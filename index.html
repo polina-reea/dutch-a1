@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <link rel="manifest" href="data:application/json,{%22name%22:%22Dutch%20A1%22,%22short_name%22:%22Dutch%20A1%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23181B1F%22,%22theme_color%22:%22%23181B1F%22,%22icons%22:[{%22src%22:%22icon.svg%22,%22sizes%22:%22192x192%20512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any%20maskable%22}]}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -125,7 +125,7 @@
   .type-answer.show-wrong { color: var(--red); }
 
   /* Quiz mode */
-  .quiz-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
+  .quiz-card { position: relative; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
   .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
   .quiz-opt { padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); font-size: 17px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; color: var(--text); min-height: 52px; }
   .quiz-opt:active { border-color: var(--purple-strong); background: var(--purple-bg); }
@@ -150,7 +150,7 @@
   .tts-btn:hover, .tts-btn:active { opacity: 1; }
 
   /* Learn mode */
-  .learn-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px 24px; margin-bottom: 24px; text-align: center; }
+  .learn-card { position: relative; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px 24px; margin-bottom: 24px; text-align: center; }
   .learn-nl { font-size: 30px; font-weight: 600; margin-bottom: 10px; line-height: 1.3; letter-spacing: -0.02em; }
   .learn-en { font-size: 19px; color: var(--text2); margin-bottom: 6px; line-height: 1.3; }
   .learn-count { font-size: 14px; color: var(--text2); margin-top: 16px; }
@@ -319,11 +319,11 @@
 <nav class="tab-bar" id="tabBar">
   <button class="tab active" id="tabVocab" onclick="switchTab('vocab')">
     <span class="tab-emoji">📖</span>
-    <span class="tab-label">Vocab</span>
+    <span class="tab-label">Lessons</span>
   </button>
   <button class="tab" id="tabWords" onclick="switchTab('words')">
     <span class="tab-emoji">🔤</span>
-    <span class="tab-label">Words</span>
+    <span class="tab-label">Basics</span>
   </button>
   <button class="tab" id="tabSpeak" onclick="switchTab('speak')">
     <span class="tab-emoji">🎙</span>
@@ -480,115 +480,39 @@ const SPEAK_CARDS = [
 ];
 
 // KNS (Kennis van de Nederlandse Samenleving) — Fotoboek exam questions
-const KNS_CARDS = [
-// Land en water / Geography
-["1","In welk deel van de wereld ligt Nederland?","Europa","Zuid-Amerika","a","land"],
+const KNS_CARDS = [["vb01","U ziet de Nederlandse vlag. Wat zijn de kleuren van de Nederlandse vlag?","rood, wit, oranje","rood, wit, blauw","b","land"],
+["vb02","U ziet een foto. Wie is dit?","Koningin Máxima","Willem van Oranje","a","land"],
+["1","In welk deel van de wereld ligt Nederland?","Zuid-Amerika","Europa","b","land"],
 ["2","Welk land ligt ten zuiden van Nederland?","België","Duitsland","a","land"],
-["3","Welk land is groter?","Marokko","Nederland","a","land"],
+["3","Welk land is groter?","Nederland","Marokko","b","land"],
 ["4","Welk land is kleiner?","Nederland","Turkije","a","land"],
-["5","Wat betekent Nederland?","laag land","waterland","a","land"],
-["6","Nederland staat onder water als er geen dijken zijn. Wat doen dijken?","ze houden het water tegen","ze maken het land groter","a","land"],
-["7","In Nederland waait het vaak. Waarvoor gebruikte men vroeger de wind?","voor molens","voor treinen","a","land"],
-["8","Een groot deel van Nederland ligt onder de zeespiegel. Hoe heet het verschil?","NAP","NIP","a","land"],
-["9","Waar in Nederland wonen de meeste mensen?","in het westen","in het oosten","a","land"],
-["10","In Nederland wonen veel of weinig mensen?","veel mensen","weinig mensen","a","land"],
-["11","Hoe reizen veel Nederlanders in de stad?","met de tram","met de boot","a","land"],
-["12","Waar zit de regering van Nederland?","Den Haag","Amsterdam","a","land"],
-["13","Wie is het staatshoofd van Nederland?","de Koning","de minister-president","a","land"],
-["14","Waar ligt de grootste haven van Nederland?","Rotterdam","Amsterdam","a","land"],
-["15","Hoe heet de nationale luchthaven van Nederland?","Schiphol","Europoort","a","land"],
-["16","Nederland is een dichtbevolkt land. Wat betekent dat?","er wonen veel mensen op weinig ruimte","er zijn veel vliegtuigen","a","land"],
-["17","Als u naar Nederland komt, waar komt u dan aan?","op Schiphol","in de haven van Rotterdam","a","land"],
-["18","Als u op Schiphol aankomt, moet u dan uw paspoort laten zien?","ja","nee","a","land"],
-["19","Is Nederland een druk of rustig land?","druk","rustig","a","land"],
-["20","In Nederland zijn de wegen druk. Wat is het gevolg?","files","overstromingen","a","land"],
-["21","Wat is typisch Nederlands in het verkeer?","fietsen","schaatsen","a","land"],
+["5","Wat betekent Nederland?","waterland","laag land","b","land"],
+["6","Kijk naar de foto. Wat gebeurt er met Nederland als er geen dijken zijn?","Nederland staat onder water","Nederland krijgt meer regen","a","land"],
+["7","In de Randstad wonen ... mensen.","weinig","veel","b","land"],
+["8","Welke stad ligt in de Randstad?","Utrecht","Eindhoven","a","land"],
+["9","In welke stad zit de regering van Nederland?","Amsterdam","Den Haag","b","land"],
+["10","Wat is de hoofdstad van Nederland?","Amsterdam","Den Haag","a","land"],
+["11","In welke stad woont de Koning van Nederland?","Amsterdam","Den Haag","b","land"],
+["12","Waar woont de Koning van Nederland?","Den Haag","Amsterdam","a","land"],
+["13","Hoe heet de nationale luchthaven van Nederland?","Europoort","Schiphol","b","land"],
+["14","Waar ligt de grootste zeehaven van Nederland?","Rotterdam","Amsterdam","a","land"],
+["15","Hoe heet Schiphol?","de nationale zeehaven","de nationale luchthaven","b","land"],
+["16","Wie rijdt u naar Nederland? Moet u dan opnieuw uw rijbewijs halen?","de regering","mijn partner","a","land"],
+["17","Is Nederland vaak droog of nat?","droog","nat","b","land"],
+["18","Als u naar Nederland komt, moet u dan uw paspoort laten zien?","ja","nee","a","land"],
+["19","Is Nederland een druk of rustig land?","rustig","druk","b","land"],
+["20","In Nederland zijn de wegen druk of rustig?","druk","rustig","a","land"],
+["21","Wat is typisch Nederlands in het verkeer?","schaatsen","fietsen","b","land"],
 ["22","In Nederland fietsen veel of weinig mensen?","veel","weinig","a","land"],
-["23","Kijk naar de foto. Wat ziet u?","een Nederlands huis met een groot raam","een Nederlands kasteel","a","land"],
-// Geschiedenis / History
-["24","Wie is dit op de foto?","Willem van Oranje","Filips II","a","geschiedenis"],
-["25","Wie is dit op de foto?","Filips II","Willem van Oranje","a","geschiedenis"],
-["26","Was de oorlog van Nederland met Spanje lang of kort?","lang: tachtig (80) jaar","kort: acht (8) jaar","a","geschiedenis"],
-["27","Waar ligt het graf van Willem van Oranje?","in Delft","in Amsterdam","a","geschiedenis"],
-["28","Waarvoor zijn de VOC-schepen bekend?","voor de handel","voor de visserij","a","geschiedenis"],
-["29","Wie schilderde dit schilderij (De Nachtwacht)?","Rembrandt van Rijn","Willem van Oranje","a","geschiedenis"],
+["23","Leven Nederlanders veel binnen of buiten?","buiten","binnen","b","land"],
+["24","Was de koning van Spanje katholiek of protestants?","katholiek","protestants","a","geschiedenis"],
+["25","Wie is dit op de foto?","Willem van Oranje","de Koning van Spanje","b","geschiedenis"],
+["26","Hoe lang duurde de oorlog van Nederland met Spanje?","tachtig (80) jaar","vierhonderd (400) jaar","a","geschiedenis"],
+["27","Hoe lang bestaat de Nederlandse staat ongeveer?","vijftig (50) jaar","vierhonderd (400) jaar","b","geschiedenis"],
+["28","Waren de VOC-schepen voor de handel of voor de visserij?","voor de handel","voor de visserij","a","geschiedenis"],
+["29","Wie schilderde dit schilderij?","Willem van Oranje","Rembrandt van Rijn","b","geschiedenis"],
 ["30","Is er in Nederland scheiding van kerk en staat?","ja","nee","a","geschiedenis"],
-["31","Door welk land is Nederland bezet tijdens de Tweede Wereldoorlog?","Duitsland","Engeland","a","geschiedenis"],
-["32","Wat gebeurde er met Rotterdam in de Tweede Wereldoorlog?","de stad werd gebombardeerd","de stad werd de hoofdstad","a","geschiedenis"],
-["33","In welke oorlog schreef Anne Frank haar dagboek?","de Tweede Wereldoorlog","de Eerste Wereldoorlog","a","geschiedenis"],
-["34","Welk land was een kolonie van Nederland?","Indonesië","Marokko","a","geschiedenis"],
-["35","Waarom kwamen er in de jaren '60 gastarbeiders naar Nederland?","er was veel werk","er was veel ruimte","a","geschiedenis"],
-["36","Uit welk land werd Nederland in 1945 bevrijd?","Duitsland","Engeland","b","geschiedenis"],
-["37","Wie is de Koning van Nederland?","Willem-Alexander","Beatrix","a","geschiedenis"],
-["38","Wie is de koningin (echtgenote van de Koning)?","Máxima","Beatrix","a","geschiedenis"],
-["39","Hoe lang bestaat het Koninkrijk der Nederlanden ongeveer?","tweehonderd (200) jaar","vijfhonderd (500) jaar","a","geschiedenis"],
-// Staatsinrichting / Government
-["40","Waar staat dit gebouw? (Madurodam)","in Den Haag","in Amsterdam","a","staatsinrichting"],
-["41","Hoe heet dit gebouw? (Binnenhof)","het Binnenhof","het Rijksmuseum","a","staatsinrichting"],
-["42","Wat is de Grondwet?","het belangrijkste wetboek van Nederland","een geschiedenisboek","a","staatsinrichting"],
-["43","Wie is de minister-president van Nederland?","de leider van de regering","de Koning","a","staatsinrichting"],
-["44","Wat doen de leden van de Tweede Kamer?","ze controleren de regering","ze helpen de Koning","a","staatsinrichting"],
-["45","Hoeveel leden heeft de Tweede Kamer?","honderdvijftig (150)","vijfenzeventig (75)","a","staatsinrichting"],
-["46","Hoeveel leden heeft de Eerste Kamer?","vijfenzeventig (75)","honderdvijftig (150)","a","staatsinrichting"],
-["47","Hoe heet het gebouw waar de Tweede Kamer vergadert?","het Binnenhof","het Paleis op de Dam","a","staatsinrichting"],
-["48","Wie is de burgemeester?","het hoofd van de gemeente","het hoofd van het land","a","staatsinrichting"],
-["49","Nederland is een democratie. Wat betekent dat?","het volk beslist mee","de Koning beslist alles","a","staatsinrichting"],
-["50","Wie mogen er in Nederland trouwen?","een man en een vrouw, en ook twee mannen of twee vrouwen","alleen een man en een vrouw","a","staatsinrichting"],
-["51","Mogen een man en een vrouw in Nederland samenwonen zonder te trouwen?","ja","nee","a","staatsinrichting"],
-["52","Mogen twee mannen in Nederland trouwen?","ja","nee","a","staatsinrichting"],
-["53","Is er in Nederland vrijheid van godsdienst?","ja","nee","a","staatsinrichting"],
-["54","Heeft Nederland persvrijheid?","ja","nee","a","staatsinrichting"],
-["55","Wat betekent persvrijheid?","de media mogen vrij berichten","de regering bepaalt het nieuws","a","staatsinrichting"],
-["56","Zijn mannen en vrouwen in Nederland gelijk?","ja","nee","a","staatsinrichting"],
-["57","Mag u in Nederland zeggen wat u vindt?","ja, maar u mag niet discrimineren","nee","a","staatsinrichting"],
-["58","Wat is discriminatie?","mensen anders behandelen vanwege hun afkomst, geloof of geslacht","een mening geven","a","staatsinrichting"],
-["59","Is discriminatie verboden in Nederland?","ja","nee","a","staatsinrichting"],
-["60","Hoeveel godsdiensten zijn er in Nederland?","veel verschillende","alleen christendom","a","staatsinrichting"],
-// Dagelijks leven / Daily life & Integration
-["61","In Nederland werken mannen en vrouwen. Is dat normaal?","ja","nee","a","dagelijks leven"],
-["62","Waar kan een nieuwkomer Nederlands leren?","bij een taalschool of ROC","op het gemeentehuis","a","dagelijks leven"],
-["63","Moeten nieuwkomers in Nederland inburgeren?","ja","nee","a","dagelijks leven"],
-["64","Wat hoort bij inburgering?","Nederlands leren en kennis van de Nederlandse samenleving","alleen een taalcursus","a","dagelijks leven"],
-["65","Wat leert u bij een inburgeringscursus?","Nederlands en kennis van de samenleving","alleen lezen en schrijven","a","dagelijks leven"],
-["66","Is het belangrijk om Nederlands te leren?","ja","nee","a","dagelijks leven"],
-["67","Wat doen buren in Nederland als er iemand nieuw komt wonen?","ze stellen zich voor","ze doen niets","a","dagelijks leven"],
-["68","Hoe wonen de meeste mensen in Nederland?","in een huis of flat","op een boot","a","dagelijks leven"],
-["69","Wat doen Nederlandse gezinnen vaak 's avonds?","samen eten en televisie kijken","werken","a","dagelijks leven"],
-// Onderwijs / Education
-["70","Is er in Nederland leerplicht?","ja","nee","a","onderwijs"],
-["71","Vanaf welke leeftijd moeten kinderen in Nederland naar school?","vijf (5) jaar","drie (3) jaar","a","onderwijs"],
-["72","Wie brengt de kinderen naar school?","de ouders","de buren","a","onderwijs"],
-["73","Hoe heet de eerste school voor kinderen in Nederland?","de basisschool","het gymnasium","a","onderwijs"],
-["74","Hoeveel jaar duurt de basisschool?","acht (8) jaar","zes (6) jaar","a","onderwijs"],
-["75","Kunnen kinderen van vier (4) jaar al naar school?","ja, naar groep 1","nee","a","onderwijs"],
-["76","Wat leren kinderen op de basisschool?","lezen, schrijven en rekenen","alleen spelen","a","onderwijs"],
-["77","Hoeveel kinderen zitten er in een klas op de basisschool?","ongeveer dertig (30)","ongeveer tien (10)","a","onderwijs"],
-["78","Wat doen kinderen na de basisschool?","ze gaan naar het voortgezet onderwijs","ze gaan werken","a","onderwijs"],
-["79","Mogen kinderen in Nederland thuis op de computer werken voor school?","ja","nee","a","onderwijs"],
-["80","Welke soorten voortgezet onderwijs zijn er?","vmbo, havo en vwo","alleen gymnasium","a","onderwijs"],
-["81","Tot welke leeftijd is er in Nederland leerplicht?","zestien (16) jaar","veertien (14) jaar","a","onderwijs"],
-["82","Mogen jongens en meisjes samen naar school?","ja","nee","a","onderwijs"],
-["83","Mag je zelf een school kiezen in Nederland?","ja","nee","a","onderwijs"],
-// Gezondheid / Health
-["84","Als u ziek bent, naar wie gaat u dan eerst?","de huisarts","het ziekenhuis","a","gezondheid"],
-["85","Moet iedereen in Nederland een zorgverzekering hebben?","ja","nee","a","gezondheid"],
-["86","Wat doet u als u voor het eerst naar de huisarts gaat?","u schrijft zich in","u gaat direct naar binnen","a","gezondheid"],
-["87","Waar haalt u medicijnen?","bij de apotheek","bij de huisarts","a","gezondheid"],
-["88","Waarvoor gaat u naar het ziekenhuis?","als de huisarts u doorstuurt","altijd als u ziek bent","a","gezondheid"],
-["89","Is de gezondheidszorg in Nederland goed?","ja","nee","a","gezondheid"],
-["90","Waar gaan ouders met een baby naartoe voor controle?","het consultatiebureau","het ziekenhuis","a","gezondheid"],
-// Werk / Work & Economy
-["91","Moet u in Nederland belasting betalen?","ja","nee","a","werk"],
-["92","Wie haalt het huisvuil op in Nederland?","de gemeente","de buren","a","werk"],
-["93","Zijn er in Nederland veel of weinig fabrieken?","veel","weinig","a","werk"],
-["94","Wat is belangrijk voor de Nederlandse economie?","handel en landbouw","alleen visserij","a","werk"],
-["95","Wat doet de politie in Nederland?","zorgen voor orde en veiligheid","belasting innen","a","werk"],
-["96","Mag u in Nederland werken als u een verblijfsvergunning hebt?","ja, meestal wel","nee","b","werk"],
-["97","Waar kunt u zoeken naar werk?","bij het UWV of op internet","alleen via vrienden","a","werk"],
-["98","Als u werkt in Nederland, wat krijgt u dan?","salaris en een loonstrook","alleen contant geld","a","werk"],
-["99","Is het belangrijk om Nederlands te spreken op uw werk?","ja","nee","a","werk"],
-["100","Moet u in Nederland belasting betalen over uw inkomen?","ja","nee","a","werk"]
-];
+["31","Door welk land is Nederland bezet tijdens de Tweede Wereldoorlog?","Engeland","Duitsland","b","geschiedenis"]];
 
 let mode = 'nl';
 let activeTab = 'vocab';
@@ -861,7 +785,7 @@ function switchTab(tab) {
     buildLessonFilterForTab('vocab');
     setMode(mode);
   } else if (tab === 'words') {
-    document.querySelector('.top-bar h1').textContent = 'Words';
+    document.querySelector('.top-bar h1').textContent = 'Basics';
     modePill.style.display = '';
     drawer.style.display = '';
     if (mode === 'kns' || mode === 'speak') mode = 'nl';
