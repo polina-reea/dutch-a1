@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dutch A1 — Naar Nederland</title>
+<meta name="theme-color" content="#007aff">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="manifest" href="data:application/json,{%22name%22:%22Dutch%20A1%22,%22short_name%22:%22Dutch%20A1%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f5f5f7%22,%22theme_color%22:%22%23007aff%22,%22icons%22:[{%22src%22:%22icon.svg%22,%22sizes%22:%22192x192%20512x512%22,%22type%22:%22image/svg+xml%22,%22purpose%22:%22any%20maskable%22}]}">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f5f7;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: #1d1d1f;
+    padding-bottom: 60px;
+  }
+  h1 { font-size: 24px; margin-bottom: 8px; }
+  .stats { font-size: 14px; color: #86868b; margin-bottom: 16px; text-align: center; }
+  .stats span { margin: 0 8px; }
+  .progress-bar { width: 100%; max-width: 440px; height: 6px; background: #e0e0e0; border-radius: 3px; margin-bottom: 24px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #34c759; border-radius: 3px; transition: width 0.3s; }
+
+  .card-container { perspective: 1000px; width: 100%; max-width: 440px; height: 240px; margin-bottom: 24px; cursor: pointer; }
+  .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s; }
+  .card.flipped { transform: rotateY(180deg); }
+  .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .card-front { background: #fff; }
+  .card-back { background: #fff; transform: rotateY(180deg); }
+  .card-word { font-size: 32px; font-weight: 600; margin-bottom: 8px; text-align: center; line-height: 1.3; }
+  .card-hint { font-size: 14px; color: #86868b; }
+  .card-tag { position: absolute; top: 16px; right: 16px; font-size: 12px; color: #86868b; background: #f5f5f7; padding: 4px 10px; border-radius: 12px; }
+
+  .buttons { display: flex; gap: 12px; width: 100%; max-width: 440px; }
+  .btn { flex: 1; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.1s; }
+  .btn:active { transform: scale(0.97); }
+  .btn-again { background: #ff3b30; color: #fff; }
+  .btn-good { background: #34c759; color: #fff; }
+  .btn-show { background: #007aff; color: #fff; }
+  .btn-skip { background: #e0e0e0; color: #1d1d1f; }
+  .btn-next { background: #007aff; color: #fff; }
+
+  .lesson-filter { display: flex; flex-wrap: wrap; gap: 5px; max-width: 440px; margin-bottom: 16px; justify-content: center; }
+  .lesson-btn { padding: 5px 10px; border: 2px solid #e0e0e0; border-radius: 20px; background: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+  .lesson-btn.active { border-color: #007aff; background: #007aff; color: #fff; }
+
+  .mode-toggle { display: flex; flex-wrap: wrap; gap: 4px; max-width: 540px; width: 100%; margin-bottom: 16px; justify-content: center; }
+  .mode-btn { padding: 8px 14px; border: 2px solid #e0e0e0; border-radius: 20px; background: #fff; font-size: 13px; font-weight: 600; cursor: pointer; color: #86868b; transition: all 0.2s; white-space: nowrap; }
+  .mode-btn.active { border-color: #007aff; background: #007aff; color: #fff; }
+
+  .done-screen { text-align: center; padding: 40px; }
+  .done-screen h2 { font-size: 28px; margin-bottom: 12px; }
+  .done-screen p { color: #86868b; margin-bottom: 24px; font-size: 16px; }
+  .done-screen .btn { max-width: 200px; margin: 0 auto; display: block; }
+  .score-circle { width: 100px; height: 100px; border-radius: 50%; background: #34c759; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; margin: 0 auto 16px; }
+
+  .type-card { width: 100%; max-width: 440px; background: #fff; border-radius: 16px; padding: 32px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 24px; text-align: center; }
+  .type-card .card-tag { position: static; display: inline-block; margin-bottom: 12px; }
+  .type-prompt { font-size: 14px; color: #86868b; margin-bottom: 8px; }
+  .type-word { font-size: 32px; font-weight: 600; margin-bottom: 20px; line-height: 1.3; }
+  .type-input { width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 20px; text-align: center; outline: none; transition: border-color 0.2s; font-family: inherit; }
+  .type-input:focus { border-color: #007aff; }
+  .type-input.correct { border-color: #34c759; background: #f0fff4; color: #34c759; }
+  .type-input.wrong { border-color: #ff3b30; background: #fff5f5; color: #ff3b30; }
+  .type-answer { margin-top: 12px; font-size: 20px; font-weight: 600; color: #34c759; min-height: 30px; }
+  .type-answer.show-wrong { color: #ff3b30; }
+
+  /* Quiz mode */
+  .quiz-card { width: 100%; max-width: 440px; background: #fff; border-radius: 16px; padding: 32px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 24px; text-align: center; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+  .quiz-opt { padding: 14px 16px; border: 2px solid #e0e0e0; border-radius: 12px; background: #fff; font-size: 16px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; }
+  .quiz-opt:hover { border-color: #007aff; background: #f0f5ff; }
+  .quiz-opt.correct { border-color: #34c759; background: #f0fff4; color: #1d1d1f; }
+  .quiz-opt.wrong { border-color: #ff3b30; background: #fff5f5; color: #86868b; }
+  .quiz-opt.dim { opacity: 0.5; }
+  .quiz-opt[disabled] { cursor: default; }
+
+  /* Match mode */
+  .match-area { width: 100%; max-width: 440px; margin-bottom: 24px; }
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .match-item { padding: 14px 12px; border: 2px solid #e0e0e0; border-radius: 12px; background: #fff; font-size: 15px; cursor: pointer; transition: all 0.2s; text-align: center; font-family: inherit; min-height: 50px; display: flex; align-items: center; justify-content: center; }
+  .match-item.selected { border-color: #007aff; background: #f0f5ff; }
+  .match-item.matched { border-color: #34c759; background: #f0fff4; opacity: 0.6; cursor: default; }
+  .match-item.error { border-color: #ff3b30; background: #fff5f5; animation: shake 0.4s; }
+  .match-score { text-align: center; margin-bottom: 12px; font-size: 14px; color: #86868b; }
+  @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+  /* TTS button */
+  .tts-btn { background: none; border: none; font-size: 24px; cursor: pointer; padding: 4px 8px; opacity: 0.5; transition: opacity 0.2s; vertical-align: middle; }
+  .tts-btn:hover, .tts-btn.playing { opacity: 1; }
+
+  /* Learn mode */
+  .learn-card { width: 100%; background: #fff; border-radius: 16px; padding: 28px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 24px; text-align: center; }
+  .learn-nl { font-size: 28px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+  .learn-en { font-size: 18px; color: #86868b; margin-bottom: 4px; line-height: 1.3; }
+  .learn-count { font-size: 13px; color: #86868b; margin-top: 12px; }
+
+  /* Build mode */
+  .build-card { width: 100%; background: #fff; border-radius: 16px; padding: 28px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 24px; text-align: center; }
+  .build-prompt { font-size: 24px; font-weight: 600; margin-bottom: 20px; line-height: 1.3; }
+  .build-slots { min-height: 50px; border: 2px dashed #e0e0e0; border-radius: 12px; padding: 12px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+  .build-slots.correct { border-color: #34c759; background: #f0fff4; }
+  .build-slots.wrong { border-color: #ff3b30; background: #fff5f5; }
+  .build-words { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .build-word { padding: 8px 14px; border: 2px solid #007aff; border-radius: 20px; background: #f0f5ff; font-size: 16px; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .build-word:hover { background: #007aff; color: #fff; }
+  .build-word.used { opacity: 0.3; pointer-events: none; }
+  .build-placed { padding: 8px 14px; border: 2px solid #007aff; border-radius: 20px; background: #007aff; color: #fff; font-size: 16px; cursor: pointer; transition: all 0.2s; }
+
+  /* Speak mode */
+  .speak-card { width: 100%; max-width: 440px; background: #fff; border-radius: 16px; padding: 32px 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 24px; text-align: center; }
+  .speak-tag { font-size: 12px; color: #86868b; background: #f5f5f7; padding: 4px 10px; border-radius: 12px; display: inline-block; margin-bottom: 12px; }
+  .speak-q { font-size: 24px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; }
+  .speak-q-en { font-size: 15px; color: #86868b; margin-bottom: 20px; line-height: 1.4; }
+  .speak-answer { font-size: 20px; color: #34c759; font-weight: 500; min-height: 60px; display: flex; align-items: center; justify-content: center; line-height: 1.4; padding: 12px; border-top: 1px solid #f0f0f0; }
+  .speak-answer.hidden { color: transparent; user-select: none; }
+  .speak-hint { font-size: 13px; color: #86868b; margin-top: 8px; }
+  .speak-filter { display: flex; flex-wrap: wrap; gap: 5px; max-width: 440px; margin-bottom: 16px; justify-content: center; }
+  .speak-filter-btn { padding: 5px 10px; border: 2px solid #e0e0e0; border-radius: 20px; background: #fff; font-size: 11px; cursor: pointer; transition: all 0.2s; font-weight: 500; }
+  .speak-filter-btn.active { border-color: #007aff; background: #007aff; color: #fff; }
+</style>
+</head>
+<body>
+
+<h1>Dutch A1</h1>
+
+<div class="mode-toggle" id="modeToggle">
+  <button class="mode-btn" onclick="setMode('learn')">Learn</button>
+  <button class="mode-btn" onclick="setMode('build')">Build</button>
+  <button class="mode-btn active" onclick="setMode('nl')">NL→EN</button>
+  <button class="mode-btn" onclick="setMode('en')">EN→NL</button>
+  <button class="mode-btn" onclick="setMode('type')">Type</button>
+  <button class="mode-btn" onclick="setMode('quiz')">Quiz</button>
+  <button class="mode-btn" onclick="setMode('match')">Match</button>
+  <button class="mode-btn" onclick="setMode('speak')">Speak</button>
+</div>
+
+<div class="lesson-filter" id="lessonFilter"></div>
+<div class="stats" id="stats"></div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div id="mainArea" style="width:100%;max-width:440px;"></div>
+
+<script>
+const ALL_CARDS = [
+["één","one","1"],["twee","two","1"],["drie","three","1"],["vier","four","1"],["vijf","five","1"],["zes","six","1"],["zeven","seven","1"],["acht","eight","1"],["negen","nine","1"],["tien","ten","1"],["elf","eleven","1"],["twaalf","twelve","1"],
+["één uur","1 o'clock","2"],["twee uur","2 o'clock","2"],["drie uur","3 o'clock","2"],["vier uur","4 o'clock","2"],["vijf uur","5 o'clock","2"],["zes uur","6 o'clock","2"],["zeven uur","7 o'clock","2"],["acht uur","8 o'clock","2"],["negen uur","9 o'clock","2"],["tien uur","10 o'clock","2"],["elf uur","11 o'clock","2"],["twaalf uur","12 o'clock","2"],
+["rood","red","3"],["wit","white","3"],["blauw","blue","3"],["oranje","orange","3"],["geel","yellow","3"],["groen","green","3"],["paars","purple","3"],["zwart","black","3"],["bruin","brown","3"],
+["de hand","hand","4"],["het been","leg","4"],["de knie","knee","4"],["de voet","foot","4"],["het hoofd","head","4"],["de neus","nose","4"],["de tong","tongue","4"],["de mond","mouth","4"],["het haar","hair","4"],
+["het mes","knife","5"],["de bel","bell","5"],["de kam","comb","5"],["de bal","ball","5"],["de kip","chicken","5"],["de lip","lip","5"],["de vis","fish","5"],
+["de kop","cup","6"],["de sok","sock","6"],["de mug","mosquito","6"],["de tas","bag","6"],["de pot","pot","6"],["de bus","bus","6"],
+["de voet","foot","7"],["het doel","goal","7"],["de riem","belt","7"],["het wiel","wheel","7"],["het huis","house","7"],["de duim","thumb","7"],
+["de noot","nut","8"],["de zeep","soap","8"],["geel","yellow","8"],["het jaar","year","8"],["de maan","moon","8"],["het vuur","fire","8"],
+["de geit","goat","9"],["de ring","ring","9"],["de lach","laugh","9"],["de schaar","scissors","9"],
+["de vrouw","woman","10"],["de cent","cent","10"],["het schrift","notebook","10"],["het bloed","blood","10"],["het gezicht","face","10"],
+["lek","has a hole in it","11"],["ken","know","11"],["de pil","pill","11"],["het sap","juice","11"],["de man","man","11"],["het pak","carton","11"],["tik","tap","11"],["mis","miss","11"],["kom","come","11"],["de les","lesson","11"],["leg","put","11"],["tel","count","11"],
+["de stap","step","12"],["de knop","button","12"],["denk","think","12"],["help","help","12"],["praat","talk","12"],["graag","(I) like","12"],["de drop","liquorice","12"],["hard","hard","12"],["dans","dance","12"],["speel","play","12"],["de hals","neck","12"],["de vlek","mark","12"],["half","half","12"],
+["het stuur","steering wheel","13"],["trouw","marry","13"],["de broer","brother","13"],["het plein","square","13"],["vast","tight / fixed","13"],["vals","false","13"],["sterk","strong","13"],["de rits","zipper","13"],["de ster","star","13"],["bang","afraid","13"],["het kind","child","13"],["de grond","ground","13"],["de trein","train","13"],["de fiets","bicycle","13"],["de school","school","13"],["de brug","bridge","13"],["vlug","quick","13"],
+["Ik ben een vrouw","I am a woman","14"],["Ik heet Iva","My name is Iva","14"],["Ik ben dertig (30) jaar","I am 30 years old","14"],["Ik hou van film","I like movies","14"],["Ik ga vaak naar de film","I often go to the movies","14"],["Jij ook?","You too?","14"],["Weet je wat?","You know what?","14"],["Laten we samen gaan","Let's go together","14"],["Dat is veel leuker","That's much more fun","14"],["Toch?","Right?","14"],["Ga je met mij mee?","Are you coming with me?","14"],
+["Ik zoek een huis","I'm looking for a house","15"],["Ik heb een zoon van tien (10) jaar","I have a 10-year-old son","15"],["Ik kom uit Thailand","I come from Thailand","15"],["de huur","rent","15"],["per maand","per month","15"],["voor twee jaar","for two years","15"],["Wie helpt mij?","Who can help me?","15"],["Bel mij","Call me","15"],
+["te koop","for sale","16"],["twee jaar oud","two years old","16"],["grote maat","large size","16"],["het slot","lock","16"],["met een sterk slot","with a strong lock","16"],["De fiets rijdt goed","The bike rides well","16"],["Hij kost honderd (100) euro","It costs 100 euros","16"],
+["Dag meneer","Hello sir","17"],["Heeft u een fiets te koop?","Do you have a bike for sale?","17"],["Ja dat klopt","Yes that's right","17"],["Ik wil de fiets wel kopen","I'd like to buy the bike","17"],["Dat kan","That's possible","17"],["Ik vind dat wel veel","I think that's quite a lot","17"],["Dat is te laag","That's too low","17"],["U krijgt hem voor negentig (90) euro","You can have it for 90 euros","17"],["kopen","to buy","17"],["vragen","to ask","17"],["laag","low","17"],["veel","much / a lot","17"],
+["Wie maakt de school schoon?","Who cleans the school?","18"],["de schoonmaker","cleaner","18"],["man of vrouw","man or woman","18"],["drie keer per week","three times per week","18"],["na acht uur","after eight o'clock","18"],["in de avond","in the evening","18"],["Stuur een brief","Send a letter","18"],["klein","small","18"],["mooi","nice / beautiful","18"],["de buurt","neighborhood","18"],["de brief","letter","18"],["schoon","clean","18"],["schoonmaken","to clean","18"],
+["Ik zoek een baan","I'm looking for a job","19"],["de baan","job","19"],["in de ochtend","in the morning","19"],["de nacht","night","19"],["het licht","light","19"],["lachen","to laugh","19"],["het schaap","sheep","19"],["de schoen","shoe","19"],["het schip","ship","19"],["Beste meneer","Dear sir","19"],["Dank u wel voor uw brief","Thank you for your letter","19"],["want","because","19"],
+["de letter","letter (of alphabet)","20"],["de postcode","postal code","20"],["het adres","address","20"],["de straat","street","20"],
+["Wat is uw naam?","What is your name?","21"],["Dag mevrouw","Hello madam","21"],["Goedemiddag","Good afternoon","21"],["Kan ik u helpen?","Can I help you?","21"],["Ik wil mij graag inschrijven","I'd like to register","21"],["Waar woont u?","Where do you live?","21"],["Ik woon in Rotterdam","I live in Rotterdam","21"],["En uw adres?","And your address?","21"],["Weet u de postcode?","Do you know the postal code?","21"],["Hebt u telefoon?","Do you have a phone?","21"],["makkelijk","easy","21"],["mobiel","mobile","21"],["Even denken","Let me think","21"],["Wacht","Wait","21"],["het boekje","booklet","21"],["moeilijk","difficult","21"],["Ik vergeet het steeds","I keep forgetting it","21"],
+["Kennen wij elkaar?","Do we know each other?","22"],["Ik geloof het niet","I don't think so","22"],["Ik zie jou vaak fietsen","I often see you cycling","22"],["Hoe heet jij?","What's your name?","22"],["Ben je hier alleen?","Are you here alone?","22"],["de vriend","friend","22"],["de jongen","boy","22"],["het meisje","girl","22"],["de zoon","son","22"],["de dochter","daughter","22"],["leuk","nice / fun","22"],["buiten","outside","22"],["Hoe oud zijn ze?","How old are they?","22"],["bijna","almost","22"],["nog","still / yet","22"],["jong","young","22"],["dertien","thirteen","22"],["veertien","fourteen","22"],["vijftien","fifteen","22"],["zestien","sixteen","22"],["zeventien","seventeen","22"],["achttien","eighteen","22"],["negentien","nineteen","22"],["twintig","twenty","22"],["dertig","thirty","22"],["veertig","forty","22"],["vijftig","fifty","22"],["zestig","sixty","22"],["zeventig","seventy","22"],["tachtig","eighty","22"],["negentig","ninety","22"],["honderd","hundred","22"],
+["Kijk dit is ons huis","Look this is our house","23"],["Wil je het zien?","Do you want to see it?","23"],["de deur","door","23"],["Kom maar binnen","Come on in","23"],["Welkom!","Welcome!","23"],["de woonkamer","living room","23"],["de keuken","kitchen","23"],["achter","behind","23"],["de trap","stairs","23"],["naar boven","upstairs","23"],["de verdieping","floor / story","23"],["de badkamer","bathroom","23"],["de slaapkamer","bedroom","23"],["de ruimte","space / room","23"],["nodig","necessary / needed","23"],["alles","everything","23"],["ruim","spacious","23"],["de woning","home / dwelling","23"],["het toilet","toilet","23"],["beneden","downstairs","23"],["de gang","hallway","23"],["links","left","23"],["rechts","right","23"],["eten maken","to cook","23"],
+["het seizoen","season","24"],["de winter","winter","24"],["de lente","spring","24"],["de zomer","summer","24"],["het najaar","autumn","24"],["de dag","day","24"],["kort","short","24"],["lang","long","24"],["vandaag","today","24"],["koud","cold","24"],["warm","warm","24"],["binnen","inside","24"],["buiten","outside","24"],["natuurlijk","of course","24"],["zonder","without","24"],["de bloem","flower","24"],["niemand","nobody","24"],["de jas","coat","24"],["droog","dry","24"],["vrij","free","24"],["nat","wet","24"],["donker","dark","24"],["gezellig","cozy","24"],["de hond","dog","24"],["januari","January","24"],["februari","February","24"],["maart","March","24"],["april","April","24"],["mei","May","24"],["juni","June","24"],["juli","July","24"],["augustus","August","24"],["september","September","24"],["oktober","October","24"],["november","November","24"],["december","December","24"],
+["de lerares","female teacher","25"],["noemen","to call","25"],["om half negen","at half past eight","25"],["tussen de middag","during lunchtime","25"],["kwart voor één","quarter to one","25"],["Wanneer ben je klaar?","When are you done?","25"],["opruimen","to tidy up","25"],["sluiten","to close","25"],["de bank","bank","25"],["druk","busy","25"],["soms","sometimes","25"],["nooit","never","25"],["gesloten","closed","25"],["het weekend","weekend","25"],["de klok","clock","25"],["kwart over één","quarter past one","25"],["half twee","half past one","25"],["de minuut","minute","25"],["maandag","Monday","25"],["dinsdag","Tuesday","25"],["woensdag","Wednesday","25"],["donderdag","Thursday","25"],["vrijdag","Friday","25"],["zaterdag","Saturday","25"],["zondag","Sunday","25"],["'s ochtends","in the morning","25"],["'s middags","in the afternoon","25"],["'s avonds","in the evening","25"],["'s nachts","at night","25"],
+["Wil je iets eten?","Do you want to eat something?","26"],["de tafel","table","26"],["het raam","window","26"],["de stoel","chair","26"],["het broodje kaas","cheese sandwich","26"],["de honger","hunger","26"],["de soep","soup","26"],["lekker","tasty","26"],["het vlees","meat","26"],["drinken","to drink","26"],["het geld","money","26"],["betalen","to pay","26"],["de collega","colleague","26"],["thuis","at home","26"],["het gezin","family (household)","26"],["meestal","usually","26"],["de groente","vegetables","26"],["het ontbijt","breakfast","26"],["het brood","bread","26"],["de boter","butter","26"],["de kaas","cheese","26"],["de thee","tea","26"],["de koffie","coffee","26"],["de lunch","lunch","26"],["het water","water","26"],["de aardappel","potato","26"],
+["vroeg","early","27"],["uit bed","out of bed","27"],["douchen","to shower","27"],["wakker","awake","27"],["wassen","to wash","27"],["aankleden","to dress","27"],["de taak","task","27"],["iedereen","everyone","27"],["behalve","except","27"],["langzaam","slow","27"],["roepen","to call / shout","27"],["te laat","too late","27"],["klaar","ready / done","27"],["luisteren","to listen","27"],["het nieuws","news","27"],["vertrekken","to leave / depart","27"],["moe","tired","27"],["gelukkig","fortunately","27"],["kletsen","to chat","27"],["de wekker","alarm clock","27"],["opstaan","to get up","27"],
+["de familie","family","28"],["de hoek","corner","28"],["de foto","photo","28"],["de tuin","garden","28"],["naast","next to","28"],["de achternaam","last name","28"],["de voornaam","first name","28"],["de moeder","mother","28"],["de ouders","parents","28"],["allemaal","all / everyone","28"],["blond","blond","28"],["zoals","like / as","28"],["gisteren","yesterday","28"],["aardig","nice / kind","28"],["allebei","both","28"],["de gemeente","municipality","28"],["misschien","maybe","28"],
+["ziek geweest","been sick","29"],["de pijn","pain","29"],["de arm","arm","29"],["de dokter","doctor","29"],["de apotheek","pharmacy","29"],["de medicijnen","medicine","29"],["Ik voel me nu beter","I feel better now","29"],["de herfst","autumn","29"],["de regen","rain","29"],["daarom","therefore","29"],["zorgen","to take care","29"],["genoeg","enough","29"],["bijvoorbeeld","for example","29"],["de huisarts","family doctor","29"],["bewegen","to exercise","29"],["regelmatig","regularly","29"],["wandelen","to walk","29"],["minstens","at least","29"],["te veel","too much","29"],["vet","fat / greasy","29"],["roken","to smoke","29"],["weinig","little / few","29"],["voldoende rust","enough rest","29"],
+["de stad","city","30"],["praktisch","practical","30"],["de weg","road","30"],["stil","still / quiet","30"],["de file","traffic jam","30"],["vol","full","30"],["staan","to stand","30"],["de halte","stop (bus/tram)","30"],["wachten","to wait","30"],["dus","so / therefore","30"],["liever","rather / preferably","30"],["het nadeel","disadvantage","30"],["fijn","nice / great","30"],["het voordeel","advantage","30"],["de afstand","distance","30"],["gelijk hebben","to be right","30"],["goedkoper","cheaper","30"],["de beweging","movement / exercise","30"],
+["binnenkort","soon","31"],["voordat","before","31"],["regelen","to arrange","31"],["de taal","language","31"],["de toekomst","future","31"],["de haven","port / harbor","31"],["zwaar","heavy / hard","31"],["verdienen","to earn","31"],["redelijk","reasonable / fairly","31"],["eigenlijk","actually","31"],["dichtbij","nearby","31"],["Duitsland","Germany","31"],["Frankrijk","France","31"],["Den Haag","The Hague","31"],["genoemd","called","31"],["hetzelfde","the same","31"],["het land","country","31"],
+["jarig","having a birthday","32"],["het feestje","party","32"],["hoezo?","how so? / why?","32"],["het begin","beginning","32"],["het idee","idea","32"],["de oplossing","solution","32"],["uitslapen","to sleep in","32"],["Je hebt gelijk","You're right","32"],["zaterdagavond","Saturday evening","32"],["vlak voor","just before","32"],["de kerst","Christmas","32"],["afgesproken","agreed / settled","32"],["de boodschappen doen","to do the groceries","32"],["dragen","to carry","32"],["handig","handy / convenient","32"],["ontmoeten","to meet","32"],["besteden","to spend (time)","32"],["de aandacht","attention","32"],["daarna","after that","32"],["de natuur","nature","32"],["zelfs","even","32"]
+];
+
+// Speaking exam questions: [question, translation, example answer, topic]
+const SPEAK_CARDS = [
+// Persoonlijk / Personal
+["Hoe gaat het met u?","How are you?","Het gaat goed, dank u.","persoonlijk"],
+["Wat is uw naam?","What is your name?","Mijn naam is Polina.","persoonlijk"],
+["Wat is uw adres?","What is your address?","Ik woon in de Hoofdstraat 10.","persoonlijk"],
+["Wat is uw telefoonnummer?","What is your phone number?","Mijn telefoonnummer is 06-12345678.","persoonlijk"],
+["Wanneer bent u geboren?","When were you born?","Ik ben geboren in negentienhonderddrieënnegentig (1993).","persoonlijk"],
+["Waar bent u geboren?","Where were you born?","Ik ben geboren in Rusland.","persoonlijk"],
+["In welk land bent u geboren?","In which country were you born?","Ik ben geboren in Rusland.","persoonlijk"],
+["Wanneer bent u blij?","When are you happy?","Ik ben blij als ik met mijn vrienden ben.","persoonlijk"],
+// Familie / Family
+["Hoeveel broers en zussen hebt u?","How many brothers and sisters?","Ik heb één broer en één zus.","familie"],
+["Hoeveel kinderen hebt u?","How many children do you have?","Ik heb geen kinderen.","familie"],
+["Waar woont uw familie?","Where does your family live?","Mijn familie woont in Rusland.","familie"],
+["Wie wonen bij u in huis?","Who lives with you?","Ik woon alleen.","familie"],
+["Wat doet u graag met uw familie?","What do you like doing with family?","Ik kook graag met mijn familie.","familie"],
+["Wat doet u graag met uw vrienden?","What do you like doing with friends?","Ik ga graag wandelen met mijn vrienden.","familie"],
+["Bij wie gaat u wonen in Nederland?","Who will you live with in NL?","Ik ga alleen wonen.","familie"],
+// Wonen / Living
+["Waar woont u?","Where do you live?","Ik woon in Rotterdam.","wonen"],
+["In welke plaats gaat u wonen in Nederland?","Which city will you live in?","Ik ga in Amsterdam wonen.","wonen"],
+["In wat voor huis gaat u wonen in Nederland?","What kind of house in NL?","Ik ga in een flat wonen.","wonen"],
+["Wat vindt u van uw huis?","What do you think of your house?","Mijn huis is klein maar gezellig.","wonen"],
+// Werk / Work
+["Hoe laat begint u met werken?","What time do you start work?","Ik begin om negen uur.","werk"],
+["Hoe laat stopt u met werken?","What time do you stop work?","Ik stop om vijf uur.","werk"],
+["Hoeveel dagen in de week werkt u?","How many days a week do you work?","Ik werk vijf dagen per week.","werk"],
+["Op welke dagen werkt u?","On which days do you work?","Ik werk van maandag tot vrijdag.","werk"],
+["Met hoeveel mensen werkt u?","How many people do you work with?","Ik werk met tien mensen.","werk"],
+["Wat voor werk wilt u doen?","What kind of work do you want to do?","Ik wil in een kantoor werken.","werk"],
+// School / Opleiding
+["Hoeveel jaar school hebt u gehad?","How many years of school?","Ik heb vijftien jaar school gehad.","school"],
+["Wat hebt u geleerd op school?","What did you learn at school?","Ik heb Engels en wiskunde geleerd.","school"],
+["Hoeveel talen spreekt u?","How many languages do you speak?","Ik spreek drie talen: Russisch, Engels en een beetje Nederlands.","school"],
+["Welke talen spreekt u?","Which languages do you speak?","Ik spreek Russisch en Engels.","school"],
+// Nederlands leren
+["Waarom leert u Nederlands?","Why are you learning Dutch?","Ik leer Nederlands omdat ik in Nederland wil wonen.","taal"],
+["Waar heeft u Nederlands geleerd?","Where did you learn Dutch?","Ik heb Nederlands geleerd met een boek en online.","taal"],
+["Wat vindt u van de Nederlandse taal?","What do you think of Dutch?","Ik vind Nederlands moeilijk maar leuk.","taal"],
+["Wie helpt u met Nederlands leren?","Who helps you learn Dutch?","Ik leer zelf met een boek.","taal"],
+["Wat wilt u graag leren in Nederland?","What would you like to learn in NL?","Ik wil goed Nederlands leren.","taal"],
+// Nederland
+["Waarom wilt u naar Nederland?","Why do you want to go to NL?","Ik wil in Nederland wonen en werken.","nederland"],
+["Wanneer wilt u naar Nederland gaan?","When do you want to go to NL?","Ik wil binnenkort naar Nederland gaan.","nederland"],
+["Hoe vaak bent u al in Nederland geweest?","How often have you been to NL?","Ik ben nog nooit in Nederland geweest.","nederland"],
+["Wat vindt u van Nederland?","What do you think of the Netherlands?","Ik vind Nederland een mooi land.","nederland"],
+["Wat vindt u van Nederlandse mensen?","What do you think of Dutch people?","Ik vind Nederlandse mensen aardig.","nederland"],
+["Hoe bent u hier gekomen?","How did you get here?","Ik ben met het vliegtuig gekomen.","nederland"],
+// Dagelijks leven / Daily life
+["Hoe laat is het nu?","What time is it now?","Het is drie uur.","dagelijks"],
+["Hoe laat wordt u 's ochtends wakker?","What time do you wake up?","Ik word om zeven uur wakker.","dagelijks"],
+["Hoe laat gaat u 's avonds naar bed?","What time do you go to bed?","Ik ga om elf uur naar bed.","dagelijks"],
+["Welke dag is het vandaag?","What day is it today?","Vandaag is het vrijdag.","dagelijks"],
+["Welke maand is het nu?","What month is it now?","Het is nu maart.","dagelijks"],
+["Wat gaat u morgen doen?","What will you do tomorrow?","Morgen ga ik boodschappen doen.","dagelijks"],
+["Wat hebt u gisteren gedaan?","What did you do yesterday?","Gisteren heb ik Nederlands geleerd.","dagelijks"],
+// Reizen / Travel
+["Hoe reist u meestal?","How do you usually travel?","Ik reis meestal met de trein.","reizen"],
+["Hoe gaat u naar uw werk?","How do you get to work?","Ik ga met de fiets naar mijn werk.","reizen"],
+// Eten & drinken / Food
+["Hoe vaak eet u op een dag?","How many times a day do you eat?","Ik eet drie keer per dag.","eten"],
+["Wat eet u 's ochtends?","What do you eat in the morning?","Ik eet brood met kaas.","eten"],
+["Wat eet u 's avonds?","What do you eat in the evening?","Ik eet groente met rijst.","eten"],
+["Wat gaat u vandaag eten?","What will you eat today?","Ik ga soep eten.","eten"],
+["Wat hebt u gisteren gegeten?","What did you eat yesterday?","Ik heb aardappelen met groente gegeten.","eten"],
+["Wat drinkt u graag?","What do you like to drink?","Ik drink graag thee en koffie.","eten"],
+["Wat kookt u graag?","What do you like to cook?","Ik kook graag soep.","eten"],
+["Wat eet u op een feest?","What do you eat at a party?","Ik eet taart en fruit op een feest.","eten"],
+["Welk eten koopt u vaak?","What food do you buy often?","Ik koop vaak brood en groente.","eten"],
+["Welk fruit eet u graag?","Which fruit do you like?","Ik eet graag appels en bananen.","eten"],
+["Welke groente eet u vaak?","Which vegetables do you eat often?","Ik eet vaak tomaten en paprika.","eten"],
+// Boodschappen
+["Waar doet u boodschappen?","Where do you do groceries?","Ik doe boodschappen bij de supermarkt.","boodschappen"],
+["Wanneer doet u boodschappen?","When do you do groceries?","Ik doe boodschappen op zaterdag.","boodschappen"],
+// Vrije tijd / Free time
+["Wat doet u graag buiten?","What do you like to do outside?","Ik wandel graag buiten.","vrije tijd"],
+["Wat doet u in het weekend?","What do you do on weekends?","In het weekend slaap ik uit en ga ik wandelen.","vrije tijd"],
+["Wat doet u in uw vrije tijd?","What do you do in your free time?","In mijn vrije tijd lees ik graag.","vrije tijd"],
+["Wat doet u op een feestdag?","What do you do on a holiday?","Op een feestdag ga ik naar mijn familie.","vrije tijd"],
+["Hoe vaak kijkt u tv?","How often do you watch TV?","Ik kijk soms tv, 's avonds.","vrije tijd"],
+["Hoe vaak luistert u naar de radio?","How often do you listen to radio?","Ik luister nooit naar de radio.","vrije tijd"],
+["Naar welke muziek luistert u graag?","What music do you like?","Ik luister graag naar popmuziek.","vrije tijd"],
+["Van welke muziek houdt u?","What music do you like?","Ik hou van popmuziek.","vrije tijd"],
+["Welke sport doet u?","What sport do you do?","Ik ga graag wandelen en zwemmen.","vrije tijd"],
+["Welke dieren vindt u leuk?","Which animals do you like?","Ik vind katten leuk.","vrije tijd"],
+// Feest / Celebrations
+["Wanneer geeft u een feest?","When do you throw a party?","Ik geef een feest als ik jarig ben.","feest"],
+["Welk feest vindt u leuk?","Which celebration do you like?","Ik vind Kerstmis leuk.","feest"],
+["Welk cadeau geeft u graag aan iemand?","What gift do you like to give?","Ik geef graag bloemen.","feest"],
+// Kleding & weer / Clothes & weather
+["Wat voor kleren draagt u vaak?","What clothes do you often wear?","Ik draag vaak een broek en een trui.","kleding"],
+["Wat voor kleren vindt u mooi?","What clothes do you find nice?","Ik vind een jurk mooi.","kleding"],
+["Welke kleur vindt u mooi?","Which color do you find beautiful?","Ik vind blauw mooi.","kleding"],
+["Wat voor weer is het vandaag?","What's the weather like today?","Het is koud en het regent.","kleding"],
+];
+
+let mode = 'nl';
+let activeLessons = new Set();
+let deck = [], current = 0, known = 0, again = [], sessionTotal = 0;
+let isFlipped = false, typeState = 'input';
+let matchState = {};
+let speakTopics = new Set();
+let speakAnswerVisible = false;
+
+function getAllLessons() { return [...new Set(ALL_CARDS.map(c => c[2]))].sort((a,b) => +a - +b); }
+function getFiltered() { return ALL_CARDS.filter(c => activeLessons.has(c[2])); }
+function shuffle(a) { for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function norm(s) { return s.toLowerCase().trim().replace(/['']/g,"'").replace(/[éè]/g,'e').replace(/ë/g,'e'); }
+
+// ---- TTS ----
+let nlVoice = null;
+function initVoices() {
+  const voices = speechSynthesis.getVoices();
+  nlVoice = voices.find(v => v.lang === 'nl-NL') || voices.find(v => v.lang.startsWith('nl')) || null;
+}
+if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = initVoices;
+initVoices();
+
+function sayNL(text) {
+  speechSynthesis.cancel();
+  // strip parenthetical numbers like (100)
+  const clean = text.replace(/\(\d+\)/g, '').trim();
+  const u = new SpeechSynthesisUtterance(clean);
+  u.lang = 'nl-NL';
+  u.rate = 0.85;
+  if (nlVoice) u.voice = nlVoice;
+  speechSynthesis.speak(u);
+}
+function ttsBtn(text) {
+  return `<button class="tts-btn" onclick="event.stopPropagation();sayNL('${text.replace(/'/g,"\\'")}')" title="Listen">&#128264;</button>`;
+}
+
+function buildLessonFilter() {
+  const c = document.getElementById('lessonFilter');
+  const lessons = getAllLessons();
+  // select all by default
+  lessons.forEach(l => activeLessons.add(l));
+
+  const allBtn = document.createElement('button');
+  allBtn.className = 'lesson-btn active'; allBtn.textContent = 'All'; allBtn.id = 'allBtn';
+  allBtn.onclick = () => {
+    const allActive = getAllLessons().every(l => activeLessons.has(l));
+    if (allActive) { activeLessons.clear(); } else { getAllLessons().forEach(l => activeLessons.add(l)); }
+    syncFilterUI(); startSession();
+  };
+  c.appendChild(allBtn);
+
+  lessons.forEach(l => {
+    const btn = document.createElement('button');
+    btn.className = 'lesson-btn active'; btn.textContent = l; btn.dataset.les = l;
+    btn.onclick = () => {
+      if (activeLessons.has(l)) activeLessons.delete(l); else activeLessons.add(l);
+      syncFilterUI(); startSession();
+    };
+    c.appendChild(btn);
+  });
+}
+
+function syncFilterUI() {
+  document.querySelectorAll('.lesson-btn').forEach(btn => {
+    if (btn.id === 'allBtn') {
+      btn.classList.toggle('active', getAllLessons().every(l => activeLessons.has(l)));
+    } else {
+      btn.classList.toggle('active', activeLessons.has(btn.dataset.les));
+    }
+  });
+}
+
+function setMode(m) {
+  mode = m;
+  const modes = ['learn','build','nl','en','type','quiz','match','speak'];
+  document.querySelectorAll('.mode-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', modes[i] === m);
+  });
+  document.getElementById('lessonFilter').style.display = m === 'speak' ? 'none' : 'flex';
+  if (m === 'speak') {
+    showSpeakFilter();
+    startSpeakSession();
+  } else {
+    const sf = document.getElementById('speakFilter');
+    if (sf) sf.style.display = 'none';
+    startSession();
+  }
+}
+
+function startSession() {
+  const filtered = getFiltered();
+  if (mode === 'match') {
+    startMatchSession(filtered);
+    return;
+  }
+  deck = shuffle(filtered.map(c => [...c]));
+  sessionTotal = deck.length;
+  current = 0; known = 0; again = []; isFlipped = false; typeState = 'input';
+  if (deck.length > 0) showCard(); else showEmpty();
+  updateStats();
+}
+
+function showCard() {
+  if (current >= deck.length) {
+    if (again.length > 0) { deck = shuffle(again); again = []; current = 0; showCard(); return; }
+    showDone(); return;
+  }
+  if (mode === 'learn') showLearnCard();
+  else if (mode === 'build') showBuildCard();
+  else if (mode === 'type') showTypeCard();
+  else if (mode === 'quiz') showQuizCard();
+  else showFlipCard();
+  updateStats();
+}
+
+function updateStats() {
+  const rem = (deck.length - current) + again.length;
+  document.getElementById('stats').innerHTML = `<span>${rem} left</span><span>${known} learned</span>`;
+  const pct = sessionTotal > 0 ? (known / sessionTotal) * 100 : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function showDone() {
+  const pct = sessionTotal > 0 ? Math.round((known / sessionTotal) * 100) : 0;
+  document.getElementById('mainArea').innerHTML = `<div class="done-screen"><div class="score-circle">${pct}%</div><h2>Done!</h2><p>${known} / ${sessionTotal} learned</p><button class="btn btn-good" onclick="startSession()">Again</button></div>`;
+}
+
+function showEmpty() {
+  document.getElementById('mainArea').innerHTML = '<div class="done-screen"><p>Select lessons above</p></div>';
+  document.getElementById('stats').innerHTML = '';
+  document.getElementById('progressFill').style.width = '0%';
+}
+
+// ---- FLIP ----
+function showFlipCard() {
+  const c = deck[current]; isFlipped = false;
+  const [f, b] = mode === 'en' ? [c[1], c[0]] : [c[0], c[1]];
+  const nlText = c[0];
+  document.getElementById('mainArea').innerHTML = `
+    <div class="card-container" onclick="flipCard()"><div class="card" id="card">
+      <div class="card-face card-front"><div class="card-tag">Les ${c[2]}</div><div class="card-word">${f} ${mode==='nl' ? ttsBtn(nlText) : ''}</div><div class="card-hint">tap to flip</div></div>
+      <div class="card-face card-back"><div class="card-tag">Les ${c[2]}</div><div class="card-word">${b} ${mode==='en' ? ttsBtn(nlText) : ''}</div></div>
+    </div></div>
+    <div class="buttons" id="buttons"><button class="btn btn-show" onclick="flipCard()">Show</button></div>`;
+}
+function flipCard() {
+  if (isFlipped) return; isFlipped = true;
+  document.getElementById('card').classList.add('flipped');
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-again" onclick="markAgain()">Again</button><button class="btn btn-good" onclick="markGood()">Know it</button>';
+}
+
+// ---- TYPE ----
+function showTypeCard() {
+  const c = deck[current]; typeState = 'input';
+  document.getElementById('mainArea').innerHTML = `
+    <div class="type-card"><div class="card-tag">Les ${c[2]}</div>
+      <div class="type-prompt">Type in Dutch:</div><div class="type-word">${c[1]}</div>
+      <input type="text" class="type-input" id="typeInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="..." />
+      <div class="type-answer" id="typeAnswer"></div>
+    </div>
+    <div class="buttons" id="buttons"><button class="btn btn-show" onclick="checkTyped()">Check</button><button class="btn btn-skip" onclick="skipTyped()">Skip</button></div>`;
+  setTimeout(() => {
+    const inp = document.getElementById('typeInput');
+    if (inp) { inp.focus(); inp.onkeydown = e => { if (e.key==='Enter'){e.preventDefault(); if(typeState==='input')checkTyped();else{current++;showCard();}} }; }
+  }, 50);
+}
+function checkTyped() {
+  if (typeState !== 'input') return; typeState = 'result';
+  const c = deck[current], inp = document.getElementById('typeInput'), ans = document.getElementById('typeAnswer');
+  const ok = norm(inp.value) === norm(c[0]);
+  inp.disabled = true;
+  if (ok) { inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(c[0]); known++; }
+  else { inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.innerHTML = c[0] + ' ' + ttsBtn(c[0]); again.push(c); }
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
+  updateStats();
+}
+function skipTyped() {
+  const c = deck[current]; typeState = 'result';
+  const inp = document.getElementById('typeInput'), ans = document.getElementById('typeAnswer');
+  inp.disabled = true; inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.textContent = c[0]; again.push(c);
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
+  updateStats();
+}
+
+// ---- QUIZ ----
+function showQuizCard() {
+  const c = deck[current];
+  const correct = c[1];
+  const others = ALL_CARDS.filter(x => x[1] !== correct).map(x => x[1]);
+  const opts = shuffle([correct, ...shuffle(others).slice(0, 3)]);
+
+  document.getElementById('mainArea').innerHTML = `
+    <div class="quiz-card"><div class="card-tag">Les ${c[2]}</div>
+      <div class="type-prompt">What does this mean?</div><div class="type-word">${c[0]} ${ttsBtn(c[0])}</div>
+      <div class="quiz-options">${opts.map((o, i) => `<button class="quiz-opt" onclick="pickQuiz(this,${i},'${escHtml(correct)}')">${o}</button>`).join('')}</div>
+    </div>
+    <div class="buttons" id="buttons"></div>`;
+}
+function escHtml(s) { return s.replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+function pickQuiz(btn, idx, correct) {
+  const btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach(b => { b.disabled = true; b.classList.add('dim'); });
+  const isCorrect = btn.textContent === correct;
+  if (isCorrect) { btn.classList.remove('dim'); btn.classList.add('correct'); known++; }
+  else {
+    btn.classList.remove('dim'); btn.classList.add('wrong');
+    btns.forEach(b => { if (b.textContent === correct) { b.classList.remove('dim'); b.classList.add('correct'); } });
+    again.push(deck[current]);
+  }
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
+  updateStats();
+}
+
+// ---- MATCH ----
+function startMatchSession(filtered) {
+  if (filtered.length < 5) { showEmpty(); return; }
+  matchState = { cards: shuffle([...filtered]), round: 0, totalRounds: Math.ceil(filtered.length / 5), score: 0, total: filtered.length };
+  sessionTotal = filtered.length; known = 0;
+  showMatchRound();
+}
+function showMatchRound() {
+  const ms = matchState;
+  const start = ms.round * 5;
+  const batch = ms.cards.slice(start, start + 5);
+  if (batch.length === 0) { showDone(); return; }
+
+  const nlItems = shuffle(batch.map((c, i) => ({ text: c[0], id: i, side: 'nl' })));
+  const enItems = shuffle(batch.map((c, i) => ({ text: c[1], id: i, side: 'en' })));
+  ms.selected = null; ms.matched = 0; ms.batchSize = batch.length;
+
+  const grid = [...nlItems, ...enItems].reduce((acc, item, idx) => {
+    const col = idx < nlItems.length ? 0 : 1;
+    if (!acc[col]) acc[col] = [];
+    acc[col].push(item);
+    return acc;
+  }, []);
+
+  let html = `<div class="match-area"><div class="match-score">Round ${ms.round + 1} / ${ms.totalRounds}</div><div class="match-grid">`;
+  html += '<div>' + grid[0].map(it => `<div class="match-item" data-id="${it.id}" data-side="${it.side}" onclick="pickMatch(this)">${it.text}</div>`).join('') + '</div>';
+  html += '<div>' + grid[1].map(it => `<div class="match-item" data-id="${it.id}" data-side="${it.side}" onclick="pickMatch(this)">${it.text}</div>`).join('') + '</div>';
+  html += '</div></div>';
+
+  document.getElementById('mainArea').innerHTML = html;
+  document.getElementById('stats').innerHTML = `<span>${ms.score} / ${ms.total} matched</span>`;
+  document.getElementById('progressFill').style.width = (ms.score / ms.total * 100) + '%';
+}
+function pickMatch(el) {
+  if (el.classList.contains('matched')) return;
+  const ms = matchState;
+  if (!ms.selected) {
+    ms.selected = el; el.classList.add('selected');
+  } else {
+    const prev = ms.selected;
+    if (prev === el) { prev.classList.remove('selected'); ms.selected = null; return; }
+    if (prev.dataset.side === el.dataset.side) { prev.classList.remove('selected'); ms.selected = el; el.classList.add('selected'); return; }
+
+    prev.classList.remove('selected');
+    if (prev.dataset.id === el.dataset.id) {
+      prev.classList.add('matched'); el.classList.add('matched'); ms.matched++; ms.score++; known++;
+      document.getElementById('stats').innerHTML = `<span>${ms.score} / ${ms.total} matched</span>`;
+      document.getElementById('progressFill').style.width = (ms.score / ms.total * 100) + '%';
+      if (ms.matched === ms.batchSize) { ms.round++; setTimeout(() => showMatchRound(), 600); }
+    } else {
+      prev.classList.add('error'); el.classList.add('error');
+      setTimeout(() => { prev.classList.remove('error'); el.classList.remove('error'); }, 500);
+    }
+    ms.selected = null;
+  }
+}
+
+// ---- LEARN ----
+function showLearnCard() {
+  const c = deck[current];
+  document.getElementById('mainArea').innerHTML = `
+    <div class="learn-card">
+      <div class="card-tag">Les ${c[2]}</div>
+      <div class="learn-nl">${c[0]} ${ttsBtn(c[0])}</div>
+      <div class="learn-en">${c[1]}</div>
+      <div class="learn-count">${current + 1} / ${sessionTotal}</div>
+    </div>
+    <div class="buttons" id="buttons">
+      <button class="btn btn-again" onclick="markAgain()">Study again</button>
+      <button class="btn btn-good" onclick="markGood()">Got it</button>
+    </div>`;
+}
+
+// ---- BUILD ----
+let buildState = {};
+function showBuildCard() {
+  const c = deck[current];
+  // split Dutch phrase into words
+  const words = c[0].split(/\s+/);
+  if (words.length < 2) {
+    // single word — skip to next or treat as learn
+    showLearnCard();
+    return;
+  }
+  const scrambled = shuffle([...words]);
+  buildState = { words, placed: [], scrambled };
+
+  document.getElementById('mainArea').innerHTML = `
+    <div class="build-card">
+      <div class="card-tag">Les ${c[2]}</div>
+      <div class="type-prompt">Build the Dutch phrase:</div>
+      <div class="build-prompt">${c[1]}</div>
+      <div class="build-slots" id="buildSlots"></div>
+      <div class="build-words" id="buildWords">
+        ${scrambled.map((w, i) => `<button class="build-word" data-idx="${i}" onclick="pickBuildWord(this, ${i})">${w}</button>`).join('')}
+      </div>
+    </div>
+    <div class="buttons" id="buttons"></div>`;
+}
+
+function pickBuildWord(btn, idx) {
+  const bs = buildState;
+  bs.placed.push({ word: bs.scrambled[idx], idx });
+  btn.classList.add('used');
+
+  // render placed words in slots
+  const slots = document.getElementById('buildSlots');
+  slots.innerHTML = bs.placed.map((p, i) =>
+    `<span class="build-placed" onclick="removeBuildWord(${i})">${p.word}</span>`
+  ).join('');
+
+  // check if complete
+  if (bs.placed.length === bs.words.length) {
+    const attempt = bs.placed.map(p => p.word).join(' ');
+    const correct = bs.words.join(' ');
+    if (norm(attempt) === norm(correct)) {
+      slots.classList.add('correct');
+      known++;
+      sayNL(correct);
+      document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
+    } else {
+      slots.classList.add('wrong');
+      again.push(deck[current]);
+      document.getElementById('buttons').innerHTML = `<div style="text-align:center;margin-bottom:12px;color:#ff3b30;font-weight:600">${correct} ${ttsBtn(correct)}</div><button class="btn btn-next" onclick="current++;showCard()">Next</button>`;
+    }
+    updateStats();
+  }
+}
+
+function removeBuildWord(placedIdx) {
+  const bs = buildState;
+  const removed = bs.placed.splice(placedIdx, 1)[0];
+  // un-use the word button
+  const btns = document.querySelectorAll('.build-word');
+  btns[removed.idx].classList.remove('used');
+  // re-render slots
+  const slots = document.getElementById('buildSlots');
+  slots.innerHTML = bs.placed.map((p, i) =>
+    `<span class="build-placed" onclick="removeBuildWord(${i})">${p.word}</span>`
+  ).join('');
+}
+
+// ---- SPEAK ----
+function getAllSpeakTopics() { return [...new Set(SPEAK_CARDS.map(c => c[3]))]; }
+function getSpeakFiltered() {
+  if (speakTopics.size === 0) return SPEAK_CARDS;
+  return SPEAK_CARDS.filter(c => speakTopics.has(c[3]));
+}
+const TOPIC_LABELS = {persoonlijk:'Persoonlijk',familie:'Familie',wonen:'Wonen',werk:'Werk',school:'School',taal:'Nederlands',nederland:'Nederland',dagelijks:'Dagelijks',reizen:'Reizen',eten:'Eten',boodschappen:'Boodschappen','vrije tijd':'Vrije tijd',feest:'Feest',kleding:'Kleding'};
+
+function showSpeakFilter() {
+  let sf = document.getElementById('speakFilter');
+  if (!sf) {
+    sf = document.createElement('div');
+    sf.id = 'speakFilter';
+    sf.className = 'speak-filter';
+    document.getElementById('lessonFilter').insertAdjacentElement('afterend', sf);
+  }
+  sf.style.display = 'flex';
+  sf.innerHTML = '';
+  const allBtn = document.createElement('button');
+  allBtn.className = 'speak-filter-btn' + (speakTopics.size === 0 ? ' active' : '');
+  allBtn.textContent = 'All';
+  allBtn.onclick = () => { speakTopics.clear(); showSpeakFilter(); startSpeakSession(); };
+  sf.appendChild(allBtn);
+  getAllSpeakTopics().forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'speak-filter-btn' + (speakTopics.has(t) ? ' active' : '');
+    btn.textContent = TOPIC_LABELS[t] || t;
+    btn.onclick = () => {
+      if (speakTopics.has(t)) speakTopics.delete(t); else speakTopics.add(t);
+      showSpeakFilter(); startSpeakSession();
+    };
+    sf.appendChild(btn);
+  });
+}
+
+function startSpeakSession() {
+  const filtered = getSpeakFiltered();
+  deck = shuffle(filtered.map(c => [...c]));
+  sessionTotal = deck.length;
+  current = 0; known = 0; again = []; speakAnswerVisible = false;
+  if (deck.length > 0) showSpeakCard(); else showEmpty();
+  updateStats();
+}
+
+function showSpeakCard() {
+  if (current >= deck.length) {
+    if (again.length > 0) { deck = shuffle(again); again = []; current = 0; showSpeakCard(); return; }
+    showDone(); return;
+  }
+  const c = deck[current]; speakAnswerVisible = false;
+  const topic = TOPIC_LABELS[c[3]] || c[3];
+  document.getElementById('mainArea').innerHTML = `
+    <div class="speak-card">
+      <div class="speak-tag">${topic}</div>
+      <div class="speak-q">${c[0]} ${ttsBtn(c[0])}</div>
+      <div class="speak-q-en">${c[1]}</div>
+      <div class="speak-answer hidden" id="speakAnswer">${c[2]} ${ttsBtn(c[2])}</div>
+      <div class="speak-hint" id="speakHint">Say your answer, then check</div>
+    </div>
+    <div class="buttons" id="buttons">
+      <button class="btn btn-show" onclick="showSpeakAnswer()">Show answer</button>
+    </div>`;
+  updateStats();
+}
+
+function showSpeakAnswer() {
+  if (speakAnswerVisible) return;
+  speakAnswerVisible = true;
+  document.getElementById('speakAnswer').classList.remove('hidden');
+  document.getElementById('speakHint').textContent = 'Did you get it right?';
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-again" onclick="markAgain()">Again</button><button class="btn btn-good" onclick="markGood()">Got it</button>';
+}
+
+// ---- COMMON ----
+function markGood() { known++; current++; if (mode === 'speak') showSpeakCard(); else showCard(); updateStats(); }
+function markAgain() { again.push(deck[current]); current++; if (mode === 'speak') showSpeakCard(); else showCard(); updateStats(); }
+
+buildLessonFilter();
+startSession();
+
+document.addEventListener('keydown', e => {
+  if (mode === 'type' || mode === 'quiz' || mode === 'match' || mode === 'build') return;
+  if (mode === 'learn') {
+    if (e.key === '1' || e.key === 'ArrowLeft') markAgain();
+    if (e.key === '2' || e.key === 'ArrowRight') markGood();
+    return;
+  }
+  if (mode === 'speak') {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!speakAnswerVisible) showSpeakAnswer(); }
+    if (e.key === '1' || e.key === 'ArrowLeft') { if (speakAnswerVisible) markAgain(); }
+    if (e.key === '2' || e.key === 'ArrowRight') { if (speakAnswerVisible) markGood(); }
+    return;
+  }
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!isFlipped) flipCard(); }
+  if (e.key === '1' || e.key === 'ArrowLeft') { if (isFlipped) markAgain(); }
+  if (e.key === '2' || e.key === 'ArrowRight') { if (isFlipped) markGood(); }
+});
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'dutch-a1-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./', 'flashcards.html', 'icon.svg'])));
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', e => {
+      e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))));
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+        const clone = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return res;
+      })));
+    });
+  `;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  navigator.serviceWorker.register(URL.createObjectURL(blob), { scope: './' }).catch(() => {});
+}
+</script>
+</body>
+</html>
