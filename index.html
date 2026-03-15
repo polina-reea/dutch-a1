@@ -20,16 +20,14 @@
     --surface: #242830;
     --surface2: #2E3340;
     --text: #FFFFFF;
-    --text2: rgba(255,255,255,0.6);
+    --text2: rgba(255,255,255,0.55);
     --accent: #E5FF5D;
     --purple: #CABAF9;
     --purple-strong: #AB7DFF;
     --green: #27C55A;
     --red: #FF5756;
-    --orange: #FF8347;
-    --border: rgba(255,255,255,0.1);
-    --glass: rgba(36,40,48,0.8);
-    --radius: 12px;
+    --border: rgba(255,255,255,0.08);
+    --radius: 16px;
     --radius-pill: 9999px;
   }
   body {
@@ -40,135 +38,188 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 16px;
-    padding-top: env(safe-area-inset-top, 16px);
-    padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 20px);
+    padding: 24px 20px;
+    padding-top: calc(env(safe-area-inset-top, 24px) + 16px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 24px) + 32px);
     color: var(--text);
     -webkit-tap-highlight-color: transparent;
+    width: 100%;
   }
-  h1 { font-size: 22px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+  h1 { font-size: 24px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em; }
 
-  .stats { font-size: 13px; color: var(--text2); margin-bottom: 12px; text-align: center; }
-  .stats span { margin: 0 8px; }
-  .progress-bar { width: 100%; max-width: 480px; height: 4px; background: var(--surface2); border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--purple-strong), var(--accent)); border-radius: 2px; transition: width 0.3s; }
+  .stats { font-size: 15px; color: var(--text2); margin-bottom: 14px; text-align: center; }
+  .stats span { margin: 0 10px; }
+  .progress-bar { width: 100%; max-width: 520px; height: 5px; background: var(--surface2); border-radius: 3px; margin-bottom: 24px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--purple-strong), var(--accent)); border-radius: 3px; transition: width 0.3s; }
 
-  .card-container { perspective: 1000px; width: 100%; max-width: 480px; height: 260px; margin-bottom: 20px; cursor: pointer; }
+  .card-container { perspective: 1000px; width: 100%; max-width: 520px; height: 300px; margin-bottom: 24px; cursor: pointer; }
   .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); }
   .card.flipped { transform: rotateY(180deg); }
-  .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: var(--radius); padding: 24px; background: var(--surface); border: 1px solid var(--border); backdrop-filter: blur(12px); }
+  .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 20px; padding: 32px 24px; background: var(--surface); border: 1px solid var(--border); }
   .card-front { background: var(--surface); }
   .card-back { background: var(--surface); transform: rotateY(180deg); }
-  .card-word { font-size: 28px; font-weight: 600; margin-bottom: 8px; text-align: center; line-height: 1.3; letter-spacing: -0.02em; }
-  .card-hint { font-size: 13px; color: var(--text2); }
-  .card-tag { position: absolute; top: 14px; right: 14px; font-size: 11px; color: var(--purple); background: rgba(202,186,249,0.1); padding: 4px 10px; border-radius: var(--radius-pill); font-weight: 500; }
+  .card-word { font-size: 32px; font-weight: 600; margin-bottom: 10px; text-align: center; line-height: 1.3; letter-spacing: -0.02em; }
+  .card-hint { font-size: 15px; color: var(--text2); }
+  .card-tag { position: absolute; top: 16px; right: 16px; font-size: 13px; color: var(--purple); background: rgba(202,186,249,0.1); padding: 5px 12px; border-radius: var(--radius-pill); font-weight: 500; }
 
-  .buttons { display: flex; gap: 10px; width: 100%; max-width: 480px; }
-  .btn { flex: 1; padding: 14px; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; letter-spacing: -0.01em; }
+  .buttons { display: flex; gap: 12px; width: 100%; max-width: 520px; }
+  .btn { flex: 1; padding: 18px; border: none; border-radius: var(--radius); font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; letter-spacing: -0.01em; }
   .btn:active { transform: scale(0.97); }
-  .btn-again { background: rgba(255,87,86,0.15); color: var(--red); border: 1px solid rgba(255,87,86,0.3); }
+  .btn-again { background: rgba(255,87,86,0.15); color: var(--red); border: 1px solid rgba(255,87,86,0.25); }
   .btn-good { background: var(--accent); color: #181B1F; }
-  .btn-good:active { filter: brightness(0.95); }
+  .btn-good:active { filter: brightness(0.93); }
   .btn-show { background: var(--purple-strong); color: #fff; }
   .btn-skip { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
   .btn-next { background: var(--purple-strong); color: #fff; }
 
-  .lesson-filter { display: flex; flex-wrap: wrap; gap: 4px; max-width: 480px; margin-bottom: 12px; justify-content: center; }
-  .lesson-btn { padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; color: var(--text2); font-family: inherit; }
+  .lesson-filter { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; margin-bottom: 0; justify-content: flex-start; }
+  .lesson-btn { padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 14px; cursor: pointer; transition: all 0.2s; font-weight: 500; color: var(--text2); font-family: inherit; min-height: 36px; }
   .lesson-btn.active { border-color: var(--purple-strong); background: rgba(171,125,255,0.15); color: var(--purple); }
 
-  .mode-toggle { display: flex; flex-wrap: wrap; gap: 4px; max-width: 540px; width: 100%; margin-bottom: 14px; justify-content: center; }
-  .mode-btn { padding: 7px 14px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text2); transition: all 0.2s; white-space: nowrap; font-family: inherit; }
+  .mode-toggle { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; margin-bottom: 0; justify-content: flex-start; }
+  .mode-btn { padding: 10px 16px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text2); transition: all 0.2s; white-space: nowrap; font-family: inherit; min-height: 40px; }
   .mode-btn.active { border-color: var(--accent); background: rgba(229,255,93,0.1); color: var(--accent); }
 
-  .done-screen { text-align: center; padding: 40px 20px; }
-  .done-screen h2 { font-size: 26px; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.02em; }
-  .done-screen p { color: var(--text2); margin-bottom: 24px; font-size: 15px; }
-  .done-screen .btn { max-width: 200px; margin: 0 auto; display: block; }
-  .score-circle { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--purple-strong), var(--accent)); color: #181B1F; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; margin: 0 auto 16px; }
+  .done-screen { text-align: center; padding: 48px 20px; }
+  .done-screen h2 { font-size: 28px; margin-bottom: 14px; font-weight: 700; letter-spacing: -0.02em; }
+  .done-screen p { color: var(--text2); margin-bottom: 28px; font-size: 17px; }
+  .done-screen .btn { max-width: 220px; margin: 0 auto; display: block; }
+  .score-circle { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, var(--purple-strong), var(--accent)); color: #181B1F; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; margin: 0 auto 20px; }
 
-  .type-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 20px; margin-bottom: 20px; text-align: center; }
-  .type-card .card-tag { position: static; display: inline-block; margin-bottom: 12px; }
-  .type-prompt { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
-  .type-word { font-size: 28px; font-weight: 600; margin-bottom: 20px; line-height: 1.3; letter-spacing: -0.02em; }
-  .type-input { width: 100%; padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 18px; text-align: center; outline: none; transition: border-color 0.2s; font-family: inherit; background: var(--bg); color: var(--text); }
+  .type-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
+  .type-card .card-tag { position: static; display: inline-block; margin-bottom: 14px; }
+  .type-prompt { font-size: 15px; color: var(--text2); margin-bottom: 10px; }
+  .type-word { font-size: 30px; font-weight: 600; margin-bottom: 24px; line-height: 1.3; letter-spacing: -0.02em; }
+  .type-input { width: 100%; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 20px; text-align: center; outline: none; transition: border-color 0.2s; font-family: inherit; background: var(--bg); color: var(--text); }
   .type-input:focus { border-color: var(--purple-strong); }
-  .type-input.correct { border-color: var(--green); background: rgba(39,197,90,0.1); color: var(--green); }
-  .type-input.wrong { border-color: var(--red); background: rgba(255,87,86,0.1); color: var(--red); }
-  .type-answer { margin-top: 12px; font-size: 18px; font-weight: 600; color: var(--green); min-height: 30px; }
+  .type-input.correct { border-color: var(--green); background: rgba(39,197,90,0.08); color: var(--green); }
+  .type-input.wrong { border-color: var(--red); background: rgba(255,87,86,0.08); color: var(--red); }
+  .type-answer { margin-top: 14px; font-size: 20px; font-weight: 600; color: var(--green); min-height: 34px; }
   .type-answer.show-wrong { color: var(--red); }
 
   /* Quiz mode */
-  .quiz-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 20px; margin-bottom: 20px; text-align: center; }
-  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
-  .quiz-opt { padding: 14px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); font-size: 15px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; color: var(--text); }
-  .quiz-opt:hover { border-color: var(--purple-strong); background: rgba(171,125,255,0.08); }
-  .quiz-opt.correct { border-color: var(--green); background: rgba(39,197,90,0.15); color: var(--green); }
-  .quiz-opt.wrong { border-color: var(--red); background: rgba(255,87,86,0.1); color: var(--red); }
-  .quiz-opt.dim { opacity: 0.4; }
+  .quiz-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
+  .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
+  .quiz-opt { padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); font-size: 17px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; color: var(--text); min-height: 52px; }
+  .quiz-opt:active { border-color: var(--purple-strong); background: rgba(171,125,255,0.08); }
+  .quiz-opt.correct { border-color: var(--green); background: rgba(39,197,90,0.12); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: rgba(255,87,86,0.08); color: var(--red); }
+  .quiz-opt.dim { opacity: 0.35; }
   .quiz-opt[disabled] { cursor: default; }
 
   /* Match mode */
-  .match-area { width: 100%; max-width: 480px; margin-bottom: 20px; }
-  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .match-item { padding: 12px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 14px; cursor: pointer; transition: all 0.2s; text-align: center; font-family: inherit; min-height: 48px; display: flex; align-items: center; justify-content: center; color: var(--text); }
+  .match-area { width: 100%; max-width: 520px; margin-bottom: 24px; }
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .match-item { padding: 14px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 16px; cursor: pointer; transition: all 0.2s; text-align: center; font-family: inherit; min-height: 56px; display: flex; align-items: center; justify-content: center; color: var(--text); }
   .match-item.selected { border-color: var(--purple-strong); background: rgba(171,125,255,0.15); }
-  .match-item.matched { border-color: var(--green); background: rgba(39,197,90,0.1); opacity: 0.5; cursor: default; }
-  .match-item.error { border-color: var(--red); background: rgba(255,87,86,0.1); animation: shake 0.4s; }
-  .match-score { text-align: center; margin-bottom: 10px; font-size: 13px; color: var(--text2); }
+  .match-item.matched { border-color: var(--green); background: rgba(39,197,90,0.08); opacity: 0.5; cursor: default; }
+  .match-item.error { border-color: var(--red); background: rgba(255,87,86,0.08); animation: shake 0.4s; }
+  .match-score { text-align: center; margin-bottom: 12px; font-size: 15px; color: var(--text2); }
   @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
   /* TTS button */
-  .tts-btn { background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 6px; opacity: 0.4; transition: opacity 0.2s; vertical-align: middle; }
+  .tts-btn { background: none; border: none; font-size: 24px; cursor: pointer; padding: 6px 8px; opacity: 0.4; transition: opacity 0.2s; vertical-align: middle; }
   .tts-btn:hover, .tts-btn:active { opacity: 1; }
 
   /* Learn mode */
-  .learn-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 20px; margin-bottom: 20px; text-align: center; }
-  .learn-nl { font-size: 26px; font-weight: 600; margin-bottom: 8px; line-height: 1.3; letter-spacing: -0.02em; }
-  .learn-en { font-size: 17px; color: var(--text2); margin-bottom: 4px; line-height: 1.3; }
-  .learn-count { font-size: 12px; color: var(--text2); margin-top: 12px; }
+  .learn-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 36px 24px; margin-bottom: 24px; text-align: center; }
+  .learn-nl { font-size: 30px; font-weight: 600; margin-bottom: 10px; line-height: 1.3; letter-spacing: -0.02em; }
+  .learn-en { font-size: 19px; color: var(--text2); margin-bottom: 6px; line-height: 1.3; }
+  .learn-count { font-size: 14px; color: var(--text2); margin-top: 16px; }
 
   /* Build mode */
-  .build-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 20px; margin-bottom: 20px; text-align: center; }
-  .build-prompt { font-size: 22px; font-weight: 600; margin-bottom: 20px; line-height: 1.3; letter-spacing: -0.02em; }
-  .build-slots { min-height: 50px; border: 2px dashed rgba(255,255,255,0.15); border-radius: var(--radius); padding: 12px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
-  .build-slots.correct { border-color: var(--green); background: rgba(39,197,90,0.1); }
-  .build-slots.wrong { border-color: var(--red); background: rgba(255,87,86,0.1); }
-  .build-words { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-  .build-word { padding: 8px 14px; border: 1px solid var(--purple-strong); border-radius: var(--radius-pill); background: rgba(171,125,255,0.1); font-size: 15px; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--purple); }
-  .build-word:hover, .build-word:active { background: var(--purple-strong); color: #fff; }
-  .build-word.used { opacity: 0.2; pointer-events: none; }
-  .build-placed { padding: 8px 14px; border: 1px solid var(--purple-strong); border-radius: var(--radius-pill); background: var(--purple-strong); color: #fff; font-size: 15px; cursor: pointer; transition: all 0.2s; }
+  .build-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
+  .build-prompt { font-size: 24px; font-weight: 600; margin-bottom: 24px; line-height: 1.3; letter-spacing: -0.02em; }
+  .build-slots { min-height: 56px; border: 2px dashed rgba(255,255,255,0.12); border-radius: var(--radius); padding: 14px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
+  .build-slots.correct { border-color: var(--green); background: rgba(39,197,90,0.08); }
+  .build-slots.wrong { border-color: var(--red); background: rgba(255,87,86,0.08); }
+  .build-words { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .build-word { padding: 12px 18px; border: 1px solid var(--purple-strong); border-radius: var(--radius-pill); background: rgba(171,125,255,0.1); font-size: 17px; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--purple); min-height: 46px; }
+  .build-word:active { background: var(--purple-strong); color: #fff; }
+  .build-word.used { opacity: 0.15; pointer-events: none; }
+  .build-placed { padding: 12px 18px; border: 1px solid var(--purple-strong); border-radius: var(--radius-pill); background: var(--purple-strong); color: #fff; font-size: 17px; cursor: pointer; transition: all 0.2s; }
 
   /* Speak mode */
-  .speak-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 20px; margin-bottom: 20px; text-align: center; }
-  .speak-tag { font-size: 11px; color: var(--purple); background: rgba(202,186,249,0.1); padding: 4px 10px; border-radius: var(--radius-pill); display: inline-block; margin-bottom: 12px; font-weight: 500; }
-  .speak-q { font-size: 22px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; letter-spacing: -0.02em; }
-  .speak-q-en { font-size: 14px; color: var(--text2); margin-bottom: 20px; line-height: 1.4; }
-  .speak-answer { font-size: 18px; color: var(--green); font-weight: 500; min-height: 56px; display: flex; align-items: center; justify-content: center; line-height: 1.4; padding: 12px; border-top: 1px solid var(--border); }
+  .speak-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
+  .speak-tag { font-size: 13px; color: var(--purple); background: rgba(202,186,249,0.1); padding: 6px 14px; border-radius: var(--radius-pill); display: inline-block; margin-bottom: 14px; font-weight: 500; }
+  .speak-q { font-size: 24px; font-weight: 600; margin-bottom: 10px; line-height: 1.4; letter-spacing: -0.02em; }
+  .speak-q-en { font-size: 16px; color: var(--text2); margin-bottom: 24px; line-height: 1.4; }
+  .speak-answer { font-size: 20px; color: var(--green); font-weight: 500; min-height: 64px; display: flex; align-items: center; justify-content: center; line-height: 1.4; padding: 16px; border-top: 1px solid var(--border); }
   .speak-answer.hidden { color: transparent; user-select: none; }
-  .speak-hint { font-size: 12px; color: var(--text2); margin-top: 8px; }
-  .speak-filter { display: flex; flex-wrap: wrap; gap: 4px; max-width: 480px; margin-bottom: 12px; justify-content: center; }
-  .speak-filter-btn { padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 11px; cursor: pointer; transition: all 0.2s; font-weight: 500; color: var(--text2); font-family: inherit; }
+  .speak-hint { font-size: 14px; color: var(--text2); margin-top: 10px; }
+  .speak-filter { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; margin-bottom: 0; margin-top: 16px; justify-content: flex-start; }
+  .speak-filter-btn { padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 13px; cursor: pointer; transition: all 0.2s; font-weight: 500; color: var(--text2); font-family: inherit; min-height: 36px; }
   .speak-filter-btn.active { border-color: var(--purple-strong); background: rgba(171,125,255,0.15); color: var(--purple); }
+
+  /* Stats screen */
+  .stats-screen { width: 100%; max-width: 520px; }
+  .stats-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .stats-header h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  .stats-close { background: var(--surface); border: 1px solid var(--border); color: var(--text2); font-size: 15px; padding: 8px 16px; border-radius: var(--radius-pill); cursor: pointer; font-family: inherit; font-weight: 500; }
+  .stats-summary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+  .stats-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 14px; text-align: center; }
+  .stats-box .num { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; }
+  .stats-box .num.accent { color: var(--accent); }
+  .stats-box .num.purple { color: var(--purple); }
+  .stats-box .num.green { color: var(--green); }
+  .stats-box .label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+  .lesson-progress { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; margin-bottom: 10px; }
+  .lesson-progress .lp-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 15px; }
+  .lesson-progress .lp-label { font-weight: 600; }
+  .lesson-progress .lp-count { color: var(--text2); font-size: 13px; }
+  .lp-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .lp-fill { height: 100%; background: linear-gradient(90deg, var(--purple-strong), var(--accent)); border-radius: 3px; transition: width 0.3s; }
+  .stats-reset { background: rgba(255,87,86,0.1); border: 1px solid rgba(255,87,86,0.2); color: var(--red); font-size: 14px; padding: 12px 20px; border-radius: var(--radius); cursor: pointer; font-family: inherit; font-weight: 500; margin-top: 16px; width: 100%; }
+
+  /* Top bar */
+  .top-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 520px; margin-bottom: 16px; }
+  .top-bar h1 { margin: 0; font-size: 22px; }
+  .top-bar-actions { display: flex; gap: 8px; }
+  .top-icon { background: var(--surface); border: 1px solid var(--border); color: var(--text2); font-size: 18px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-family: inherit; }
+  .top-icon:active { background: var(--surface2); }
+  .top-icon.open { border-color: var(--purple-strong); color: var(--purple); background: rgba(171,125,255,0.1); }
+
+  /* Active mode pill (shown in top bar) */
+  .active-mode-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(229,255,93,0.1); border: 1px solid rgba(229,255,93,0.2); color: var(--accent); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: var(--radius-pill); cursor: pointer; font-family: inherit; }
+  .active-mode-pill:active { background: rgba(229,255,93,0.2); }
+
+  /* Settings drawer */
+  .settings-drawer { width: 100%; max-width: 520px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 16px; display: none; }
+  .settings-drawer.open { display: block; }
+  .settings-section { margin-bottom: 16px; }
+  .settings-section:last-child { margin-bottom: 0; }
+  .settings-label { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
 </style>
 </head>
 <body>
 
-<h1>Dutch A1</h1>
-
-<div class="mode-toggle" id="modeToggle">
-  <button class="mode-btn" onclick="setMode('learn')">Learn</button>
-  <button class="mode-btn" onclick="setMode('build')">Build</button>
-  <button class="mode-btn active" onclick="setMode('nl')">NL→EN</button>
-  <button class="mode-btn" onclick="setMode('en')">EN→NL</button>
-  <button class="mode-btn" onclick="setMode('type')">Type</button>
-  <button class="mode-btn" onclick="setMode('quiz')">Quiz</button>
-  <button class="mode-btn" onclick="setMode('match')">Match</button>
-  <button class="mode-btn" onclick="setMode('speak')">Speak</button>
+<div class="top-bar">
+  <h1>Dutch A1</h1>
+  <div class="top-bar-actions">
+    <button class="active-mode-pill" id="modePill" onclick="toggleSettings()">NL→EN &#9662;</button>
+    <button class="top-icon" onclick="showStats()" title="Progress">&#128202;</button>
+  </div>
 </div>
 
-<div class="lesson-filter" id="lessonFilter"></div>
+<div class="settings-drawer" id="settingsDrawer">
+  <div class="settings-section">
+    <div class="settings-label">Mode</div>
+    <div class="mode-toggle" id="modeToggle">
+      <button class="mode-btn" onclick="setMode('learn')">Learn</button>
+      <button class="mode-btn" onclick="setMode('build')">Build</button>
+      <button class="mode-btn active" onclick="setMode('nl')">NL→EN</button>
+      <button class="mode-btn" onclick="setMode('en')">EN→NL</button>
+      <button class="mode-btn" onclick="setMode('type')">Type</button>
+      <button class="mode-btn" onclick="setMode('quiz')">Quiz</button>
+      <button class="mode-btn" onclick="setMode('match')">Match</button>
+      <button class="mode-btn" onclick="setMode('speak')">Speak</button>
+    </div>
+  </div>
+  <div class="settings-section">
+    <div class="settings-label">Lessons</div>
+    <div class="lesson-filter" id="lessonFilter"></div>
+  </div>
+</div>
 <div class="stats" id="stats"></div>
 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 <div id="mainArea" style="width:100%;max-width:440px;"></div>
@@ -342,6 +393,115 @@ function ttsBtn(text) {
   return `<button class="tts-btn" onclick="event.stopPropagation();sayNL('${text.replace(/'/g,"\\'")}')" title="Listen">&#128264;</button>`;
 }
 
+// ---- PROGRESS TRACKING ----
+const MASTERED_THRESHOLD = 3; // correct answers in a row to master a card
+function cardKey(c) { return c[0] + '|' + c[2]; } // dutch word + lesson as unique key
+function speakKey(c) { return 'sp|' + c[0]; }
+
+function loadProgress() {
+  try { return JSON.parse(localStorage.getItem('dutch-a1-progress') || '{}'); } catch(e) { return {}; }
+}
+function saveProgress(p) { localStorage.setItem('dutch-a1-progress', JSON.stringify(p)); }
+
+function recordCorrect(c, isSpeakCard) {
+  const p = loadProgress();
+  const k = isSpeakCard ? speakKey(c) : cardKey(c);
+  if (!p[k]) p[k] = { correct: 0, total: 0 };
+  p[k].correct++;
+  p[k].total++;
+  p[k].lastDate = new Date().toISOString().slice(0, 10);
+  saveProgress(p);
+}
+function recordWrong(c, isSpeakCard) {
+  const p = loadProgress();
+  const k = isSpeakCard ? speakKey(c) : cardKey(c);
+  if (!p[k]) p[k] = { correct: 0, total: 0 };
+  p[k].correct = 0; // reset streak
+  p[k].total++;
+  p[k].lastDate = new Date().toISOString().slice(0, 10);
+  saveProgress(p);
+}
+function isMastered(c, isSpeakCard) {
+  const p = loadProgress();
+  const k = isSpeakCard ? speakKey(c) : cardKey(c);
+  return p[k] && p[k].correct >= MASTERED_THRESHOLD;
+}
+
+function getLessonStats() {
+  const p = loadProgress();
+  const lessons = getAllLessons();
+  const stats = {};
+  lessons.forEach(l => {
+    const cards = ALL_CARDS.filter(c => c[2] === l);
+    const mastered = cards.filter(c => { const d = p[cardKey(c)]; return d && d.correct >= MASTERED_THRESHOLD; }).length;
+    stats[l] = { total: cards.length, mastered };
+  });
+  return stats;
+}
+
+function getTotalStats() {
+  const p = loadProgress();
+  const allKeys = Object.keys(p);
+  const mastered = allKeys.filter(k => p[k].correct >= MASTERED_THRESHOLD).length;
+  const today = new Date().toISOString().slice(0, 10);
+  const todayReviewed = allKeys.filter(k => p[k].lastDate === today).length;
+  return { total: ALL_CARDS.length + SPEAK_CARDS.length, mastered, reviewed: allKeys.length, todayReviewed };
+}
+
+function showStats() {
+  const ts = getTotalStats();
+  const ls = getLessonStats();
+  const p = loadProgress();
+
+  // Speak stats
+  const speakMastered = SPEAK_CARDS.filter(c => { const d = p[speakKey(c)]; return d && d.correct >= MASTERED_THRESHOLD; }).length;
+
+  let html = `<div class="stats-screen">
+    <div class="stats-header"><h2>Progress</h2><button class="stats-close" onclick="closeStats()">Back</button></div>
+    <div class="stats-summary">
+      <div class="stats-box"><div class="num accent">${ts.mastered}</div><div class="label">Mastered</div></div>
+      <div class="stats-box"><div class="num purple">${ts.reviewed}</div><div class="label">Seen</div></div>
+      <div class="stats-box"><div class="num green">${ts.todayReviewed}</div><div class="label">Today</div></div>
+    </div>`;
+
+  // Per lesson
+  getAllLessons().forEach(l => {
+    const s = ls[l];
+    const pct = s.total > 0 ? Math.round(s.mastered / s.total * 100) : 0;
+    html += `<div class="lesson-progress">
+      <div class="lp-header"><span class="lp-label">Les ${l}</span><span class="lp-count">${s.mastered}/${s.total}</span></div>
+      <div class="lp-bar"><div class="lp-fill" style="width:${pct}%"></div></div>
+    </div>`;
+  });
+
+  // Speak section
+  const spPct = SPEAK_CARDS.length > 0 ? Math.round(speakMastered / SPEAK_CARDS.length * 100) : 0;
+  html += `<div class="lesson-progress">
+    <div class="lp-header"><span class="lp-label">Speak</span><span class="lp-count">${speakMastered}/${SPEAK_CARDS.length}</span></div>
+    <div class="lp-bar"><div class="lp-fill" style="width:${spPct}%"></div></div>
+  </div>`;
+
+  html += `<button class="stats-reset" onclick="if(confirm('Reset all progress?')){localStorage.removeItem('dutch-a1-progress');showStats();}">Reset progress</button>`;
+  html += `</div>`;
+
+  // Hide normal UI, show stats
+  document.querySelector('.top-bar').style.display = 'none';
+  document.getElementById('settingsDrawer').style.display = 'none';
+  document.getElementById('stats').style.display = 'none';
+  document.querySelector('.progress-bar').style.display = 'none';
+  const sf = document.getElementById('speakFilter');
+  if (sf) sf.style.display = 'none';
+  document.getElementById('mainArea').innerHTML = html;
+}
+
+function closeStats() {
+  document.querySelector('.top-bar').style.display = 'flex';
+  document.getElementById('settingsDrawer').style.display = '';
+  document.getElementById('stats').style.display = '';
+  document.querySelector('.progress-bar').style.display = '';
+  setMode(mode);
+}
+
 function buildLessonFilter() {
   const c = document.getElementById('lessonFilter');
   const lessons = getAllLessons();
@@ -378,13 +538,27 @@ function syncFilterUI() {
   });
 }
 
+const MODE_LABELS = {learn:'Learn',build:'Build',nl:'NL→EN',en:'EN→NL',type:'Type',quiz:'Quiz',match:'Match',speak:'Speak'};
+
+function toggleSettings() {
+  const d = document.getElementById('settingsDrawer');
+  d.classList.toggle('open');
+  document.getElementById('modePill').innerHTML = MODE_LABELS[mode] + (d.classList.contains('open') ? ' &#9652;' : ' &#9662;');
+}
+
 function setMode(m) {
   mode = m;
   const modes = ['learn','build','nl','en','type','quiz','match','speak'];
   document.querySelectorAll('.mode-btn').forEach((btn, i) => {
     btn.classList.toggle('active', modes[i] === m);
   });
-  document.getElementById('lessonFilter').style.display = m === 'speak' ? 'none' : 'flex';
+  // Update pill & close drawer
+  document.getElementById('modePill').innerHTML = MODE_LABELS[m] + ' &#9662;';
+  document.getElementById('settingsDrawer').classList.remove('open');
+
+  // Lesson filter visibility
+  const lessonSection = document.getElementById('lessonFilter').parentElement;
+  lessonSection.style.display = m === 'speak' ? 'none' : '';
   if (m === 'speak') {
     showSpeakFilter();
     startSpeakSession();
@@ -477,15 +651,15 @@ function checkTyped() {
   const c = deck[current], inp = document.getElementById('typeInput'), ans = document.getElementById('typeAnswer');
   const ok = norm(inp.value) === norm(c[0]);
   inp.disabled = true;
-  if (ok) { inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(c[0]); known++; }
-  else { inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.innerHTML = c[0] + ' ' + ttsBtn(c[0]); again.push(c); }
+  if (ok) { inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(c[0]); known++; recordCorrect(c, false); }
+  else { inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.innerHTML = c[0] + ' ' + ttsBtn(c[0]); again.push(c); recordWrong(c, false); }
   document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
   updateStats();
 }
 function skipTyped() {
   const c = deck[current]; typeState = 'result';
   const inp = document.getElementById('typeInput'), ans = document.getElementById('typeAnswer');
-  inp.disabled = true; inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.textContent = c[0]; again.push(c);
+  inp.disabled = true; inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.textContent = c[0]; again.push(c); recordWrong(c, false);
   document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
   updateStats();
 }
@@ -509,11 +683,11 @@ function pickQuiz(btn, idx, correct) {
   const btns = document.querySelectorAll('.quiz-opt');
   btns.forEach(b => { b.disabled = true; b.classList.add('dim'); });
   const isCorrect = btn.textContent === correct;
-  if (isCorrect) { btn.classList.remove('dim'); btn.classList.add('correct'); known++; }
+  if (isCorrect) { btn.classList.remove('dim'); btn.classList.add('correct'); known++; recordCorrect(deck[current], false); }
   else {
     btn.classList.remove('dim'); btn.classList.add('wrong');
     btns.forEach(b => { if (b.textContent === correct) { b.classList.remove('dim'); b.classList.add('correct'); } });
-    again.push(deck[current]);
+    again.push(deck[current]); recordWrong(deck[current], false);
   }
   document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
   updateStats();
@@ -637,11 +811,12 @@ function pickBuildWord(btn, idx) {
     if (norm(attempt) === norm(correct)) {
       slots.classList.add('correct');
       known++;
+      recordCorrect(deck[current], false);
       sayNL(correct);
       document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
     } else {
       slots.classList.add('wrong');
-      again.push(deck[current]);
+      again.push(deck[current]); recordWrong(deck[current], false);
       document.getElementById('buttons').innerHTML = `<div style="text-align:center;margin-bottom:12px;color:#ff3b30;font-weight:600">${correct} ${ttsBtn(correct)}</div><button class="btn btn-next" onclick="current++;showCard()">Next</button>`;
     }
     updateStats();
@@ -675,7 +850,7 @@ function showSpeakFilter() {
     sf = document.createElement('div');
     sf.id = 'speakFilter';
     sf.className = 'speak-filter';
-    document.getElementById('lessonFilter').insertAdjacentElement('afterend', sf);
+    document.getElementById('settingsDrawer').appendChild(sf);
   }
   sf.style.display = 'flex';
   sf.innerHTML = '';
@@ -735,8 +910,20 @@ function showSpeakAnswer() {
 }
 
 // ---- COMMON ----
-function markGood() { known++; current++; if (mode === 'speak') showSpeakCard(); else showCard(); updateStats(); }
-function markAgain() { again.push(deck[current]); current++; if (mode === 'speak') showSpeakCard(); else showCard(); updateStats(); }
+function markGood() {
+  const c = deck[current];
+  recordCorrect(c, mode === 'speak');
+  known++; current++;
+  if (mode === 'speak') showSpeakCard(); else showCard();
+  updateStats();
+}
+function markAgain() {
+  const c = deck[current];
+  recordWrong(c, mode === 'speak');
+  again.push(c); current++;
+  if (mode === 'speak') showSpeakCard(); else showCard();
+  updateStats();
+}
 
 buildLessonFilter();
 startSession();
