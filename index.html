@@ -15,20 +15,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
+  :root, [data-theme="dark"] {
     --bg: #181B1F;
     --surface: #242830;
     --surface2: #2E3340;
     --text: #FFFFFF;
     --text2: rgba(255,255,255,0.55);
     --accent: #E5FF5D;
+    --accent-text: #181B1F;
     --purple: #CABAF9;
     --purple-strong: #AB7DFF;
     --green: #27C55A;
     --red: #FF5756;
     --border: rgba(255,255,255,0.08);
+    --accent-bg: rgba(229,255,93,0.1);
+    --accent-border: rgba(229,255,93,0.2);
+    --purple-bg: rgba(202,186,249,0.1);
+    --green-bg: rgba(39,197,90,0.08);
+    --red-bg: rgba(255,87,86,0.08);
+    --dashed-border: rgba(255,255,255,0.12);
     --radius: 16px;
     --radius-pill: 9999px;
+  }
+  [data-theme="light"] {
+    --bg: #F5F5F7;
+    --surface: #FFFFFF;
+    --surface2: #E8E8EC;
+    --text: #1D1D1F;
+    --text2: rgba(0,0,0,0.55);
+    --accent: #AB7DFF;
+    --accent-text: #FFFFFF;
+    --purple: #7C5AC7;
+    --purple-strong: #AB7DFF;
+    --green: #0D9344;
+    --red: #DC2626;
+    --border: rgba(0,0,0,0.12);
+    --accent-bg: rgba(171,125,255,0.12);
+    --accent-border: rgba(171,125,255,0.3);
+    --purple-bg: rgba(124,90,199,0.12);
+    --green-bg: rgba(13,147,68,0.1);
+    --red-bg: rgba(220,38,38,0.1);
+    --dashed-border: rgba(0,0,0,0.15);
   }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -40,7 +67,7 @@
     align-items: center;
     padding: 24px 20px;
     padding-top: calc(env(safe-area-inset-top, 24px) + 16px);
-    padding-bottom: calc(env(safe-area-inset-bottom, 24px) + 32px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 24px) + 80px);
     color: var(--text);
     -webkit-tap-highlight-color: transparent;
     width: 100%;
@@ -60,13 +87,13 @@
   .card-back { background: var(--surface); transform: rotateY(180deg); }
   .card-word { font-size: 32px; font-weight: 600; margin-bottom: 10px; text-align: center; line-height: 1.3; letter-spacing: -0.02em; }
   .card-hint { font-size: 15px; color: var(--text2); }
-  .card-tag { position: absolute; top: 16px; right: 16px; font-size: 13px; color: var(--purple); background: rgba(202,186,249,0.1); padding: 5px 12px; border-radius: var(--radius-pill); font-weight: 500; }
+  .card-tag { position: absolute; top: 16px; right: 16px; font-size: 13px; color: var(--purple); background: var(--purple-bg); padding: 5px 12px; border-radius: var(--radius-pill); font-weight: 500; }
 
   .buttons { display: flex; gap: 12px; width: 100%; max-width: 520px; }
   .btn { flex: 1; padding: 18px; border: none; border-radius: var(--radius); font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; letter-spacing: -0.01em; }
   .btn:active { transform: scale(0.97); }
-  .btn-again { background: rgba(255,87,86,0.15); color: var(--red); border: 1px solid rgba(255,87,86,0.25); }
-  .btn-good { background: var(--accent); color: #181B1F; }
+  .btn-again { background: var(--red-bg); color: var(--red); border: 1px solid currentColor; }
+  .btn-good { background: var(--accent); color: var(--accent-text); }
   .btn-good:active { filter: brightness(0.93); }
   .btn-show { background: var(--purple-strong); color: #fff; }
   .btn-skip { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
@@ -74,17 +101,17 @@
 
   .lesson-filter { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; margin-bottom: 0; justify-content: flex-start; }
   .lesson-btn { padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 14px; cursor: pointer; transition: all 0.2s; font-weight: 500; color: var(--text2); font-family: inherit; min-height: 36px; }
-  .lesson-btn.active { border-color: var(--purple-strong); background: rgba(171,125,255,0.15); color: var(--purple); }
+  .lesson-btn.active { border-color: var(--purple-strong); background: var(--purple-bg); color: var(--purple); }
 
   .mode-toggle { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; margin-bottom: 0; justify-content: flex-start; }
   .mode-btn { padding: 10px 16px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 14px; font-weight: 600; cursor: pointer; color: var(--text2); transition: all 0.2s; white-space: nowrap; font-family: inherit; min-height: 40px; }
-  .mode-btn.active { border-color: var(--accent); background: rgba(229,255,93,0.1); color: var(--accent); }
+  .mode-btn.active { border-color: var(--accent); background: var(--accent-bg); color: var(--accent); }
 
   .done-screen { text-align: center; padding: 48px 20px; }
   .done-screen h2 { font-size: 28px; margin-bottom: 14px; font-weight: 700; letter-spacing: -0.02em; }
   .done-screen p { color: var(--text2); margin-bottom: 28px; font-size: 17px; }
   .done-screen .btn { max-width: 220px; margin: 0 auto; display: block; }
-  .score-circle { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, var(--purple-strong), var(--accent)); color: #181B1F; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; margin: 0 auto 20px; }
+  .score-circle { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, var(--purple-strong), var(--accent)); color: var(--accent-text); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; margin: 0 auto 20px; }
 
   .type-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
   .type-card .card-tag { position: static; display: inline-block; margin-bottom: 14px; }
@@ -92,8 +119,8 @@
   .type-word { font-size: 30px; font-weight: 600; margin-bottom: 24px; line-height: 1.3; letter-spacing: -0.02em; }
   .type-input { width: 100%; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 20px; text-align: center; outline: none; transition: border-color 0.2s; font-family: inherit; background: var(--bg); color: var(--text); }
   .type-input:focus { border-color: var(--purple-strong); }
-  .type-input.correct { border-color: var(--green); background: rgba(39,197,90,0.08); color: var(--green); }
-  .type-input.wrong { border-color: var(--red); background: rgba(255,87,86,0.08); color: var(--red); }
+  .type-input.correct { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+  .type-input.wrong { border-color: var(--red); background: var(--red-bg); color: var(--red); }
   .type-answer { margin-top: 14px; font-size: 20px; font-weight: 600; color: var(--green); min-height: 34px; }
   .type-answer.show-wrong { color: var(--red); }
 
@@ -101,19 +128,20 @@
   .quiz-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
   .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; }
   .quiz-opt { padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); font-size: 17px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; color: var(--text); min-height: 52px; }
-  .quiz-opt:active { border-color: var(--purple-strong); background: rgba(171,125,255,0.08); }
-  .quiz-opt.correct { border-color: var(--green); background: rgba(39,197,90,0.12); color: var(--green); }
-  .quiz-opt.wrong { border-color: var(--red); background: rgba(255,87,86,0.08); color: var(--red); }
+  .quiz-opt:active { border-color: var(--purple-strong); background: var(--purple-bg); }
+  .quiz-opt.correct { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+  .quiz-opt.wrong { border-color: var(--red); background: var(--red-bg); color: var(--red); }
   .quiz-opt.dim { opacity: 0.35; }
   .quiz-opt[disabled] { cursor: default; }
 
   /* Match mode */
   .match-area { width: 100%; max-width: 520px; margin-bottom: 24px; }
   .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .match-grid > div { display: flex; flex-direction: column; gap: 10px; }
   .match-item { padding: 14px 12px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); font-size: 16px; cursor: pointer; transition: all 0.2s; text-align: center; font-family: inherit; min-height: 56px; display: flex; align-items: center; justify-content: center; color: var(--text); }
-  .match-item.selected { border-color: var(--purple-strong); background: rgba(171,125,255,0.15); }
-  .match-item.matched { border-color: var(--green); background: rgba(39,197,90,0.08); opacity: 0.5; cursor: default; }
-  .match-item.error { border-color: var(--red); background: rgba(255,87,86,0.08); animation: shake 0.4s; }
+  .match-item.selected { border-color: var(--purple-strong); background: var(--purple-bg); }
+  .match-item.matched { border-color: var(--green); background: var(--green-bg); opacity: 0.5; cursor: default; }
+  .match-item.error { border-color: var(--red); background: var(--red-bg); animation: shake 0.4s; }
   .match-score { text-align: center; margin-bottom: 12px; font-size: 15px; color: var(--text2); }
   @keyframes shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
@@ -130,18 +158,18 @@
   /* Build mode */
   .build-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
   .build-prompt { font-size: 24px; font-weight: 600; margin-bottom: 24px; line-height: 1.3; letter-spacing: -0.02em; }
-  .build-slots { min-height: 56px; border: 2px dashed rgba(255,255,255,0.12); border-radius: var(--radius); padding: 14px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
-  .build-slots.correct { border-color: var(--green); background: rgba(39,197,90,0.08); }
-  .build-slots.wrong { border-color: var(--red); background: rgba(255,87,86,0.08); }
+  .build-slots { min-height: 56px; border: 2px dashed var(--dashed-border); border-radius: var(--radius); padding: 14px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
+  .build-slots.correct { border-color: var(--green); background: var(--green-bg); }
+  .build-slots.wrong { border-color: var(--red); background: var(--red-bg); }
   .build-words { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-  .build-word { padding: 12px 18px; border: 1px solid var(--purple-strong); border-radius: var(--radius-pill); background: rgba(171,125,255,0.1); font-size: 17px; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--purple); min-height: 46px; }
+  .build-word { padding: 12px 18px; border: 1px solid var(--purple-strong); border-radius: var(--radius-pill); background: var(--purple-bg); font-size: 17px; cursor: pointer; transition: all 0.2s; font-family: inherit; color: var(--purple); min-height: 46px; }
   .build-word:active { background: var(--purple-strong); color: #fff; }
   .build-word.used { opacity: 0.15; pointer-events: none; }
   .build-placed { padding: 12px 18px; border: 1px solid var(--purple-strong); border-radius: var(--radius-pill); background: var(--purple-strong); color: #fff; font-size: 17px; cursor: pointer; transition: all 0.2s; }
 
   /* Speak mode */
   .speak-card { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 32px 24px; margin-bottom: 24px; text-align: center; }
-  .speak-tag { font-size: 13px; color: var(--purple); background: rgba(202,186,249,0.1); padding: 6px 14px; border-radius: var(--radius-pill); display: inline-block; margin-bottom: 14px; font-weight: 500; }
+  .speak-tag { font-size: 13px; color: var(--purple); background: var(--purple-bg); padding: 6px 14px; border-radius: var(--radius-pill); display: inline-block; margin-bottom: 14px; font-weight: 500; }
   .speak-q { font-size: 24px; font-weight: 600; margin-bottom: 10px; line-height: 1.4; letter-spacing: -0.02em; }
   .speak-q-en { font-size: 16px; color: var(--text2); margin-bottom: 24px; line-height: 1.4; }
   .speak-answer { font-size: 20px; color: var(--green); font-weight: 500; min-height: 64px; display: flex; align-items: center; justify-content: center; line-height: 1.4; padding: 16px; border-top: 1px solid var(--border); }
@@ -149,7 +177,30 @@
   .speak-hint { font-size: 14px; color: var(--text2); margin-top: 10px; }
   .speak-filter { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; margin-bottom: 0; margin-top: 16px; justify-content: flex-start; }
   .speak-filter-btn { padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--radius-pill); background: var(--surface); font-size: 13px; cursor: pointer; transition: all 0.2s; font-weight: 500; color: var(--text2); font-family: inherit; min-height: 36px; }
-  .speak-filter-btn.active { border-color: var(--purple-strong); background: rgba(171,125,255,0.15); color: var(--purple); }
+  .speak-filter-btn.active { border-color: var(--purple-strong); background: var(--purple-bg); color: var(--purple); }
+
+  /* KNS mode */
+  .kns-card { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 28px 24px; text-align: center; }
+  .kns-tag { font-size: 13px; color: var(--purple); background: var(--purple-bg); padding: 5px 12px; border-radius: var(--radius-pill); font-weight: 500; display: inline-block; margin-bottom: 12px; }
+  .kns-photo-num { font-size: 15px; font-weight: 600; color: var(--text2); margin-bottom: 8px; }
+  .kns-photo { width: 100%; max-width: 360px; border-radius: 12px; margin: 0 auto 16px; display: block; border: 1px solid var(--border); }
+  .kns-question { font-size: 19px; font-weight: 500; line-height: 1.5; margin-bottom: 24px; color: var(--text); }
+  .kns-options { display: flex; flex-direction: column; gap: 12px; }
+  .kns-option { display: flex; align-items: center; gap: 14px; padding: 18px 20px; border: 2px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; text-align: left; }
+  .kns-option:active { transform: scale(0.98); }
+  .kns-option:hover { border-color: var(--accent-border); background: var(--accent-bg); }
+  .kns-letter { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: var(--surface2); font-weight: 700; font-size: 15px; flex-shrink: 0; }
+  .kns-option.kns-correct { border-color: var(--green); background: var(--green-bg); }
+  .kns-option.kns-correct .kns-letter { background: var(--green); color: #fff; }
+  .kns-option.kns-wrong { border-color: var(--red); background: var(--red-bg); }
+  .kns-option.kns-wrong .kns-letter { background: var(--red); color: #fff; }
+  .kns-option:disabled { cursor: default; transform: none; }
+  .kns-option:disabled:hover { border-color: var(--border); background: var(--surface); }
+  .kns-option.kns-correct:disabled:hover { border-color: var(--green); background: var(--green-bg); }
+  .kns-option.kns-wrong:disabled:hover { border-color: var(--red); background: var(--red-bg); }
+  .kns-result { margin-top: 16px; font-size: 16px; font-weight: 600; }
+  .kns-ok { color: var(--green); }
+  .kns-nope { color: var(--red); }
 
   /* Stats screen */
   .stats-screen { width: 100%; max-width: 520px; }
@@ -169,7 +220,10 @@
   .lesson-progress .lp-count { color: var(--text2); font-size: 13px; }
   .lp-bar { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
   .lp-fill { height: 100%; background: linear-gradient(90deg, var(--purple-strong), var(--accent)); border-radius: 3px; transition: width 0.3s; }
-  .stats-reset { background: rgba(255,87,86,0.1); border: 1px solid rgba(255,87,86,0.2); color: var(--red); font-size: 14px; padding: 12px 20px; border-radius: var(--radius); cursor: pointer; font-family: inherit; font-weight: 500; margin-top: 16px; width: 100%; }
+  .sync-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+  .sync-dot.on { background: var(--green); }
+  .sync-dot.off { background: var(--text2); }
+  .stats-reset { background: var(--red-bg); border: 1px solid currentColor; color: var(--red); font-size: 14px; padding: 12px 20px; border-radius: var(--radius); cursor: pointer; font-family: inherit; font-weight: 500; margin-top: 16px; width: 100%; }
 
   /* Top bar */
   .top-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 520px; margin-bottom: 16px; }
@@ -177,11 +231,11 @@
   .top-bar-actions { display: flex; gap: 8px; }
   .top-icon { background: var(--surface); border: 1px solid var(--border); color: var(--text2); font-size: 18px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-family: inherit; }
   .top-icon:active { background: var(--surface2); }
-  .top-icon.open { border-color: var(--purple-strong); color: var(--purple); background: rgba(171,125,255,0.1); }
+  .top-icon.open { border-color: var(--purple-strong); color: var(--purple); background: var(--purple-bg); }
 
   /* Active mode pill (shown in top bar) */
-  .active-mode-pill { display: inline-flex; align-items: center; gap: 6px; background: rgba(229,255,93,0.1); border: 1px solid rgba(229,255,93,0.2); color: var(--accent); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: var(--radius-pill); cursor: pointer; font-family: inherit; }
-  .active-mode-pill:active { background: rgba(229,255,93,0.2); }
+  .active-mode-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-bg); border: 1px solid var(--accent-border); color: var(--accent); font-size: 13px; font-weight: 600; padding: 6px 14px; border-radius: var(--radius-pill); cursor: pointer; font-family: inherit; }
+  .active-mode-pill:active { opacity: 0.8; }
 
   /* Settings drawer */
   .settings-drawer { width: 100%; max-width: 520px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 20px; margin-bottom: 16px; display: none; }
@@ -189,15 +243,52 @@
   .settings-section { margin-bottom: 16px; }
   .settings-section:last-child { margin-bottom: 0; }
   .settings-label { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+
+  /* Welcome/login screen */
+  .welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; min-height: 80dvh; width: 100%; max-width: 400px; text-align: center; }
+  .welcome-icon { font-size: 64px; margin-bottom: 20px; }
+  .welcome h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+  .welcome p { color: var(--text2); font-size: 16px; line-height: 1.5; margin-bottom: 32px; }
+  .welcome-input { width: 100%; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); font-size: 18px; text-align: center; font-family: inherit; outline: none; margin-bottom: 14px; }
+  .welcome-input:focus { border-color: var(--purple-strong); }
+  .welcome-input::placeholder { color: var(--text2); }
+  .welcome-btn { width: 100%; padding: 18px; border: none; border-radius: var(--radius); font-size: 17px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; margin-bottom: 10px; }
+  .welcome-btn:active { transform: scale(0.97); }
+  .welcome-btn.primary { background: var(--accent); color: var(--accent-text); }
+  .welcome-btn.secondary { background: var(--surface); color: var(--text2); border: 1px solid var(--border); }
+  #appWrap { flex-direction: column; align-items: center; width: 100%; }
+
+  /* Tab bar */
+  .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--surface); border-top: 1px solid var(--border); padding: 8px 0; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); z-index: 100; }
+  .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; color: var(--text2); cursor: pointer; padding: 6px 0; font-family: inherit; transition: color 0.2s; -webkit-tap-highlight-color: transparent; }
+  .tab.active { color: var(--accent); }
+  .tab-emoji { font-size: 20px; line-height: 1; }
+  .tab-label { font-size: 10px; font-weight: 600; }
+
+  /* KNS top filter (outside drawer) */
+  .kns-top-filter { display: none; width: 100%; max-width: 520px; margin-bottom: 16px; }
 </style>
 </head>
 <body>
 
+<!-- Welcome screen -->
+<div class="welcome" id="welcomeScreen">
+  <button class="top-icon" onclick="toggleTheme()" id="welcomeThemeBtn" style="position:absolute;top:24px;right:20px;">&#9790;</button>
+  <div class="welcome-icon">🇳🇱</div>
+  <h2>Dutch A1</h2>
+  <p>Flashcards for the Naar Nederland exam</p>
+  <input type="text" class="welcome-input" id="welcomeInput" placeholder="Nickname" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')doLogin()" />
+  <button class="welcome-btn primary" onclick="doLogin()">Start with sync</button>
+  <button class="welcome-btn secondary" onclick="doSkip()">Skip — no sync</button>
+</div>
+
+<!-- App (hidden until login/skip) -->
+<div id="appWrap" style="display:none;width:100%;display:none;flex-direction:column;align-items:center;">
 <div class="top-bar">
   <h1>Dutch A1</h1>
   <div class="top-bar-actions">
     <button class="active-mode-pill" id="modePill" onclick="toggleSettings()">NL→EN &#9662;</button>
-    <button class="top-icon" onclick="showStats()" title="Progress">&#128202;</button>
+    <button class="top-icon" id="themeBtn" onclick="toggleTheme()" title="Theme">&#9790;</button>
   </div>
 </div>
 
@@ -212,7 +303,6 @@
       <button class="mode-btn" onclick="setMode('type')">Type</button>
       <button class="mode-btn" onclick="setMode('quiz')">Quiz</button>
       <button class="mode-btn" onclick="setMode('match')">Match</button>
-      <button class="mode-btn" onclick="setMode('speak')">Speak</button>
     </div>
   </div>
   <div class="settings-section">
@@ -222,7 +312,33 @@
 </div>
 <div class="stats" id="stats"></div>
 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-<div id="mainArea" style="width:100%;max-width:440px;"></div>
+<div class="kns-top-filter" id="speakTopFilter"></div>
+<div class="kns-top-filter" id="knsTopFilter"></div>
+<div id="mainArea" style="width:100%;max-width:520px;"></div>
+
+<nav class="tab-bar" id="tabBar">
+  <button class="tab active" id="tabVocab" onclick="switchTab('vocab')">
+    <span class="tab-emoji">📖</span>
+    <span class="tab-label">Vocab</span>
+  </button>
+  <button class="tab" id="tabWords" onclick="switchTab('words')">
+    <span class="tab-emoji">🔤</span>
+    <span class="tab-label">Words</span>
+  </button>
+  <button class="tab" id="tabSpeak" onclick="switchTab('speak')">
+    <span class="tab-emoji">🎙</span>
+    <span class="tab-label">Speak</span>
+  </button>
+  <button class="tab" id="tabKns" onclick="switchTab('kns')">
+    <span class="tab-emoji">🖼</span>
+    <span class="tab-label">KNS</span>
+  </button>
+  <button class="tab" id="tabStats" onclick="switchTab('stats')">
+    <span class="tab-emoji">📊</span>
+    <span class="tab-label">Stats</span>
+  </button>
+</nav>
+</div>
 
 <script>
 const ALL_CARDS = [
@@ -232,8 +348,8 @@ const ALL_CARDS = [
 ["de hand","hand","4"],["het been","leg","4"],["de knie","knee","4"],["de voet","foot","4"],["het hoofd","head","4"],["de neus","nose","4"],["de tong","tongue","4"],["de mond","mouth","4"],["het haar","hair","4"],
 ["het mes","knife","5"],["de bel","bell","5"],["de kam","comb","5"],["de bal","ball","5"],["de kip","chicken","5"],["de lip","lip","5"],["de vis","fish","5"],
 ["de kop","cup","6"],["de sok","sock","6"],["de mug","mosquito","6"],["de tas","bag","6"],["de pot","pot","6"],["de bus","bus","6"],
-["de voet","foot","7"],["het doel","goal","7"],["de riem","belt","7"],["het wiel","wheel","7"],["het huis","house","7"],["de duim","thumb","7"],
-["de noot","nut","8"],["de zeep","soap","8"],["geel","yellow","8"],["het jaar","year","8"],["de maan","moon","8"],["het vuur","fire","8"],
+["het doel","goal","7"],["de riem","belt","7"],["het wiel","wheel","7"],["het huis","house","7"],["de duim","thumb","7"],
+["de noot","nut","8"],["de zeep","soap","8"],["het jaar","year","8"],["de maan","moon","8"],["het vuur","fire","8"],
 ["de geit","goat","9"],["de ring","ring","9"],["de lach","laugh","9"],["de schaar","scissors","9"],
 ["de vrouw","woman","10"],["de cent","cent","10"],["het schrift","notebook","10"],["het bloed","blood","10"],["het gezicht","face","10"],
 ["lek","has a hole in it","11"],["ken","know","11"],["de pil","pill","11"],["het sap","juice","11"],["de man","man","11"],["het pak","carton","11"],["tik","tap","11"],["mis","miss","11"],["kom","come","11"],["de les","lesson","11"],["leg","put","11"],["tel","count","11"],
@@ -249,7 +365,7 @@ const ALL_CARDS = [
 ["Wat is uw naam?","What is your name?","21"],["Dag mevrouw","Hello madam","21"],["Goedemiddag","Good afternoon","21"],["Kan ik u helpen?","Can I help you?","21"],["Ik wil mij graag inschrijven","I'd like to register","21"],["Waar woont u?","Where do you live?","21"],["Ik woon in Rotterdam","I live in Rotterdam","21"],["En uw adres?","And your address?","21"],["Weet u de postcode?","Do you know the postal code?","21"],["Hebt u telefoon?","Do you have a phone?","21"],["makkelijk","easy","21"],["mobiel","mobile","21"],["Even denken","Let me think","21"],["Wacht","Wait","21"],["het boekje","booklet","21"],["moeilijk","difficult","21"],["Ik vergeet het steeds","I keep forgetting it","21"],
 ["Kennen wij elkaar?","Do we know each other?","22"],["Ik geloof het niet","I don't think so","22"],["Ik zie jou vaak fietsen","I often see you cycling","22"],["Hoe heet jij?","What's your name?","22"],["Ben je hier alleen?","Are you here alone?","22"],["de vriend","friend","22"],["de jongen","boy","22"],["het meisje","girl","22"],["de zoon","son","22"],["de dochter","daughter","22"],["leuk","nice / fun","22"],["buiten","outside","22"],["Hoe oud zijn ze?","How old are they?","22"],["bijna","almost","22"],["nog","still / yet","22"],["jong","young","22"],["dertien","thirteen","22"],["veertien","fourteen","22"],["vijftien","fifteen","22"],["zestien","sixteen","22"],["zeventien","seventeen","22"],["achttien","eighteen","22"],["negentien","nineteen","22"],["twintig","twenty","22"],["dertig","thirty","22"],["veertig","forty","22"],["vijftig","fifty","22"],["zestig","sixty","22"],["zeventig","seventy","22"],["tachtig","eighty","22"],["negentig","ninety","22"],["honderd","hundred","22"],
 ["Kijk dit is ons huis","Look this is our house","23"],["Wil je het zien?","Do you want to see it?","23"],["de deur","door","23"],["Kom maar binnen","Come on in","23"],["Welkom!","Welcome!","23"],["de woonkamer","living room","23"],["de keuken","kitchen","23"],["achter","behind","23"],["de trap","stairs","23"],["naar boven","upstairs","23"],["de verdieping","floor / story","23"],["de badkamer","bathroom","23"],["de slaapkamer","bedroom","23"],["de ruimte","space / room","23"],["nodig","necessary / needed","23"],["alles","everything","23"],["ruim","spacious","23"],["de woning","home / dwelling","23"],["het toilet","toilet","23"],["beneden","downstairs","23"],["de gang","hallway","23"],["links","left","23"],["rechts","right","23"],["eten maken","to cook","23"],
-["het seizoen","season","24"],["de winter","winter","24"],["de lente","spring","24"],["de zomer","summer","24"],["het najaar","autumn","24"],["de dag","day","24"],["kort","short","24"],["lang","long","24"],["vandaag","today","24"],["koud","cold","24"],["warm","warm","24"],["binnen","inside","24"],["buiten","outside","24"],["natuurlijk","of course","24"],["zonder","without","24"],["de bloem","flower","24"],["niemand","nobody","24"],["de jas","coat","24"],["droog","dry","24"],["vrij","free","24"],["nat","wet","24"],["donker","dark","24"],["gezellig","cozy","24"],["de hond","dog","24"],["januari","January","24"],["februari","February","24"],["maart","March","24"],["april","April","24"],["mei","May","24"],["juni","June","24"],["juli","July","24"],["augustus","August","24"],["september","September","24"],["oktober","October","24"],["november","November","24"],["december","December","24"],
+["het seizoen","season","24"],["de winter","winter","24"],["de lente","spring","24"],["de zomer","summer","24"],["het najaar","autumn","24"],["de dag","day","24"],["kort","short","24"],["lang","long","24"],["vandaag","today","24"],["koud","cold","24"],["warm","warm","24"],["binnen","inside","24"],["natuurlijk","of course","24"],["zonder","without","24"],["de bloem","flower","24"],["niemand","nobody","24"],["de jas","coat","24"],["droog","dry","24"],["vrij","free","24"],["nat","wet","24"],["donker","dark","24"],["gezellig","cozy","24"],["de hond","dog","24"],["januari","January","24"],["februari","February","24"],["maart","March","24"],["april","April","24"],["mei","May","24"],["juni","June","24"],["juli","July","24"],["augustus","August","24"],["september","September","24"],["oktober","October","24"],["november","November","24"],["december","December","24"],
 ["de lerares","female teacher","25"],["noemen","to call","25"],["om half negen","at half past eight","25"],["tussen de middag","during lunchtime","25"],["kwart voor één","quarter to one","25"],["Wanneer ben je klaar?","When are you done?","25"],["opruimen","to tidy up","25"],["sluiten","to close","25"],["de bank","bank","25"],["druk","busy","25"],["soms","sometimes","25"],["nooit","never","25"],["gesloten","closed","25"],["het weekend","weekend","25"],["de klok","clock","25"],["kwart over één","quarter past one","25"],["half twee","half past one","25"],["de minuut","minute","25"],["maandag","Monday","25"],["dinsdag","Tuesday","25"],["woensdag","Wednesday","25"],["donderdag","Thursday","25"],["vrijdag","Friday","25"],["zaterdag","Saturday","25"],["zondag","Sunday","25"],["'s ochtends","in the morning","25"],["'s middags","in the afternoon","25"],["'s avonds","in the evening","25"],["'s nachts","at night","25"],
 ["Wil je iets eten?","Do you want to eat something?","26"],["de tafel","table","26"],["het raam","window","26"],["de stoel","chair","26"],["het broodje kaas","cheese sandwich","26"],["de honger","hunger","26"],["de soep","soup","26"],["lekker","tasty","26"],["het vlees","meat","26"],["drinken","to drink","26"],["het geld","money","26"],["betalen","to pay","26"],["de collega","colleague","26"],["thuis","at home","26"],["het gezin","family (household)","26"],["meestal","usually","26"],["de groente","vegetables","26"],["het ontbijt","breakfast","26"],["het brood","bread","26"],["de boter","butter","26"],["de kaas","cheese","26"],["de thee","tea","26"],["de koffie","coffee","26"],["de lunch","lunch","26"],["het water","water","26"],["de aardappel","potato","26"],
 ["vroeg","early","27"],["uit bed","out of bed","27"],["douchen","to shower","27"],["wakker","awake","27"],["wassen","to wash","27"],["aankleden","to dress","27"],["de taak","task","27"],["iedereen","everyone","27"],["behalve","except","27"],["langzaam","slow","27"],["roepen","to call / shout","27"],["te laat","too late","27"],["klaar","ready / done","27"],["luisteren","to listen","27"],["het nieuws","news","27"],["vertrekken","to leave / depart","27"],["moe","tired","27"],["gelukkig","fortunately","27"],["kletsen","to chat","27"],["de wekker","alarm clock","27"],["opstaan","to get up","27"],
@@ -257,7 +373,13 @@ const ALL_CARDS = [
 ["ziek geweest","been sick","29"],["de pijn","pain","29"],["de arm","arm","29"],["de dokter","doctor","29"],["de apotheek","pharmacy","29"],["de medicijnen","medicine","29"],["Ik voel me nu beter","I feel better now","29"],["de herfst","autumn","29"],["de regen","rain","29"],["daarom","therefore","29"],["zorgen","to take care","29"],["genoeg","enough","29"],["bijvoorbeeld","for example","29"],["de huisarts","family doctor","29"],["bewegen","to exercise","29"],["regelmatig","regularly","29"],["wandelen","to walk","29"],["minstens","at least","29"],["te veel","too much","29"],["vet","fat / greasy","29"],["roken","to smoke","29"],["weinig","little / few","29"],["voldoende rust","enough rest","29"],
 ["de stad","city","30"],["praktisch","practical","30"],["de weg","road","30"],["stil","still / quiet","30"],["de file","traffic jam","30"],["vol","full","30"],["staan","to stand","30"],["de halte","stop (bus/tram)","30"],["wachten","to wait","30"],["dus","so / therefore","30"],["liever","rather / preferably","30"],["het nadeel","disadvantage","30"],["fijn","nice / great","30"],["het voordeel","advantage","30"],["de afstand","distance","30"],["gelijk hebben","to be right","30"],["goedkoper","cheaper","30"],["de beweging","movement / exercise","30"],
 ["binnenkort","soon","31"],["voordat","before","31"],["regelen","to arrange","31"],["de taal","language","31"],["de toekomst","future","31"],["de haven","port / harbor","31"],["zwaar","heavy / hard","31"],["verdienen","to earn","31"],["redelijk","reasonable / fairly","31"],["eigenlijk","actually","31"],["dichtbij","nearby","31"],["Duitsland","Germany","31"],["Frankrijk","France","31"],["Den Haag","The Hague","31"],["genoemd","called","31"],["hetzelfde","the same","31"],["het land","country","31"],
-["jarig","having a birthday","32"],["het feestje","party","32"],["hoezo?","how so? / why?","32"],["het begin","beginning","32"],["het idee","idea","32"],["de oplossing","solution","32"],["uitslapen","to sleep in","32"],["Je hebt gelijk","You're right","32"],["zaterdagavond","Saturday evening","32"],["vlak voor","just before","32"],["de kerst","Christmas","32"],["afgesproken","agreed / settled","32"],["de boodschappen doen","to do the groceries","32"],["dragen","to carry","32"],["handig","handy / convenient","32"],["ontmoeten","to meet","32"],["besteden","to spend (time)","32"],["de aandacht","attention","32"],["daarna","after that","32"],["de natuur","nature","32"],["zelfs","even","32"]
+["jarig","having a birthday","32"],["het feestje","party","32"],["hoezo?","how so? / why?","32"],["het begin","beginning","32"],["het idee","idea","32"],["de oplossing","solution","32"],["uitslapen","to sleep in","32"],["Je hebt gelijk","You're right","32"],["zaterdagavond","Saturday evening","32"],["vlak voor","just before","32"],["de kerst","Christmas","32"],["afgesproken","agreed / settled","32"],["de boodschappen doen","to do the groceries","32"],["dragen","to carry","32"],["handig","handy / convenient","32"],["ontmoeten","to meet","32"],["besteden","to spend (time)","32"],["de aandacht","attention","32"],["daarna","after that","32"],["de natuur","nature","32"],["zelfs","even","32"],
+// --- Building blocks: pronouns, question words, articles ---
+["ik","I","P"],["jij / je","you (informal)","P"],["u","you (formal)","P"],["hij","he","P"],["zij / ze","she / they","P"],["wij / we","we","P"],["het","it","P"],["mij / me","me","P"],["hem","him","P"],["ons","us / our","P"],["mijn","my","P"],["jouw / je","your (informal)","P"],["uw","your (formal)","P"],["zijn","his","P"],["haar","her","P"],["hun","their","P"],["dit","this","P"],["dat","that","P"],["deze","this / these","P"],["die","that / those","P"],["er","there (exists)","P"],["iets","something","P"],["niets","nothing","P"],["elkaar","each other","P"],["zelf","self","P"],["wie","who","P"],["wat","what","P"],["waar","where","P"],["wanneer","when","P"],["hoe","how","P"],["hoeveel","how many / much","P"],["waarom","why","P"],["welk / welke","which","P"],
+// --- Building blocks: prepositions, conjunctions, adverbs ---
+["van","of / from","C"],["naar","to / towards","C"],["met","with","C"],["voor","for / before","C"],["uit","out of / from","C"],["in","in","C"],["op","on","C"],["aan","on / at","C"],["bij","at / near / with","C"],["om","at / around","C"],["per","per","C"],["te","too / to","C"],["na","after","C"],["tot","until / to","C"],["over","about / over","C"],["tussen","between","C"],["onder","under","C"],["boven","above","C"],["tegen","against","C"],["sinds","since","C"],["tijdens","during","C"],["en","and","C"],["maar","but","C"],["of","or","C"],["als","if / when / as","C"],["toen","then / when","C"],["dat","that (conjunction)","C"],["omdat","because","C"],["niet","not","C"],["geen","no / not any","C"],["wel","indeed / yes","C"],["ook","also / too","C"],["vaak","often","C"],["samen","together","C"],["toch","yet / still / right?","C"],["al","already","C"],["nu","now","C"],["dan","then","C"],["hier","here","C"],["daar","there","C"],["heel / erg","very","C"],["alleen","only / alone","C"],["altijd","always","C"],["weer","again","C"],["pas","only / just","C"],
+// --- Building blocks: common verbs ---
+["zijn","to be","W"],["hebben","to have","W"],["gaan","to go","W"],["komen","to come","W"],["willen","to want","W"],["kunnen","can / to be able","W"],["mogen","may / to be allowed","W"],["moeten","must / to have to","W"],["zullen","will / shall","W"],["doen","to do","W"],["maken","to make","W"],["zien","to see","W"],["zoeken","to look for","W"],["heten","to be called","W"],["weten","to know (fact)","W"],["kennen","to know (person)","W"],["vinden","to find / to think","W"],["krijgen","to get / receive","W"],["geven","to give","W"],["nemen","to take","W"],["werken","to work","W"],["wonen","to live","W"],["rijden","to drive / ride","W"],["kosten","to cost","W"],["laten","to let","W"],["houden van","to love / to like","W"],["sturen","to send","W"],["helpen","to help","W"],["zeggen","to say","W"],["lezen","to read","W"],["schrijven","to write","W"],["leren","to learn / teach","W"],["beginnen","to begin","W"],["stoppen","to stop","W"],["brengen","to bring","W"],["halen","to fetch / get","W"],["proberen","to try","W"],["begrijpen","to understand","W"],["spreken","to speak","W"]
 ];
 
 // Speaking exam questions: [question, translation, example answer, topic]
@@ -357,15 +479,130 @@ const SPEAK_CARDS = [
 ["Wat voor weer is het vandaag?","What's the weather like today?","Het is koud en het regent.","kleding"],
 ];
 
+// KNS (Kennis van de Nederlandse Samenleving) — Fotoboek exam questions
+const KNS_CARDS = [
+// Land en water / Geography
+["1","In welk deel van de wereld ligt Nederland?","Europa","Zuid-Amerika","a","land"],
+["2","Welk land ligt ten zuiden van Nederland?","België","Duitsland","a","land"],
+["3","Welk land is groter?","Marokko","Nederland","a","land"],
+["4","Welk land is kleiner?","Nederland","Turkije","a","land"],
+["5","Wat betekent Nederland?","laag land","waterland","a","land"],
+["6","Nederland staat onder water als er geen dijken zijn. Wat doen dijken?","ze houden het water tegen","ze maken het land groter","a","land"],
+["7","In Nederland waait het vaak. Waarvoor gebruikte men vroeger de wind?","voor molens","voor treinen","a","land"],
+["8","Een groot deel van Nederland ligt onder de zeespiegel. Hoe heet het verschil?","NAP","NIP","a","land"],
+["9","Waar in Nederland wonen de meeste mensen?","in het westen","in het oosten","a","land"],
+["10","In Nederland wonen veel of weinig mensen?","veel mensen","weinig mensen","a","land"],
+["11","Hoe reizen veel Nederlanders in de stad?","met de tram","met de boot","a","land"],
+["12","Waar zit de regering van Nederland?","Den Haag","Amsterdam","a","land"],
+["13","Wie is het staatshoofd van Nederland?","de Koning","de minister-president","a","land"],
+["14","Waar ligt de grootste haven van Nederland?","Rotterdam","Amsterdam","a","land"],
+["15","Hoe heet de nationale luchthaven van Nederland?","Schiphol","Europoort","a","land"],
+["16","Nederland is een dichtbevolkt land. Wat betekent dat?","er wonen veel mensen op weinig ruimte","er zijn veel vliegtuigen","a","land"],
+["17","Als u naar Nederland komt, waar komt u dan aan?","op Schiphol","in de haven van Rotterdam","a","land"],
+["18","Als u op Schiphol aankomt, moet u dan uw paspoort laten zien?","ja","nee","a","land"],
+["19","Is Nederland een druk of rustig land?","druk","rustig","a","land"],
+["20","In Nederland zijn de wegen druk. Wat is het gevolg?","files","overstromingen","a","land"],
+["21","Wat is typisch Nederlands in het verkeer?","fietsen","schaatsen","a","land"],
+["22","In Nederland fietsen veel of weinig mensen?","veel","weinig","a","land"],
+["23","Kijk naar de foto. Wat ziet u?","een Nederlands huis met een groot raam","een Nederlands kasteel","a","land"],
+// Geschiedenis / History
+["24","Wie is dit op de foto?","Willem van Oranje","Filips II","a","geschiedenis"],
+["25","Wie is dit op de foto?","Filips II","Willem van Oranje","a","geschiedenis"],
+["26","Was de oorlog van Nederland met Spanje lang of kort?","lang: tachtig (80) jaar","kort: acht (8) jaar","a","geschiedenis"],
+["27","Waar ligt het graf van Willem van Oranje?","in Delft","in Amsterdam","a","geschiedenis"],
+["28","Waarvoor zijn de VOC-schepen bekend?","voor de handel","voor de visserij","a","geschiedenis"],
+["29","Wie schilderde dit schilderij (De Nachtwacht)?","Rembrandt van Rijn","Willem van Oranje","a","geschiedenis"],
+["30","Is er in Nederland scheiding van kerk en staat?","ja","nee","a","geschiedenis"],
+["31","Door welk land is Nederland bezet tijdens de Tweede Wereldoorlog?","Duitsland","Engeland","a","geschiedenis"],
+["32","Wat gebeurde er met Rotterdam in de Tweede Wereldoorlog?","de stad werd gebombardeerd","de stad werd de hoofdstad","a","geschiedenis"],
+["33","In welke oorlog schreef Anne Frank haar dagboek?","de Tweede Wereldoorlog","de Eerste Wereldoorlog","a","geschiedenis"],
+["34","Welk land was een kolonie van Nederland?","Indonesië","Marokko","a","geschiedenis"],
+["35","Waarom kwamen er in de jaren '60 gastarbeiders naar Nederland?","er was veel werk","er was veel ruimte","a","geschiedenis"],
+["36","Uit welk land werd Nederland in 1945 bevrijd?","Duitsland","Engeland","b","geschiedenis"],
+["37","Wie is de Koning van Nederland?","Willem-Alexander","Beatrix","a","geschiedenis"],
+["38","Wie is de koningin (echtgenote van de Koning)?","Máxima","Beatrix","a","geschiedenis"],
+["39","Hoe lang bestaat het Koninkrijk der Nederlanden ongeveer?","tweehonderd (200) jaar","vijfhonderd (500) jaar","a","geschiedenis"],
+// Staatsinrichting / Government
+["40","Waar staat dit gebouw? (Madurodam)","in Den Haag","in Amsterdam","a","staatsinrichting"],
+["41","Hoe heet dit gebouw? (Binnenhof)","het Binnenhof","het Rijksmuseum","a","staatsinrichting"],
+["42","Wat is de Grondwet?","het belangrijkste wetboek van Nederland","een geschiedenisboek","a","staatsinrichting"],
+["43","Wie is de minister-president van Nederland?","de leider van de regering","de Koning","a","staatsinrichting"],
+["44","Wat doen de leden van de Tweede Kamer?","ze controleren de regering","ze helpen de Koning","a","staatsinrichting"],
+["45","Hoeveel leden heeft de Tweede Kamer?","honderdvijftig (150)","vijfenzeventig (75)","a","staatsinrichting"],
+["46","Hoeveel leden heeft de Eerste Kamer?","vijfenzeventig (75)","honderdvijftig (150)","a","staatsinrichting"],
+["47","Hoe heet het gebouw waar de Tweede Kamer vergadert?","het Binnenhof","het Paleis op de Dam","a","staatsinrichting"],
+["48","Wie is de burgemeester?","het hoofd van de gemeente","het hoofd van het land","a","staatsinrichting"],
+["49","Nederland is een democratie. Wat betekent dat?","het volk beslist mee","de Koning beslist alles","a","staatsinrichting"],
+["50","Wie mogen er in Nederland trouwen?","een man en een vrouw, en ook twee mannen of twee vrouwen","alleen een man en een vrouw","a","staatsinrichting"],
+["51","Mogen een man en een vrouw in Nederland samenwonen zonder te trouwen?","ja","nee","a","staatsinrichting"],
+["52","Mogen twee mannen in Nederland trouwen?","ja","nee","a","staatsinrichting"],
+["53","Is er in Nederland vrijheid van godsdienst?","ja","nee","a","staatsinrichting"],
+["54","Heeft Nederland persvrijheid?","ja","nee","a","staatsinrichting"],
+["55","Wat betekent persvrijheid?","de media mogen vrij berichten","de regering bepaalt het nieuws","a","staatsinrichting"],
+["56","Zijn mannen en vrouwen in Nederland gelijk?","ja","nee","a","staatsinrichting"],
+["57","Mag u in Nederland zeggen wat u vindt?","ja, maar u mag niet discrimineren","nee","a","staatsinrichting"],
+["58","Wat is discriminatie?","mensen anders behandelen vanwege hun afkomst, geloof of geslacht","een mening geven","a","staatsinrichting"],
+["59","Is discriminatie verboden in Nederland?","ja","nee","a","staatsinrichting"],
+["60","Hoeveel godsdiensten zijn er in Nederland?","veel verschillende","alleen christendom","a","staatsinrichting"],
+// Dagelijks leven / Daily life & Integration
+["61","In Nederland werken mannen en vrouwen. Is dat normaal?","ja","nee","a","dagelijks leven"],
+["62","Waar kan een nieuwkomer Nederlands leren?","bij een taalschool of ROC","op het gemeentehuis","a","dagelijks leven"],
+["63","Moeten nieuwkomers in Nederland inburgeren?","ja","nee","a","dagelijks leven"],
+["64","Wat hoort bij inburgering?","Nederlands leren en kennis van de Nederlandse samenleving","alleen een taalcursus","a","dagelijks leven"],
+["65","Wat leert u bij een inburgeringscursus?","Nederlands en kennis van de samenleving","alleen lezen en schrijven","a","dagelijks leven"],
+["66","Is het belangrijk om Nederlands te leren?","ja","nee","a","dagelijks leven"],
+["67","Wat doen buren in Nederland als er iemand nieuw komt wonen?","ze stellen zich voor","ze doen niets","a","dagelijks leven"],
+["68","Hoe wonen de meeste mensen in Nederland?","in een huis of flat","op een boot","a","dagelijks leven"],
+["69","Wat doen Nederlandse gezinnen vaak 's avonds?","samen eten en televisie kijken","werken","a","dagelijks leven"],
+// Onderwijs / Education
+["70","Is er in Nederland leerplicht?","ja","nee","a","onderwijs"],
+["71","Vanaf welke leeftijd moeten kinderen in Nederland naar school?","vijf (5) jaar","drie (3) jaar","a","onderwijs"],
+["72","Wie brengt de kinderen naar school?","de ouders","de buren","a","onderwijs"],
+["73","Hoe heet de eerste school voor kinderen in Nederland?","de basisschool","het gymnasium","a","onderwijs"],
+["74","Hoeveel jaar duurt de basisschool?","acht (8) jaar","zes (6) jaar","a","onderwijs"],
+["75","Kunnen kinderen van vier (4) jaar al naar school?","ja, naar groep 1","nee","a","onderwijs"],
+["76","Wat leren kinderen op de basisschool?","lezen, schrijven en rekenen","alleen spelen","a","onderwijs"],
+["77","Hoeveel kinderen zitten er in een klas op de basisschool?","ongeveer dertig (30)","ongeveer tien (10)","a","onderwijs"],
+["78","Wat doen kinderen na de basisschool?","ze gaan naar het voortgezet onderwijs","ze gaan werken","a","onderwijs"],
+["79","Mogen kinderen in Nederland thuis op de computer werken voor school?","ja","nee","a","onderwijs"],
+["80","Welke soorten voortgezet onderwijs zijn er?","vmbo, havo en vwo","alleen gymnasium","a","onderwijs"],
+["81","Tot welke leeftijd is er in Nederland leerplicht?","zestien (16) jaar","veertien (14) jaar","a","onderwijs"],
+["82","Mogen jongens en meisjes samen naar school?","ja","nee","a","onderwijs"],
+["83","Mag je zelf een school kiezen in Nederland?","ja","nee","a","onderwijs"],
+// Gezondheid / Health
+["84","Als u ziek bent, naar wie gaat u dan eerst?","de huisarts","het ziekenhuis","a","gezondheid"],
+["85","Moet iedereen in Nederland een zorgverzekering hebben?","ja","nee","a","gezondheid"],
+["86","Wat doet u als u voor het eerst naar de huisarts gaat?","u schrijft zich in","u gaat direct naar binnen","a","gezondheid"],
+["87","Waar haalt u medicijnen?","bij de apotheek","bij de huisarts","a","gezondheid"],
+["88","Waarvoor gaat u naar het ziekenhuis?","als de huisarts u doorstuurt","altijd als u ziek bent","a","gezondheid"],
+["89","Is de gezondheidszorg in Nederland goed?","ja","nee","a","gezondheid"],
+["90","Waar gaan ouders met een baby naartoe voor controle?","het consultatiebureau","het ziekenhuis","a","gezondheid"],
+// Werk / Work & Economy
+["91","Moet u in Nederland belasting betalen?","ja","nee","a","werk"],
+["92","Wie haalt het huisvuil op in Nederland?","de gemeente","de buren","a","werk"],
+["93","Zijn er in Nederland veel of weinig fabrieken?","veel","weinig","a","werk"],
+["94","Wat is belangrijk voor de Nederlandse economie?","handel en landbouw","alleen visserij","a","werk"],
+["95","Wat doet de politie in Nederland?","zorgen voor orde en veiligheid","belasting innen","a","werk"],
+["96","Mag u in Nederland werken als u een verblijfsvergunning hebt?","ja, meestal wel","nee","b","werk"],
+["97","Waar kunt u zoeken naar werk?","bij het UWV of op internet","alleen via vrienden","a","werk"],
+["98","Als u werkt in Nederland, wat krijgt u dan?","salaris en een loonstrook","alleen contant geld","a","werk"],
+["99","Is het belangrijk om Nederlands te spreken op uw werk?","ja","nee","a","werk"],
+["100","Moet u in Nederland belasting betalen over uw inkomen?","ja","nee","a","werk"]
+];
+
 let mode = 'nl';
+let activeTab = 'vocab';
 let activeLessons = new Set();
 let deck = [], current = 0, known = 0, again = [], sessionTotal = 0;
 let isFlipped = false, typeState = 'input';
 let matchState = {};
 let speakTopics = new Set();
+let knsTopics = new Set();
 let speakAnswerVisible = false;
 
-function getAllLessons() { return [...new Set(ALL_CARDS.map(c => c[2]))].sort((a,b) => +a - +b); }
+const LESSON_TAG = {P:'Pronouns',C:'Connectors',W:'Verbs'};
+function lesTag(l) { return LESSON_TAG[l] ? LESSON_TAG[l] : 'Les ' + l; }
+function getAllLessons() { return [...new Set(ALL_CARDS.map(c => c[2]))].sort((a,b) => { const na=+a,nb=+b; if(!isNaN(na)&&!isNaN(nb)) return na-nb; if(!isNaN(na)) return -1; if(!isNaN(nb)) return 1; return a.localeCompare(b); }); }
 function getFiltered() { return ALL_CARDS.filter(c => activeLessons.has(c[2])); }
 function shuffle(a) { for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function norm(s) { return s.toLowerCase().trim().replace(/['']/g,"'").replace(/[éè]/g,'e').replace(/ë/g,'e'); }
@@ -393,19 +630,107 @@ function ttsBtn(text) {
   return `<button class="tts-btn" onclick="event.stopPropagation();sayNL('${text.replace(/'/g,"\\'")}')" title="Listen">&#128264;</button>`;
 }
 
+// ---- THEME ----
+function getPreferredTheme() {
+  const saved = localStorage.getItem('dutch-a1-theme');
+  if (saved) return saved;
+  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('dutch-a1-theme', t);
+  const icon = t === 'dark' ? '&#9790;' : '&#9728;';
+  const btn = document.getElementById('themeBtn');
+  if (btn) btn.innerHTML = icon;
+  const wBtn = document.getElementById('welcomeThemeBtn');
+  if (wBtn) wBtn.innerHTML = icon;
+  // Update meta theme-color
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = t === 'dark' ? '#181B1F' : '#F5F5F7';
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+applyTheme(getPreferredTheme());
+
+// ---- SUPABASE SYNC ----
+const SUPA_URL = 'https://tluwdkaajhsmxhardohk.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsdXdka2FhamhzbXhoYXJkb2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NjIyNjgsImV4cCI6MjA4OTEzODI2OH0.B3m9ZRAxn5fsekeY-8gSGpBxLMxAJs54KY1vJj_bWYU';
+let syncUser = localStorage.getItem('dutch-a1-user') || '';
+let syncTimer = null;
+
+async function supaFetch(method, path, body) {
+  const opts = {
+    method,
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': 'Bearer ' + SUPA_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': method === 'POST' ? 'resolution=merge-duplicates' : ''
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const r = await fetch(SUPA_URL + '/rest/v1' + path, opts);
+    if (!r.ok) return null;
+    const text = await r.text();
+    return text ? JSON.parse(text) : null;
+  } catch(e) { return null; }
+}
+
+async function cloudPull() {
+  if (!syncUser) return;
+  const rows = await supaFetch('GET', `/progress?id=eq.${encodeURIComponent(syncUser)}&select=data`);
+  if (rows && rows.length > 0 && rows[0].data) {
+    // Merge: keep the best streak for each card
+    const local = loadProgress();
+    const cloud = rows[0].data;
+    const merged = { ...local };
+    for (const k in cloud) {
+      if (!merged[k] || cloud[k].correct > merged[k].correct || cloud[k].total > merged[k].total) {
+        merged[k] = cloud[k];
+      }
+    }
+    localStorage.setItem('dutch-a1-progress', JSON.stringify(merged));
+  }
+}
+
+async function cloudPush() {
+  if (!syncUser) return;
+  const data = loadProgress();
+  await supaFetch('POST', '/progress', { id: syncUser, data, updated_at: new Date().toISOString() });
+}
+
+function schedulePush() {
+  if (!syncUser) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(cloudPush, 3000); // debounce 3s
+}
+
+function setSyncUser(name) {
+  syncUser = name.trim().toLowerCase();
+  localStorage.setItem('dutch-a1-user', syncUser);
+  if (syncUser) cloudPull().then(() => { if (mode) setMode(mode); });
+}
+
+// Auto-sync on load
+if (syncUser) cloudPull();
+
 // ---- PROGRESS TRACKING ----
-const MASTERED_THRESHOLD = 3; // correct answers in a row to master a card
-function cardKey(c) { return c[0] + '|' + c[2]; } // dutch word + lesson as unique key
+const MASTERED_THRESHOLD = 3;
+function cardKey(c) { return c[0] + '|' + c[2]; }
 function speakKey(c) { return 'sp|' + c[0]; }
+function knsKey(c) { return 'kns|' + c[0]; }
 
 function loadProgress() {
   try { return JSON.parse(localStorage.getItem('dutch-a1-progress') || '{}'); } catch(e) { return {}; }
 }
-function saveProgress(p) { localStorage.setItem('dutch-a1-progress', JSON.stringify(p)); }
+function saveProgress(p) { localStorage.setItem('dutch-a1-progress', JSON.stringify(p)); schedulePush(); }
 
 function recordCorrect(c, isSpeakCard) {
   const p = loadProgress();
-  const k = isSpeakCard ? speakKey(c) : cardKey(c);
+  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
   if (!p[k]) p[k] = { correct: 0, total: 0 };
   p[k].correct++;
   p[k].total++;
@@ -414,7 +739,7 @@ function recordCorrect(c, isSpeakCard) {
 }
 function recordWrong(c, isSpeakCard) {
   const p = loadProgress();
-  const k = isSpeakCard ? speakKey(c) : cardKey(c);
+  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
   if (!p[k]) p[k] = { correct: 0, total: 0 };
   p[k].correct = 0; // reset streak
   p[k].total++;
@@ -423,7 +748,7 @@ function recordWrong(c, isSpeakCard) {
 }
 function isMastered(c, isSpeakCard) {
   const p = loadProgress();
-  const k = isSpeakCard ? speakKey(c) : cardKey(c);
+  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
   return p[k] && p[k].correct >= MASTERED_THRESHOLD;
 }
 
@@ -445,81 +770,152 @@ function getTotalStats() {
   const mastered = allKeys.filter(k => p[k].correct >= MASTERED_THRESHOLD).length;
   const today = new Date().toISOString().slice(0, 10);
   const todayReviewed = allKeys.filter(k => p[k].lastDate === today).length;
-  return { total: ALL_CARDS.length + SPEAK_CARDS.length, mastered, reviewed: allKeys.length, todayReviewed };
+  return { total: ALL_CARDS.length + SPEAK_CARDS.length + KNS_CARDS.length, mastered, reviewed: allKeys.length, todayReviewed };
 }
 
-function showStats() {
+function getStatsHTML() {
   const ts = getTotalStats();
   const ls = getLessonStats();
   const p = loadProgress();
 
-  // Speak stats
   const speakMastered = SPEAK_CARDS.filter(c => { const d = p[speakKey(c)]; return d && d.correct >= MASTERED_THRESHOLD; }).length;
 
   let html = `<div class="stats-screen">
-    <div class="stats-header"><h2>Progress</h2><button class="stats-close" onclick="closeStats()">Back</button></div>
     <div class="stats-summary">
       <div class="stats-box"><div class="num accent">${ts.mastered}</div><div class="label">Mastered</div></div>
       <div class="stats-box"><div class="num purple">${ts.reviewed}</div><div class="label">Seen</div></div>
       <div class="stats-box"><div class="num green">${ts.todayReviewed}</div><div class="label">Today</div></div>
     </div>`;
 
-  // Per lesson
   getAllLessons().forEach(l => {
     const s = ls[l];
     const pct = s.total > 0 ? Math.round(s.mastered / s.total * 100) : 0;
     html += `<div class="lesson-progress">
-      <div class="lp-header"><span class="lp-label">Les ${l}</span><span class="lp-count">${s.mastered}/${s.total}</span></div>
+      <div class="lp-header"><span class="lp-label">${lesTag(l)}</span><span class="lp-count">${s.mastered}/${s.total}</span></div>
       <div class="lp-bar"><div class="lp-fill" style="width:${pct}%"></div></div>
     </div>`;
   });
 
-  // Speak section
   const spPct = SPEAK_CARDS.length > 0 ? Math.round(speakMastered / SPEAK_CARDS.length * 100) : 0;
   html += `<div class="lesson-progress">
     <div class="lp-header"><span class="lp-label">Speak</span><span class="lp-count">${speakMastered}/${SPEAK_CARDS.length}</span></div>
     <div class="lp-bar"><div class="lp-fill" style="width:${spPct}%"></div></div>
   </div>`;
 
-  html += `<button class="stats-reset" onclick="if(confirm('Reset all progress?')){localStorage.removeItem('dutch-a1-progress');showStats();}">Reset progress</button>`;
+  const knsMastered = KNS_CARDS.filter(c => { const d = p[knsKey(c)]; return d && d.correct >= MASTERED_THRESHOLD; }).length;
+  const knsPct = KNS_CARDS.length > 0 ? Math.round(knsMastered / KNS_CARDS.length * 100) : 0;
+  html += `<div class="lesson-progress">
+    <div class="lp-header"><span class="lp-label">KNS Fotoboek</span><span class="lp-count">${knsMastered}/${KNS_CARDS.length}</span></div>
+    <div class="lp-bar"><div class="lp-fill" style="width:${knsPct}%"></div></div>
+  </div>`;
+
+  const syncStatus = syncUser ? `Synced as <strong>${syncUser}</strong>` : 'Not synced';
+  const refreshFn = 'switchTab(\'stats\')';
+  html += `<div class="lesson-progress" style="margin-top:16px;">
+    <div class="lp-header"><span class="lp-label">Cloud Sync</span><span class="lp-count">${syncStatus}</span></div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <input type="text" id="syncInput" placeholder="Enter your nickname" value="${syncUser}"
+        style="flex:1;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;outline:none;" />
+      <button onclick="setSyncUser(document.getElementById('syncInput').value);${refreshFn};"
+        style="padding:12px 18px;border:none;border-radius:var(--radius);background:var(--purple-strong);color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">Sync</button>
+    </div>
+    <div style="font-size:12px;color:var(--text2);margin-top:8px;">Same nickname on all devices = shared progress</div>
+  </div>`;
+
+  html += `<button class="stats-reset" onclick="if(confirm('Reset all progress?')){localStorage.removeItem('dutch-a1-progress');cloudPush();${refreshFn};}">Reset progress</button>`;
   html += `</div>`;
-
-  // Hide normal UI, show stats
-  document.querySelector('.top-bar').style.display = 'none';
-  document.getElementById('settingsDrawer').style.display = 'none';
-  document.getElementById('stats').style.display = 'none';
-  document.querySelector('.progress-bar').style.display = 'none';
-  const sf = document.getElementById('speakFilter');
-  if (sf) sf.style.display = 'none';
-  document.getElementById('mainArea').innerHTML = html;
+  return html;
 }
 
-function closeStats() {
-  document.querySelector('.top-bar').style.display = 'flex';
-  document.getElementById('settingsDrawer').style.display = '';
-  document.getElementById('stats').style.display = '';
-  document.querySelector('.progress-bar').style.display = '';
-  setMode(mode);
+function switchTab(tab) {
+  activeTab = tab;
+
+  // Update tab bar active state
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const tabId = 'tab' + tab.charAt(0).toUpperCase() + tab.slice(1);
+  document.getElementById(tabId).classList.add('active');
+
+  // Get elements
+  const topBar = document.querySelector('.top-bar');
+  const drawer = document.getElementById('settingsDrawer');
+  const statsEl = document.getElementById('stats');
+  const progressBar = document.querySelector('.progress-bar');
+  const mainArea = document.getElementById('mainArea');
+  const modePill = document.getElementById('modePill');
+  const knsTopFilter = document.getElementById('knsTopFilter');
+  const speakTopFilter = document.getElementById('speakTopFilter');
+
+  // Reset all
+  topBar.style.display = 'flex';
+  drawer.classList.remove('open');
+  statsEl.style.display = '';
+  progressBar.style.display = '';
+  knsTopFilter.style.display = 'none';
+  speakTopFilter.style.display = 'none';
+
+  if (tab === 'vocab') {
+    document.querySelector('.top-bar h1').textContent = 'Dutch A1';
+    modePill.style.display = '';
+    drawer.style.display = '';
+    if (mode === 'kns' || mode === 'speak') mode = 'nl';
+    buildLessonFilterForTab('vocab');
+    setMode(mode);
+  } else if (tab === 'words') {
+    document.querySelector('.top-bar h1').textContent = 'Words';
+    modePill.style.display = '';
+    drawer.style.display = '';
+    if (mode === 'kns' || mode === 'speak') mode = 'nl';
+    buildLessonFilterForTab('words');
+    setMode(mode);
+  } else if (tab === 'speak') {
+    drawer.style.display = 'none';
+    modePill.style.display = 'none';
+    document.querySelector('.top-bar h1').textContent = 'Speak';
+    speakTopFilter.style.display = 'block';
+    mode = 'speak';
+    showSpeakFilter();
+    startSpeakSession();
+  } else if (tab === 'kns') {
+    drawer.style.display = 'none';
+    modePill.style.display = 'none';
+    document.querySelector('.top-bar h1').textContent = 'KNS Fotoboek';
+    knsTopFilter.style.display = 'block';
+    mode = 'kns';
+    showKnsFilter();
+    startKnsSession();
+  } else if (tab === 'stats') {
+    drawer.style.display = 'none';
+    modePill.style.display = 'none';
+    statsEl.style.display = 'none';
+    progressBar.style.display = 'none';
+    document.querySelector('.top-bar h1').textContent = 'Stats';
+    mainArea.innerHTML = getStatsHTML();
+  }
 }
 
-function buildLessonFilter() {
+function buildLessonFilterForTab(tab) {
   const c = document.getElementById('lessonFilter');
-  const lessons = getAllLessons();
-  // select all by default
+  c.innerHTML = '';
+  const isNumeric = l => !isNaN(+l);
+  const lessons = getAllLessons().filter(l => tab === 'words' ? !isNumeric(l) : isNumeric(l));
+
+  // Reset activeLessons to only include valid lessons for this tab
+  activeLessons.clear();
   lessons.forEach(l => activeLessons.add(l));
 
   const allBtn = document.createElement('button');
   allBtn.className = 'lesson-btn active'; allBtn.textContent = 'All'; allBtn.id = 'allBtn';
   allBtn.onclick = () => {
-    const allActive = getAllLessons().every(l => activeLessons.has(l));
-    if (allActive) { activeLessons.clear(); } else { getAllLessons().forEach(l => activeLessons.add(l)); }
+    const tabLessons = getAllLessons().filter(l => tab === 'words' ? !isNumeric(l) : isNumeric(l));
+    const allActive = tabLessons.every(l => activeLessons.has(l));
+    if (allActive) { activeLessons.clear(); } else { tabLessons.forEach(l => activeLessons.add(l)); }
     syncFilterUI(); startSession();
   };
   c.appendChild(allBtn);
 
   lessons.forEach(l => {
     const btn = document.createElement('button');
-    btn.className = 'lesson-btn active'; btn.textContent = l; btn.dataset.les = l;
+    btn.className = 'lesson-btn active'; btn.textContent = LESSON_TAG[l] || l; btn.dataset.les = l;
     btn.onclick = () => {
       if (activeLessons.has(l)) activeLessons.delete(l); else activeLessons.add(l);
       syncFilterUI(); startSession();
@@ -528,19 +924,26 @@ function buildLessonFilter() {
   });
 }
 
+function buildLessonFilter() {
+  buildLessonFilterForTab('vocab');
+}
+
 function syncFilterUI() {
+  const isNumeric = l => !isNaN(+l);
+  const tabLessons = getAllLessons().filter(l => activeTab === 'words' ? !isNumeric(l) : isNumeric(l));
   document.querySelectorAll('.lesson-btn').forEach(btn => {
     if (btn.id === 'allBtn') {
-      btn.classList.toggle('active', getAllLessons().every(l => activeLessons.has(l)));
+      btn.classList.toggle('active', tabLessons.every(l => activeLessons.has(l)));
     } else {
       btn.classList.toggle('active', activeLessons.has(btn.dataset.les));
     }
   });
 }
 
-const MODE_LABELS = {learn:'Learn',build:'Build',nl:'NL→EN',en:'EN→NL',type:'Type',quiz:'Quiz',match:'Match',speak:'Speak'};
+const MODE_LABELS = {learn:'Learn',build:'Build',nl:'NL→EN',en:'EN→NL',type:'Type',quiz:'Quiz',match:'Match',kns:'KNS'};
 
 function toggleSettings() {
+  if (activeTab !== 'vocab' && activeTab !== 'words') return;
   const d = document.getElementById('settingsDrawer');
   d.classList.toggle('open');
   document.getElementById('modePill').innerHTML = MODE_LABELS[mode] + (d.classList.contains('open') ? ' &#9652;' : ' &#9662;');
@@ -548,25 +951,15 @@ function toggleSettings() {
 
 function setMode(m) {
   mode = m;
-  const modes = ['learn','build','nl','en','type','quiz','match','speak'];
-  document.querySelectorAll('.mode-btn').forEach((btn, i) => {
+  const modes = ['learn','build','nl','en','type','quiz','match'];
+  const modeToggle = document.getElementById('modeToggle');
+  modeToggle.querySelectorAll('.mode-btn').forEach((btn, i) => {
     btn.classList.toggle('active', modes[i] === m);
   });
-  // Update pill & close drawer
   document.getElementById('modePill').innerHTML = MODE_LABELS[m] + ' &#9662;';
   document.getElementById('settingsDrawer').classList.remove('open');
 
-  // Lesson filter visibility
-  const lessonSection = document.getElementById('lessonFilter').parentElement;
-  lessonSection.style.display = m === 'speak' ? 'none' : '';
-  if (m === 'speak') {
-    showSpeakFilter();
-    startSpeakSession();
-  } else {
-    const sf = document.getElementById('speakFilter');
-    if (sf) sf.style.display = 'none';
-    startSession();
-  }
+  startSession();
 }
 
 function startSession() {
@@ -602,9 +995,40 @@ function updateStats() {
   document.getElementById('progressFill').style.width = pct + '%';
 }
 
+function getNextLesson() {
+  if (activeLessons.size !== 1) return null;
+  const currentLesson = [...activeLessons][0];
+  const isNumeric = l => !isNaN(+l);
+  const tabLessons = getAllLessons().filter(l => activeTab === 'words' ? !isNumeric(l) : isNumeric(l));
+  const idx = tabLessons.indexOf(currentLesson);
+  if (idx < 0 || idx >= tabLessons.length - 1) return null;
+  return tabLessons[idx + 1];
+}
+
+function goToLesson(lesson) {
+  activeLessons.clear();
+  activeLessons.add(lesson);
+  syncFilterUI();
+  startSession();
+}
+
 function showDone() {
   const pct = sessionTotal > 0 ? Math.round((known / sessionTotal) * 100) : 0;
-  document.getElementById('mainArea').innerHTML = `<div class="done-screen"><div class="score-circle">${pct}%</div><h2>Done!</h2><p>${known} / ${sessionTotal} learned</p><button class="btn btn-good" onclick="startSession()">Again</button></div>`;
+  const againFn = mode === 'speak' ? 'startSpeakSession()' : mode === 'kns' ? 'startKnsSession()' : 'startSession()';
+  const nextLes = (mode !== 'speak' && mode !== 'kns') ? getNextLesson() : null;
+
+  let buttons = '';
+  if (nextLes && pct === 100) {
+    buttons = `<button class="btn btn-good" onclick="goToLesson('${nextLes}')">Next → ${lesTag(nextLes)}</button>
+      <button class="btn btn-skip" onclick="${againFn}" style="margin-top:10px">Again</button>`;
+  } else if (nextLes) {
+    buttons = `<button class="btn btn-good" onclick="${againFn}">Again</button>
+      <button class="btn btn-skip" onclick="goToLesson('${nextLes}')" style="margin-top:10px">Skip → ${lesTag(nextLes)}</button>`;
+  } else {
+    buttons = `<button class="btn btn-good" onclick="${againFn}">Again</button>`;
+  }
+
+  document.getElementById('mainArea').innerHTML = `<div class="done-screen"><div class="score-circle">${pct}%</div><h2>Done!</h2><p>${known} / ${sessionTotal} learned</p>${buttons}</div>`;
 }
 
 function showEmpty() {
@@ -620,8 +1044,8 @@ function showFlipCard() {
   const nlText = c[0];
   document.getElementById('mainArea').innerHTML = `
     <div class="card-container" onclick="flipCard()"><div class="card" id="card">
-      <div class="card-face card-front"><div class="card-tag">Les ${c[2]}</div><div class="card-word">${f} ${mode==='nl' ? ttsBtn(nlText) : ''}</div><div class="card-hint">tap to flip</div></div>
-      <div class="card-face card-back"><div class="card-tag">Les ${c[2]}</div><div class="card-word">${b} ${mode==='en' ? ttsBtn(nlText) : ''}</div></div>
+      <div class="card-face card-front"><div class="card-tag">${lesTag(c[2])}</div><div class="card-word">${f} ${mode==='nl' ? ttsBtn(nlText) : ''}</div><div class="card-hint">tap to flip</div></div>
+      <div class="card-face card-back"><div class="card-tag">${lesTag(c[2])}</div><div class="card-word">${b} ${mode==='en' ? ttsBtn(nlText) : ''}</div></div>
     </div></div>
     <div class="buttons" id="buttons"><button class="btn btn-show" onclick="flipCard()">Show</button></div>`;
 }
@@ -635,7 +1059,7 @@ function flipCard() {
 function showTypeCard() {
   const c = deck[current]; typeState = 'input';
   document.getElementById('mainArea').innerHTML = `
-    <div class="type-card"><div class="card-tag">Les ${c[2]}</div>
+    <div class="type-card"><div class="card-tag">${lesTag(c[2])}</div>
       <div class="type-prompt">Type in Dutch:</div><div class="type-word">${c[1]}</div>
       <input type="text" class="type-input" id="typeInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="..." />
       <div class="type-answer" id="typeAnswer"></div>
@@ -651,8 +1075,9 @@ function checkTyped() {
   const c = deck[current], inp = document.getElementById('typeInput'), ans = document.getElementById('typeAnswer');
   const ok = norm(inp.value) === norm(c[0]);
   inp.disabled = true;
-  if (ok) { inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(c[0]); known++; recordCorrect(c, false); }
-  else { inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.innerHTML = c[0] + ' ' + ttsBtn(c[0]); again.push(c); recordWrong(c, false); }
+  if (ok) { inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(c[0]); known++; recordCorrect(c, false);
+    updateStats(); setTimeout(() => { current++; showCard(); }, 1200); return;
+  } else { inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.innerHTML = c[0] + ' ' + ttsBtn(c[0]); again.push(c); recordWrong(c, false); }
   document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
   updateStats();
 }
@@ -672,7 +1097,7 @@ function showQuizCard() {
   const opts = shuffle([correct, ...shuffle(others).slice(0, 3)]);
 
   document.getElementById('mainArea').innerHTML = `
-    <div class="quiz-card"><div class="card-tag">Les ${c[2]}</div>
+    <div class="quiz-card"><div class="card-tag">${lesTag(c[2])}</div>
       <div class="type-prompt">What does this mean?</div><div class="type-word">${c[0]} ${ttsBtn(c[0])}</div>
       <div class="quiz-options">${opts.map((o, i) => `<button class="quiz-opt" onclick="pickQuiz(this,${i},'${escHtml(correct)}')">${o}</button>`).join('')}</div>
     </div>
@@ -683,12 +1108,12 @@ function pickQuiz(btn, idx, correct) {
   const btns = document.querySelectorAll('.quiz-opt');
   btns.forEach(b => { b.disabled = true; b.classList.add('dim'); });
   const isCorrect = btn.textContent === correct;
-  if (isCorrect) { btn.classList.remove('dim'); btn.classList.add('correct'); known++; recordCorrect(deck[current], false); }
-  else {
-    btn.classList.remove('dim'); btn.classList.add('wrong');
-    btns.forEach(b => { if (b.textContent === correct) { b.classList.remove('dim'); b.classList.add('correct'); } });
-    again.push(deck[current]); recordWrong(deck[current], false);
+  if (isCorrect) { btn.classList.remove('dim'); btn.classList.add('correct'); known++; recordCorrect(deck[current], false);
+    updateStats(); setTimeout(() => { current++; showCard(); }, 1200); return;
   }
+  btn.classList.remove('dim'); btn.classList.add('wrong');
+  btns.forEach(b => { if (b.textContent === correct) { b.classList.remove('dim'); b.classList.add('correct'); } });
+  again.push(deck[current]); recordWrong(deck[current], false);
   document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
   updateStats();
 }
@@ -755,7 +1180,7 @@ function showLearnCard() {
   const c = deck[current];
   document.getElementById('mainArea').innerHTML = `
     <div class="learn-card">
-      <div class="card-tag">Les ${c[2]}</div>
+      <div class="card-tag">${lesTag(c[2])}</div>
       <div class="learn-nl">${c[0]} ${ttsBtn(c[0])}</div>
       <div class="learn-en">${c[1]}</div>
       <div class="learn-count">${current + 1} / ${sessionTotal}</div>
@@ -782,7 +1207,7 @@ function showBuildCard() {
 
   document.getElementById('mainArea').innerHTML = `
     <div class="build-card">
-      <div class="card-tag">Les ${c[2]}</div>
+      <div class="card-tag">${lesTag(c[2])}</div>
       <div class="type-prompt">Build the Dutch phrase:</div>
       <div class="build-prompt">${c[1]}</div>
       <div class="build-slots" id="buildSlots"></div>
@@ -846,12 +1271,13 @@ const TOPIC_LABELS = {persoonlijk:'Persoonlijk',familie:'Familie',wonen:'Wonen',
 
 function showSpeakFilter() {
   let sf = document.getElementById('speakFilter');
+  const container = document.getElementById('speakTopFilter');
   if (!sf) {
     sf = document.createElement('div');
     sf.id = 'speakFilter';
     sf.className = 'speak-filter';
-    document.getElementById('settingsDrawer').appendChild(sf);
   }
+  if (sf.parentElement !== container) container.appendChild(sf);
   sf.style.display = 'flex';
   sf.innerHTML = '';
   const allBtn = document.createElement('button');
@@ -909,24 +1335,141 @@ function showSpeakAnswer() {
   document.getElementById('buttons').innerHTML = '<button class="btn btn-again" onclick="markAgain()">Again</button><button class="btn btn-good" onclick="markGood()">Got it</button>';
 }
 
+// ---- KNS (Kennis van de Nederlandse Samenleving) ----
+function getAllKnsTopics() { return [...new Set(KNS_CARDS.map(c => c[5]))]; }
+function getKnsFiltered() {
+  if (knsTopics.size === 0) return KNS_CARDS;
+  return KNS_CARDS.filter(c => knsTopics.has(c[5]));
+}
+const KNS_TOPIC_LABELS = {land:'Land & Steden',geschiedenis:'Geschiedenis',staatsinrichting:'Staatsinrichting','dagelijks leven':'Dagelijks Leven',onderwijs:'Onderwijs',gezondheid:'Gezondheid',werk:'Werk & Inkomen'};
+
+function showKnsFilter() {
+  let kf = document.getElementById('knsFilter');
+  const container = document.getElementById('knsTopFilter');
+  if (!kf) {
+    kf = document.createElement('div');
+    kf.id = 'knsFilter';
+    kf.className = 'speak-filter';
+  }
+  if (kf.parentElement !== container) container.appendChild(kf);
+  kf.style.display = 'flex';
+  kf.innerHTML = '';
+  const allBtn = document.createElement('button');
+  allBtn.className = 'speak-filter-btn' + (knsTopics.size === 0 ? ' active' : '');
+  allBtn.textContent = 'All';
+  allBtn.onclick = () => { knsTopics.clear(); showKnsFilter(); startKnsSession(); };
+  kf.appendChild(allBtn);
+  getAllKnsTopics().forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'speak-filter-btn' + (knsTopics.has(t) ? ' active' : '');
+    btn.textContent = KNS_TOPIC_LABELS[t] || t;
+    btn.onclick = () => {
+      if (knsTopics.has(t)) knsTopics.delete(t); else knsTopics.add(t);
+      showKnsFilter(); startKnsSession();
+    };
+    kf.appendChild(btn);
+  });
+}
+
+function startKnsSession() {
+  const filtered = getKnsFiltered();
+  deck = shuffle(filtered.map(c => [...c]));
+  sessionTotal = deck.length;
+  current = 0; known = 0; again = [];
+  if (deck.length > 0) showKnsCard(); else showEmpty();
+  updateStats();
+}
+
+function showKnsCard() {
+  if (current >= deck.length) {
+    if (again.length > 0) { deck = shuffle(again); again = []; current = 0; showKnsCard(); return; }
+    showDone(); return;
+  }
+  const c = deck[current];
+  const topic = KNS_TOPIC_LABELS[c[5]] || c[5];
+  document.getElementById('mainArea').innerHTML = `
+    <div class="kns-card">
+      <div class="kns-tag">${topic}</div>
+      <div class="kns-photo-num">Foto ${c[0]}</div>
+      <img class="kns-photo" src="photos/${c[0]}.jpg" alt="Foto ${c[0]}" onerror="this.style.display='none'">
+      <div class="kns-question">${c[1]}</div>
+      <div class="kns-options">
+        <button class="kns-option" id="knsOptA" onclick="checkKnsAnswer('a')"><span class="kns-letter">A</span>${c[2]}</button>
+        <button class="kns-option" id="knsOptB" onclick="checkKnsAnswer('b')"><span class="kns-letter">B</span>${c[3]}</button>
+      </div>
+      <div class="kns-result hidden" id="knsResult"></div>
+    </div>
+    <div class="buttons hidden" id="buttons"></div>`;
+  updateStats();
+}
+
+function checkKnsAnswer(picked) {
+  const c = deck[current];
+  const correct = c[4];
+  const isCorrect = picked === correct;
+  const optA = document.getElementById('knsOptA');
+  const optB = document.getElementById('knsOptB');
+  optA.disabled = true;
+  optB.disabled = true;
+  if (correct === 'a') { optA.classList.add('kns-correct'); if (!isCorrect) optB.classList.add('kns-wrong'); }
+  else { optB.classList.add('kns-correct'); if (!isCorrect) optA.classList.add('kns-wrong'); }
+
+  const result = document.getElementById('knsResult');
+  result.classList.remove('hidden');
+  result.innerHTML = isCorrect ? '<span class="kns-ok">Correct!</span>' : '<span class="kns-nope">Fout — het juiste antwoord is ' + (correct === 'a' ? 'A' : 'B') + '</span>';
+
+  if (isCorrect) { known++; recordCorrect(c, 'kns');
+    updateStats(); setTimeout(() => { current++; showKnsCard(); }, 1200); return;
+  }
+  again.push(c); recordWrong(c, 'kns');
+  const btns = document.getElementById('buttons');
+  btns.classList.remove('hidden');
+  btns.innerHTML = '<button class="btn btn-next" onclick="current++;showKnsCard()">Next</button>';
+  updateStats();
+}
+
 // ---- COMMON ----
 function markGood() {
   const c = deck[current];
-  recordCorrect(c, mode === 'speak');
+  recordCorrect(c, mode === 'speak' ? true : mode === 'kns' ? 'kns' : false);
   known++; current++;
-  if (mode === 'speak') showSpeakCard(); else showCard();
+  if (mode === 'speak') showSpeakCard(); else if (mode === 'kns') showKnsCard(); else showCard();
   updateStats();
 }
 function markAgain() {
   const c = deck[current];
-  recordWrong(c, mode === 'speak');
+  recordWrong(c, mode === 'speak' ? true : mode === 'kns' ? 'kns' : false);
   again.push(c); current++;
-  if (mode === 'speak') showSpeakCard(); else showCard();
+  if (mode === 'speak') showSpeakCard(); else if (mode === 'kns') showKnsCard(); else showCard();
   updateStats();
 }
 
-buildLessonFilter();
-startSession();
+// ---- LOGIN / INIT ----
+function doLogin() {
+  const name = document.getElementById('welcomeInput').value.trim();
+  if (!name) { document.getElementById('welcomeInput').style.borderColor = 'var(--red)'; return; }
+  setSyncUser(name);
+  enterApp();
+}
+function doSkip() {
+  syncUser = '';
+  localStorage.setItem('dutch-a1-user', '');
+  localStorage.setItem('dutch-a1-skipped', '1');
+  enterApp();
+}
+function enterApp() {
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('appWrap').style.display = 'flex';
+  buildLessonFilterForTab('vocab');
+  document.getElementById('tabVocab').classList.add('active');
+  activeTab = 'vocab';
+  setMode(mode);
+}
+
+// Auto-enter if user already set or skipped before
+if (syncUser || localStorage.getItem('dutch-a1-skipped')) {
+  enterApp();
+}
 
 document.addEventListener('keydown', e => {
   if (mode === 'type' || mode === 'quiz' || mode === 'match' || mode === 'build') return;
@@ -939,6 +1482,13 @@ document.addEventListener('keydown', e => {
     if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!speakAnswerVisible) showSpeakAnswer(); }
     if (e.key === '1' || e.key === 'ArrowLeft') { if (speakAnswerVisible) markAgain(); }
     if (e.key === '2' || e.key === 'ArrowRight') { if (speakAnswerVisible) markGood(); }
+    return;
+  }
+  if (mode === 'kns') {
+    const optA = document.getElementById('knsOptA');
+    if (e.key === 'a' || e.key === 'A' || e.key === '1') { if (optA && !optA.disabled) checkKnsAnswer('a'); }
+    if (e.key === 'b' || e.key === 'B' || e.key === '2') { if (optA && !optA.disabled) checkKnsAnswer('b'); }
+    if ((e.key === ' ' || e.key === 'Enter') && optA && optA.disabled) { e.preventDefault(); current++; showKnsCard(); }
     return;
   }
   if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!isFlipped) flipCard(); }
