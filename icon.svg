@@ -1,4 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <rect width="512" height="512" rx="96" fill="#007aff"/>
-  <text x="256" y="280" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="220" font-weight="700" fill="#fff">NL</text>
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#AB7DFF"/>
+      <stop offset="100%" stop-color="#E5FF5D"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="#181B1F"/>
+  <text x="256" y="290" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="200" font-weight="700" fill="url(#g)">NL</text>
 </svg>
