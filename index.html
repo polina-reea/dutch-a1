@@ -259,11 +259,11 @@
   #appWrap { flex-direction: column; align-items: center; width: 100%; }
 
   /* Tab bar */
-  .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--surface); border-top: 1px solid var(--border); padding: 8px 0; padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px)); z-index: 100; }
-  .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; background: none; border: none; color: var(--text2); cursor: pointer; padding: 6px 0; font-family: inherit; transition: color 0.2s; -webkit-tap-highlight-color: transparent; min-width: 0; }
+  .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: var(--surface); border-top: 1px solid var(--border); padding: 10px 0 calc(14px + env(safe-area-inset-bottom, 0px)); z-index: 100; }
+  .tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; color: var(--text2); cursor: pointer; padding: 4px 0; font-family: inherit; transition: color 0.2s; -webkit-tap-highlight-color: transparent; min-width: 0; }
   .tab.active { color: var(--accent); }
-  .tab-emoji { font-size: 18px; line-height: 1; }
-  .tab-label { font-size: 9px; font-weight: 600; }
+  .tab-emoji { font-size: 20px; line-height: 1; }
+  .tab-label { font-size: 10px; font-weight: 600; }
 
   /* KNS top filter (outside drawer) */
   .kns-top-filter { display: none; width: 100%; max-width: 520px; margin-bottom: 16px; }
@@ -298,11 +298,16 @@
     <div class="mode-toggle" id="modeToggle">
       <button class="mode-btn" onclick="setMode('learn')">Learn</button>
       <button class="mode-btn" onclick="setMode('build')">Build</button>
-      <button class="mode-btn active" onclick="setMode('nl')">NL→EN</button>
-      <button class="mode-btn" onclick="setMode('en')">EN→NL</button>
       <button class="mode-btn" onclick="setMode('type')">Type</button>
       <button class="mode-btn" onclick="setMode('quiz')">Quiz</button>
       <button class="mode-btn" onclick="setMode('match')">Match</button>
+    </div>
+  </div>
+  <div class="settings-section">
+    <div class="settings-label">Direction</div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="dirNl" onclick="setDirection('nl')">NL → EN</button>
+      <button class="mode-btn" id="dirEn" onclick="setDirection('en')">EN → NL</button>
     </div>
   </div>
   <div class="settings-section">
@@ -342,44 +347,586 @@
 
 <script>
 const ALL_CARDS = [
-["één","one","1"],["twee","two","1"],["drie","three","1"],["vier","four","1"],["vijf","five","1"],["zes","six","1"],["zeven","seven","1"],["acht","eight","1"],["negen","nine","1"],["tien","ten","1"],["elf","eleven","1"],["twaalf","twelve","1"],
-["één uur","1 o'clock","2"],["twee uur","2 o'clock","2"],["drie uur","3 o'clock","2"],["vier uur","4 o'clock","2"],["vijf uur","5 o'clock","2"],["zes uur","6 o'clock","2"],["zeven uur","7 o'clock","2"],["acht uur","8 o'clock","2"],["negen uur","9 o'clock","2"],["tien uur","10 o'clock","2"],["elf uur","11 o'clock","2"],["twaalf uur","12 o'clock","2"],
-["rood","red","3"],["wit","white","3"],["blauw","blue","3"],["oranje","orange","3"],["geel","yellow","3"],["groen","green","3"],["paars","purple","3"],["zwart","black","3"],["bruin","brown","3"],
-["de hand","hand","4"],["het been","leg","4"],["de knie","knee","4"],["de voet","foot","4"],["het hoofd","head","4"],["de neus","nose","4"],["de tong","tongue","4"],["de mond","mouth","4"],["het haar","hair","4"],
-["het mes","knife","5"],["de bel","bell","5"],["de kam","comb","5"],["de bal","ball","5"],["de kip","chicken","5"],["de lip","lip","5"],["de vis","fish","5"],
-["de kop","cup","6"],["de sok","sock","6"],["de mug","mosquito","6"],["de tas","bag","6"],["de pot","pot","6"],["de bus","bus","6"],
-["het doel","goal","7"],["de riem","belt","7"],["het wiel","wheel","7"],["het huis","house","7"],["de duim","thumb","7"],
-["de noot","nut","8"],["de zeep","soap","8"],["het jaar","year","8"],["de maan","moon","8"],["het vuur","fire","8"],
-["de geit","goat","9"],["de ring","ring","9"],["de lach","laugh","9"],["de schaar","scissors","9"],
-["de vrouw","woman","10"],["de cent","cent","10"],["het schrift","notebook","10"],["het bloed","blood","10"],["het gezicht","face","10"],
-["lek","has a hole in it","11"],["ken","know","11"],["de pil","pill","11"],["het sap","juice","11"],["de man","man","11"],["het pak","carton","11"],["tik","tap","11"],["mis","miss","11"],["kom","come","11"],["de les","lesson","11"],["leg","put","11"],["tel","count","11"],
-["de stap","step","12"],["de knop","button","12"],["denk","think","12"],["help","help","12"],["praat","talk","12"],["graag","(I) like","12"],["de drop","liquorice","12"],["hard","hard","12"],["dans","dance","12"],["speel","play","12"],["de hals","neck","12"],["de vlek","mark","12"],["half","half","12"],
-["het stuur","steering wheel","13"],["trouw","marry","13"],["de broer","brother","13"],["het plein","square","13"],["vast","tight / fixed","13"],["vals","false","13"],["sterk","strong","13"],["de rits","zipper","13"],["de ster","star","13"],["bang","afraid","13"],["het kind","child","13"],["de grond","ground","13"],["de trein","train","13"],["de fiets","bicycle","13"],["de school","school","13"],["de brug","bridge","13"],["vlug","quick","13"],
-["Ik ben een vrouw","I am a woman","14"],["Ik heet Iva","My name is Iva","14"],["Ik ben dertig (30) jaar","I am 30 years old","14"],["Ik hou van film","I like movies","14"],["Ik ga vaak naar de film","I often go to the movies","14"],["Jij ook?","You too?","14"],["Weet je wat?","You know what?","14"],["Laten we samen gaan","Let's go together","14"],["Dat is veel leuker","That's much more fun","14"],["Toch?","Right?","14"],["Ga je met mij mee?","Are you coming with me?","14"],
-["Ik zoek een huis","I'm looking for a house","15"],["Ik heb een zoon van tien (10) jaar","I have a 10-year-old son","15"],["Ik kom uit Thailand","I come from Thailand","15"],["de huur","rent","15"],["per maand","per month","15"],["voor twee jaar","for two years","15"],["Wie helpt mij?","Who can help me?","15"],["Bel mij","Call me","15"],
-["te koop","for sale","16"],["twee jaar oud","two years old","16"],["grote maat","large size","16"],["het slot","lock","16"],["met een sterk slot","with a strong lock","16"],["De fiets rijdt goed","The bike rides well","16"],["Hij kost honderd (100) euro","It costs 100 euros","16"],
-["Dag meneer","Hello sir","17"],["Heeft u een fiets te koop?","Do you have a bike for sale?","17"],["Ja dat klopt","Yes that's right","17"],["Ik wil de fiets wel kopen","I'd like to buy the bike","17"],["Dat kan","That's possible","17"],["Ik vind dat wel veel","I think that's quite a lot","17"],["Dat is te laag","That's too low","17"],["U krijgt hem voor negentig (90) euro","You can have it for 90 euros","17"],["kopen","to buy","17"],["vragen","to ask","17"],["laag","low","17"],["veel","much / a lot","17"],
-["Wie maakt de school schoon?","Who cleans the school?","18"],["de schoonmaker","cleaner","18"],["man of vrouw","man or woman","18"],["drie keer per week","three times per week","18"],["na acht uur","after eight o'clock","18"],["in de avond","in the evening","18"],["Stuur een brief","Send a letter","18"],["klein","small","18"],["mooi","nice / beautiful","18"],["de buurt","neighborhood","18"],["de brief","letter","18"],["schoon","clean","18"],["schoonmaken","to clean","18"],
-["Ik zoek een baan","I'm looking for a job","19"],["de baan","job","19"],["in de ochtend","in the morning","19"],["de nacht","night","19"],["het licht","light","19"],["lachen","to laugh","19"],["het schaap","sheep","19"],["de schoen","shoe","19"],["het schip","ship","19"],["Beste meneer","Dear sir","19"],["Dank u wel voor uw brief","Thank you for your letter","19"],["want","because","19"],
-["de letter","letter (of alphabet)","20"],["de postcode","postal code","20"],["het adres","address","20"],["de straat","street","20"],
-["Wat is uw naam?","What is your name?","21"],["Dag mevrouw","Hello madam","21"],["Goedemiddag","Good afternoon","21"],["Kan ik u helpen?","Can I help you?","21"],["Ik wil mij graag inschrijven","I'd like to register","21"],["Waar woont u?","Where do you live?","21"],["Ik woon in Rotterdam","I live in Rotterdam","21"],["En uw adres?","And your address?","21"],["Weet u de postcode?","Do you know the postal code?","21"],["Hebt u telefoon?","Do you have a phone?","21"],["makkelijk","easy","21"],["mobiel","mobile","21"],["Even denken","Let me think","21"],["Wacht","Wait","21"],["het boekje","booklet","21"],["moeilijk","difficult","21"],["Ik vergeet het steeds","I keep forgetting it","21"],
-["Kennen wij elkaar?","Do we know each other?","22"],["Ik geloof het niet","I don't think so","22"],["Ik zie jou vaak fietsen","I often see you cycling","22"],["Hoe heet jij?","What's your name?","22"],["Ben je hier alleen?","Are you here alone?","22"],["de vriend","friend","22"],["de jongen","boy","22"],["het meisje","girl","22"],["de zoon","son","22"],["de dochter","daughter","22"],["leuk","nice / fun","22"],["buiten","outside","22"],["Hoe oud zijn ze?","How old are they?","22"],["bijna","almost","22"],["nog","still / yet","22"],["jong","young","22"],["dertien","thirteen","22"],["veertien","fourteen","22"],["vijftien","fifteen","22"],["zestien","sixteen","22"],["zeventien","seventeen","22"],["achttien","eighteen","22"],["negentien","nineteen","22"],["twintig","twenty","22"],["dertig","thirty","22"],["veertig","forty","22"],["vijftig","fifty","22"],["zestig","sixty","22"],["zeventig","seventy","22"],["tachtig","eighty","22"],["negentig","ninety","22"],["honderd","hundred","22"],
-["Kijk dit is ons huis","Look this is our house","23"],["Wil je het zien?","Do you want to see it?","23"],["de deur","door","23"],["Kom maar binnen","Come on in","23"],["Welkom!","Welcome!","23"],["de woonkamer","living room","23"],["de keuken","kitchen","23"],["achter","behind","23"],["de trap","stairs","23"],["naar boven","upstairs","23"],["de verdieping","floor / story","23"],["de badkamer","bathroom","23"],["de slaapkamer","bedroom","23"],["de ruimte","space / room","23"],["nodig","necessary / needed","23"],["alles","everything","23"],["ruim","spacious","23"],["de woning","home / dwelling","23"],["het toilet","toilet","23"],["beneden","downstairs","23"],["de gang","hallway","23"],["links","left","23"],["rechts","right","23"],["eten maken","to cook","23"],
-["het seizoen","season","24"],["de winter","winter","24"],["de lente","spring","24"],["de zomer","summer","24"],["het najaar","autumn","24"],["de dag","day","24"],["kort","short","24"],["lang","long","24"],["vandaag","today","24"],["koud","cold","24"],["warm","warm","24"],["binnen","inside","24"],["natuurlijk","of course","24"],["zonder","without","24"],["de bloem","flower","24"],["niemand","nobody","24"],["de jas","coat","24"],["droog","dry","24"],["vrij","free","24"],["nat","wet","24"],["donker","dark","24"],["gezellig","cozy","24"],["de hond","dog","24"],["januari","January","24"],["februari","February","24"],["maart","March","24"],["april","April","24"],["mei","May","24"],["juni","June","24"],["juli","July","24"],["augustus","August","24"],["september","September","24"],["oktober","October","24"],["november","November","24"],["december","December","24"],
-["de lerares","female teacher","25"],["noemen","to call","25"],["om half negen","at half past eight","25"],["tussen de middag","during lunchtime","25"],["kwart voor één","quarter to one","25"],["Wanneer ben je klaar?","When are you done?","25"],["opruimen","to tidy up","25"],["sluiten","to close","25"],["de bank","bank","25"],["druk","busy","25"],["soms","sometimes","25"],["nooit","never","25"],["gesloten","closed","25"],["het weekend","weekend","25"],["de klok","clock","25"],["kwart over één","quarter past one","25"],["half twee","half past one","25"],["de minuut","minute","25"],["maandag","Monday","25"],["dinsdag","Tuesday","25"],["woensdag","Wednesday","25"],["donderdag","Thursday","25"],["vrijdag","Friday","25"],["zaterdag","Saturday","25"],["zondag","Sunday","25"],["'s ochtends","in the morning","25"],["'s middags","in the afternoon","25"],["'s avonds","in the evening","25"],["'s nachts","at night","25"],
-["Wil je iets eten?","Do you want to eat something?","26"],["de tafel","table","26"],["het raam","window","26"],["de stoel","chair","26"],["het broodje kaas","cheese sandwich","26"],["de honger","hunger","26"],["de soep","soup","26"],["lekker","tasty","26"],["het vlees","meat","26"],["drinken","to drink","26"],["het geld","money","26"],["betalen","to pay","26"],["de collega","colleague","26"],["thuis","at home","26"],["het gezin","family (household)","26"],["meestal","usually","26"],["de groente","vegetables","26"],["het ontbijt","breakfast","26"],["het brood","bread","26"],["de boter","butter","26"],["de kaas","cheese","26"],["de thee","tea","26"],["de koffie","coffee","26"],["de lunch","lunch","26"],["het water","water","26"],["de aardappel","potato","26"],
-["vroeg","early","27"],["uit bed","out of bed","27"],["douchen","to shower","27"],["wakker","awake","27"],["wassen","to wash","27"],["aankleden","to dress","27"],["de taak","task","27"],["iedereen","everyone","27"],["behalve","except","27"],["langzaam","slow","27"],["roepen","to call / shout","27"],["te laat","too late","27"],["klaar","ready / done","27"],["luisteren","to listen","27"],["het nieuws","news","27"],["vertrekken","to leave / depart","27"],["moe","tired","27"],["gelukkig","fortunately","27"],["kletsen","to chat","27"],["de wekker","alarm clock","27"],["opstaan","to get up","27"],
-["de familie","family","28"],["de hoek","corner","28"],["de foto","photo","28"],["de tuin","garden","28"],["naast","next to","28"],["de achternaam","last name","28"],["de voornaam","first name","28"],["de moeder","mother","28"],["de ouders","parents","28"],["allemaal","all / everyone","28"],["blond","blond","28"],["zoals","like / as","28"],["gisteren","yesterday","28"],["aardig","nice / kind","28"],["allebei","both","28"],["de gemeente","municipality","28"],["misschien","maybe","28"],
-["ziek geweest","been sick","29"],["de pijn","pain","29"],["de arm","arm","29"],["de dokter","doctor","29"],["de apotheek","pharmacy","29"],["de medicijnen","medicine","29"],["Ik voel me nu beter","I feel better now","29"],["de herfst","autumn","29"],["de regen","rain","29"],["daarom","therefore","29"],["zorgen","to take care","29"],["genoeg","enough","29"],["bijvoorbeeld","for example","29"],["de huisarts","family doctor","29"],["bewegen","to exercise","29"],["regelmatig","regularly","29"],["wandelen","to walk","29"],["minstens","at least","29"],["te veel","too much","29"],["vet","fat / greasy","29"],["roken","to smoke","29"],["weinig","little / few","29"],["voldoende rust","enough rest","29"],
-["de stad","city","30"],["praktisch","practical","30"],["de weg","road","30"],["stil","still / quiet","30"],["de file","traffic jam","30"],["vol","full","30"],["staan","to stand","30"],["de halte","stop (bus/tram)","30"],["wachten","to wait","30"],["dus","so / therefore","30"],["liever","rather / preferably","30"],["het nadeel","disadvantage","30"],["fijn","nice / great","30"],["het voordeel","advantage","30"],["de afstand","distance","30"],["gelijk hebben","to be right","30"],["goedkoper","cheaper","30"],["de beweging","movement / exercise","30"],
-["binnenkort","soon","31"],["voordat","before","31"],["regelen","to arrange","31"],["de taal","language","31"],["de toekomst","future","31"],["de haven","port / harbor","31"],["zwaar","heavy / hard","31"],["verdienen","to earn","31"],["redelijk","reasonable / fairly","31"],["eigenlijk","actually","31"],["dichtbij","nearby","31"],["Duitsland","Germany","31"],["Frankrijk","France","31"],["Den Haag","The Hague","31"],["genoemd","called","31"],["hetzelfde","the same","31"],["het land","country","31"],
-["jarig","having a birthday","32"],["het feestje","party","32"],["hoezo?","how so? / why?","32"],["het begin","beginning","32"],["het idee","idea","32"],["de oplossing","solution","32"],["uitslapen","to sleep in","32"],["Je hebt gelijk","You're right","32"],["zaterdagavond","Saturday evening","32"],["vlak voor","just before","32"],["de kerst","Christmas","32"],["afgesproken","agreed / settled","32"],["de boodschappen doen","to do the groceries","32"],["dragen","to carry","32"],["handig","handy / convenient","32"],["ontmoeten","to meet","32"],["besteden","to spend (time)","32"],["de aandacht","attention","32"],["daarna","after that","32"],["de natuur","nature","32"],["zelfs","even","32"],
-// --- Building blocks: pronouns, question words, articles ---
-["ik","I","P"],["jij / je","you (informal)","P"],["u","you (formal)","P"],["hij","he","P"],["zij / ze","she / they","P"],["wij / we","we","P"],["het","it","P"],["mij / me","me","P"],["hem","him","P"],["ons","us / our","P"],["mijn","my","P"],["jouw / je","your (informal)","P"],["uw","your (formal)","P"],["zijn","his","P"],["haar","her","P"],["hun","their","P"],["dit","this","P"],["dat","that","P"],["deze","this / these","P"],["die","that / those","P"],["er","there (exists)","P"],["iets","something","P"],["niets","nothing","P"],["elkaar","each other","P"],["zelf","self","P"],["wie","who","P"],["wat","what","P"],["waar","where","P"],["wanneer","when","P"],["hoe","how","P"],["hoeveel","how many / much","P"],["waarom","why","P"],["welk / welke","which","P"],
-// --- Building blocks: prepositions, conjunctions, adverbs ---
-["van","of / from","C"],["naar","to / towards","C"],["met","with","C"],["voor","for / before","C"],["uit","out of / from","C"],["in","in","C"],["op","on","C"],["aan","on / at","C"],["bij","at / near / with","C"],["om","at / around","C"],["per","per","C"],["te","too / to","C"],["na","after","C"],["tot","until / to","C"],["over","about / over","C"],["tussen","between","C"],["onder","under","C"],["boven","above","C"],["tegen","against","C"],["sinds","since","C"],["tijdens","during","C"],["en","and","C"],["maar","but","C"],["of","or","C"],["als","if / when / as","C"],["toen","then / when","C"],["dat","that (conjunction)","C"],["omdat","because","C"],["niet","not","C"],["geen","no / not any","C"],["wel","indeed / yes","C"],["ook","also / too","C"],["vaak","often","C"],["samen","together","C"],["toch","yet / still / right?","C"],["al","already","C"],["nu","now","C"],["dan","then","C"],["hier","here","C"],["daar","there","C"],["heel / erg","very","C"],["alleen","only / alone","C"],["altijd","always","C"],["weer","again","C"],["pas","only / just","C"],
-// --- Building blocks: common verbs ---
-["zijn","to be","W"],["hebben","to have","W"],["gaan","to go","W"],["komen","to come","W"],["willen","to want","W"],["kunnen","can / to be able","W"],["mogen","may / to be allowed","W"],["moeten","must / to have to","W"],["zullen","will / shall","W"],["doen","to do","W"],["maken","to make","W"],["zien","to see","W"],["zoeken","to look for","W"],["heten","to be called","W"],["weten","to know (fact)","W"],["kennen","to know (person)","W"],["vinden","to find / to think","W"],["krijgen","to get / receive","W"],["geven","to give","W"],["nemen","to take","W"],["werken","to work","W"],["wonen","to live","W"],["rijden","to drive / ride","W"],["kosten","to cost","W"],["laten","to let","W"],["houden van","to love / to like","W"],["sturen","to send","W"],["helpen","to help","W"],["zeggen","to say","W"],["lezen","to read","W"],["schrijven","to write","W"],["leren","to learn / teach","W"],["beginnen","to begin","W"],["stoppen","to stop","W"],["brengen","to bring","W"],["halen","to fetch / get","W"],["proberen","to try","W"],["begrijpen","to understand","W"],["spreken","to speak","W"]
+["één","one","1"],
+["twee","two","1"],
+["drie","three","1"],
+["vier","four","1"],
+["vijf","five","1"],
+["zes","six","1"],
+["zeven","seven","1"],
+["acht","eight","1"],
+["negen","nine","1"],
+["tien","ten","1"],
+["elf","eleven","1"],
+["twaalf","twelve","1"],
+["één uur","1 o'clock","2"],
+["twee uur","2 o'clock","2"],
+["drie uur","3 o'clock","2"],
+["vier uur","4 o'clock","2"],
+["vijf uur","5 o'clock","2"],
+["zes uur","6 o'clock","2"],
+["zeven uur","7 o'clock","2"],
+["acht uur","8 o'clock","2"],
+["negen uur","9 o'clock","2"],
+["tien uur","10 o'clock","2"],
+["elf uur","11 o'clock","2"],
+["twaalf uur","12 o'clock","2"],
+["rood","red","3"],
+["wit","white","3"],
+["blauw","blue","3"],
+["oranje","orange","3"],
+["geel","yellow","3"],
+["groen","green","3"],
+["paars","purple","3"],
+["zwart","black","3"],
+["bruin","brown","3"],
+["de hand","hand","4"],
+["het been","leg","4"],
+["de knie","knee","4"],
+["de voet","foot","4"],
+["het hoofd","head","4"],
+["de neus","nose","4"],
+["de tong","tongue","4"],
+["de mond","mouth","4"],
+["het haar","hair","4"],
+["het mes","knife","5"],
+["de bel","bell","5"],
+["de kam","comb","5"],
+["de bal","ball","5"],
+["de kip","chicken","5"],
+["de lip","lip","5"],
+["de vis","fish","5"],
+["de kop","cup","6"],
+["de sok","sock","6"],
+["de mug","mosquito","6"],
+["de tas","bag","6"],
+["de pot","pot","6"],
+["de bus","bus","6"],
+["het doel","goal","7"],
+["de riem","belt","7"],
+["het wiel","wheel","7"],
+["het huis","house","7"],
+["de duim","thumb","7"],
+["de noot","nut","8"],
+["de zeep","soap","8"],
+["het jaar","year","8"],
+["de maan","moon","8"],
+["het vuur","fire","8"],
+["de geit","goat","9"],
+["de ring","ring","9"],
+["de lach","laugh","9"],
+["de schaar","scissors","9"],
+["de vrouw","woman","10"],
+["de cent","cent","10"],
+["het schrift","notebook","10"],
+["het bloed","blood","10"],
+["het gezicht","face","10"],
+["lek","has a hole in it","11"],
+["ken","know","11"],
+["de pil","pill","11"],
+["het sap","juice","11"],
+["de man","man","11"],
+["het pak","carton","11"],
+["tik","tap","11"],
+["mis","miss","11"],
+["kom","come","11"],
+["de les","lesson","11"],
+["leg","put","11"],
+["tel","count","11"],
+["de stap","step","12"],
+["de knop","button","12"],
+["denk","think","12"],
+["help","help","12"],
+["praat","talk","12"],
+["graag","(I) like","12"],
+["de drop","liquorice","12"],
+["hard","hard","12"],
+["dans","dance","12"],
+["speel","play","12"],
+["de hals","neck","12"],
+["de vlek","mark","12"],
+["half","half","12"],
+["het stuur","steering wheel","13"],
+["trouw","marry","13"],
+["de broer","brother","13"],
+["het plein","square","13"],
+["vast","tight / fixed","13"],
+["vals","false","13"],
+["sterk","strong","13"],
+["de rits","zipper","13"],
+["de ster","star","13"],
+["bang","afraid","13"],
+["het kind","child","13"],
+["de grond","ground","13"],
+["de trein","train","13"],
+["de fiets","bicycle","13"],
+["de school","school","13"],
+["de brug","bridge","13"],
+["vlug","quick","13"],
+["Ik ben een vrouw","I am a woman","14"],
+["Ik heet Iva","My name is Iva","14"],
+["Ik ben dertig (30) jaar","I am 30 years old","14"],
+["Ik hou van film","I like movies","14"],
+["Ik ga vaak naar de film","I often go to the movies","14"],
+["Jij ook?","You too?","14"],
+["Weet je wat?","You know what?","14"],
+["Laten we samen gaan","Let's go together","14"],
+["Dat is veel leuker","That's much more fun","14"],
+["Toch?","Right?","14"],
+["Ga je met mij mee?","Are you coming with me?","14"],
+["Ik zoek een huis","I'm looking for a house","15"],
+["Ik heb een zoon van tien (10) jaar","I have a 10-year-old son","15"],
+["Ik kom uit Thailand","I come from Thailand","15"],
+["de huur","rent","15"],
+["per maand","per month","15"],
+["voor twee jaar","for two years","15"],
+["Wie helpt mij?","Who can help me?","15"],
+["Bel mij","Call me","15"],
+["te koop","for sale","16"],
+["twee jaar oud","two years old","16"],
+["grote maat","large size","16"],
+["het slot","lock","16"],
+["met een sterk slot","with a strong lock","16"],
+["De fiets rijdt goed","The bike rides well","16"],
+["Hij kost honderd (100) euro","It costs 100 euros","16"],
+["Dag meneer","Hello sir","17"],
+["Heeft u een fiets te koop?","Do you have a bike for sale?","17"],
+["Ja dat klopt","Yes that's right","17"],
+["Ik wil de fiets wel kopen","I'd like to buy the bike","17"],
+["Dat kan","That's possible","17"],
+["Ik vind dat wel veel","I think that's quite a lot","17"],
+["Dat is te laag","That's too low","17"],
+["U krijgt hem voor negentig (90) euro","You can have it for 90 euros","17"],
+["kopen","to buy","17"],
+["vragen","to ask","17"],
+["laag","low","17"],
+["veel","much / a lot","17"],
+["Wie maakt de school schoon?","Who cleans the school?","18"],
+["de schoonmaker","cleaner","18"],
+["man of vrouw","man or woman","18"],
+["drie keer per week","three times per week","18"],
+["na acht uur","after eight o'clock","18"],
+["in de avond","in the evening","18"],
+["Stuur een brief","Send a letter","18"],
+["klein","small","18"],
+["mooi","nice / beautiful","18"],
+["de buurt","neighborhood","18"],
+["de brief","letter","18"],
+["schoon","clean","18"],
+["schoonmaken","to clean","18"],
+["Ik zoek een baan","I'm looking for a job","19"],
+["de baan","job","19"],
+["in de ochtend","in the morning","19"],
+["de nacht","night","19"],
+["het licht","light","19"],
+["lachen","to laugh","19"],
+["het schaap","sheep","19"],
+["de schoen","shoe","19"],
+["het schip","ship","19"],
+["Beste meneer","Dear sir","19"],
+["Dank u wel voor uw brief","Thank you for your letter","19"],
+["want","because","19"],
+["de letter","letter (of alphabet)","20"],
+["de postcode","postal code","20"],
+["het adres","address","20"],
+["de straat","street","20"],
+["Wat is uw naam?","What is your name?","21"],
+["Dag mevrouw","Hello madam","21"],
+["Goedemiddag","Good afternoon","21"],
+["Kan ik u helpen?","Can I help you?","21"],
+["Ik wil mij graag inschrijven","I'd like to register","21"],
+["Waar woont u?","Where do you live?","21"],
+["Ik woon in Rotterdam","I live in Rotterdam","21"],
+["En uw adres?","And your address?","21"],
+["Weet u de postcode?","Do you know the postal code?","21"],
+["Hebt u telefoon?","Do you have a phone?","21"],
+["makkelijk","easy","21"],
+["mobiel","mobile","21"],
+["Even denken","Let me think","21"],
+["Wacht","Wait","21"],
+["het boekje","booklet","21"],
+["moeilijk","difficult","21"],
+["Ik vergeet het steeds","I keep forgetting it","21"],
+["Kennen wij elkaar?","Do we know each other?","22"],
+["Ik geloof het niet","I don't think so","22"],
+["Ik zie jou vaak fietsen","I often see you cycling","22"],
+["Hoe heet jij?","What's your name?","22"],
+["Ben je hier alleen?","Are you here alone?","22"],
+["de vriend","friend","22"],
+["de jongen","boy","22"],
+["het meisje","girl","22"],
+["de zoon","son","22"],
+["de dochter","daughter","22"],
+["leuk","nice / fun","22"],
+["buiten","outside","22"],
+["Hoe oud zijn ze?","How old are they?","22"],
+["bijna","almost","22"],
+["nog","still / yet","22"],
+["jong","young","22"],
+["dertien","thirteen","22"],
+["veertien","fourteen","22"],
+["vijftien","fifteen","22"],
+["zestien","sixteen","22"],
+["zeventien","seventeen","22"],
+["achttien","eighteen","22"],
+["negentien","nineteen","22"],
+["twintig","twenty","22"],
+["dertig","thirty","22"],
+["veertig","forty","22"],
+["vijftig","fifty","22"],
+["zestig","sixty","22"],
+["zeventig","seventy","22"],
+["tachtig","eighty","22"],
+["negentig","ninety","22"],
+["honderd","hundred","22"],
+["Kijk dit is ons huis","Look this is our house","23"],
+["Wil je het zien?","Do you want to see it?","23"],
+["de deur","door","23"],
+["Kom maar binnen","Come on in","23"],
+["Welkom!","Welcome!","23"],
+["de woonkamer","living room","23"],
+["de keuken","kitchen","23"],
+["achter","behind","23"],
+["de trap","stairs","23"],
+["naar boven","upstairs","23"],
+["de verdieping","floor / story","23"],
+["de badkamer","bathroom","23"],
+["de slaapkamer","bedroom","23"],
+["de ruimte","space / room","23"],
+["nodig","necessary / needed","23"],
+["alles","everything","23"],
+["ruim","spacious","23"],
+["de woning","home / dwelling","23"],
+["het toilet","toilet","23"],
+["beneden","downstairs","23"],
+["de gang","hallway","23"],
+["links","left","23"],
+["rechts","right","23"],
+["eten maken","to cook","23"],
+["het seizoen","season","24"],
+["de winter","winter","24"],
+["de lente","spring","24"],
+["de zomer","summer","24"],
+["het najaar","autumn","24"],
+["de dag","day","24"],
+["kort","short","24"],
+["lang","long","24"],
+["vandaag","today","24"],
+["koud","cold","24"],
+["warm","warm","24"],
+["binnen","inside","24"],
+["natuurlijk","of course","24"],
+["zonder","without","24"],
+["de bloem","flower","24"],
+["niemand","nobody","24"],
+["de jas","coat","24"],
+["droog","dry","24"],
+["vrij","free","24"],
+["nat","wet","24"],
+["donker","dark","24"],
+["gezellig","cozy","24"],
+["de hond","dog","24"],
+["januari","January","24"],
+["februari","February","24"],
+["maart","March","24"],
+["april","April","24"],
+["mei","May","24"],
+["juni","June","24"],
+["juli","July","24"],
+["augustus","August","24"],
+["september","September","24"],
+["oktober","October","24"],
+["november","November","24"],
+["december","December","24"],
+["de lerares","female teacher","25"],
+["noemen","to call","25"],
+["om half negen","at half past eight","25"],
+["tussen de middag","during lunchtime","25"],
+["kwart voor één","quarter to one","25"],
+["Wanneer ben je klaar?","When are you done?","25"],
+["opruimen","to tidy up","25"],
+["sluiten","to close","25"],
+["de bank","bank","25"],
+["druk","busy","25"],
+["soms","sometimes","25"],
+["nooit","never","25"],
+["gesloten","closed","25"],
+["het weekend","weekend","25"],
+["de klok","clock","25"],
+["kwart over één","quarter past one","25"],
+["half twee","half past one","25"],
+["de minuut","minute","25"],
+["maandag","Monday","25"],
+["dinsdag","Tuesday","25"],
+["woensdag","Wednesday","25"],
+["donderdag","Thursday","25"],
+["vrijdag","Friday","25"],
+["zaterdag","Saturday","25"],
+["zondag","Sunday","25"],
+["'s ochtends","in the morning","25"],
+["'s middags","in the afternoon","25"],
+["'s avonds","in the evening","25"],
+["'s nachts","at night","25"],
+["Wil je iets eten?","Do you want to eat something?","26"],
+["de tafel","table","26"],
+["het raam","window","26"],
+["de stoel","chair","26"],
+["het broodje kaas","cheese sandwich","26"],
+["de honger","hunger","26"],
+["de soep","soup","26"],
+["lekker","tasty","26"],
+["het vlees","meat","26"],
+["drinken","to drink","26"],
+["het geld","money","26"],
+["betalen","to pay","26"],
+["de collega","colleague","26"],
+["thuis","at home","26"],
+["het gezin","family (household)","26"],
+["meestal","usually","26"],
+["de groente","vegetables","26"],
+["het ontbijt","breakfast","26"],
+["het brood","bread","26"],
+["de boter","butter","26"],
+["de kaas","cheese","26"],
+["de thee","tea","26"],
+["de koffie","coffee","26"],
+["de lunch","lunch","26"],
+["het water","water","26"],
+["de aardappel","potato","26"],
+["vroeg","early","27"],
+["uit bed","out of bed","27"],
+["douchen","to shower","27"],
+["wakker","awake","27"],
+["wassen","to wash","27"],
+["aankleden","to dress","27"],
+["de taak","task","27"],
+["iedereen","everyone","27"],
+["behalve","except","27"],
+["langzaam","slow","27"],
+["roepen","to call / shout","27"],
+["te laat","too late","27"],
+["klaar","ready / done","27"],
+["luisteren","to listen","27"],
+["het nieuws","news","27"],
+["vertrekken","to leave / depart","27"],
+["moe","tired","27"],
+["gelukkig","fortunately","27"],
+["kletsen","to chat","27"],
+["de wekker","alarm clock","27"],
+["opstaan","to get up","27"],
+["de familie","family","28"],
+["de hoek","corner","28"],
+["de foto","photo","28"],
+["de tuin","garden","28"],
+["naast","next to","28"],
+["de achternaam","last name","28"],
+["de voornaam","first name","28"],
+["de moeder","mother","28"],
+["de ouders","parents","28"],
+["allemaal","all / everyone","28"],
+["blond","blond","28"],
+["zoals","like / as","28"],
+["gisteren","yesterday","28"],
+["aardig","nice / kind","28"],
+["allebei","both","28"],
+["de gemeente","municipality","28"],
+["misschien","maybe","28"],
+["ziek geweest","been sick","29"],
+["de pijn","pain","29"],
+["de arm","arm","29"],
+["de dokter","doctor","29"],
+["de apotheek","pharmacy","29"],
+["de medicijnen","medicine","29"],
+["Ik voel me nu beter","I feel better now","29"],
+["de herfst","autumn","29"],
+["de regen","rain","29"],
+["daarom","therefore","29"],
+["zorgen","to take care","29"],
+["genoeg","enough","29"],
+["bijvoorbeeld","for example","29"],
+["de huisarts","family doctor","29"],
+["bewegen","to exercise","29"],
+["regelmatig","regularly","29"],
+["wandelen","to walk","29"],
+["minstens","at least","29"],
+["te veel","too much","29"],
+["vet","fat / greasy","29"],
+["roken","to smoke","29"],
+["weinig","little / few","29"],
+["voldoende rust","enough rest","29"],
+["de stad","city","30"],
+["praktisch","practical","30"],
+["de weg","road","30"],
+["stil","still / quiet","30"],
+["de file","traffic jam","30"],
+["vol","full","30"],
+["staan","to stand","30"],
+["de halte","stop (bus/tram)","30"],
+["wachten","to wait","30"],
+["dus","so / therefore","30"],
+["liever","rather / preferably","30"],
+["het nadeel","disadvantage","30"],
+["fijn","nice / great","30"],
+["het voordeel","advantage","30"],
+["de afstand","distance","30"],
+["gelijk hebben","to be right","30"],
+["goedkoper","cheaper","30"],
+["de beweging","movement / exercise","30"],
+["binnenkort","soon","31"],
+["voordat","before","31"],
+["regelen","to arrange","31"],
+["de taal","language","31"],
+["de toekomst","future","31"],
+["de haven","port / harbor","31"],
+["zwaar","heavy / hard","31"],
+["verdienen","to earn","31"],
+["redelijk","reasonable / fairly","31"],
+["eigenlijk","actually","31"],
+["dichtbij","nearby","31"],
+["Duitsland","Germany","31"],
+["Frankrijk","France","31"],
+["Den Haag","The Hague","31"],
+["genoemd","called","31"],
+["hetzelfde","the same","31"],
+["het land","country","31"],
+["jarig","having a birthday","32"],
+["het feestje","party","32"],
+["hoezo?","how so? / why?","32"],
+["het begin","beginning","32"],
+["het idee","idea","32"],
+["de oplossing","solution","32"],
+["uitslapen","to sleep in","32"],
+["Je hebt gelijk","You're right","32"],
+["zaterdagavond","Saturday evening","32"],
+["vlak voor","just before","32"],
+["de kerst","Christmas","32"],
+["afgesproken","agreed / settled","32"],
+["de boodschappen doen","to do the groceries","32"],
+["dragen","to carry","32"],
+["handig","handy / convenient","32"],
+["ontmoeten","to meet","32"],
+["besteden","to spend (time)","32"],
+["de aandacht","attention","32"],
+["daarna","after that","32"],
+["de natuur","nature","32"],
+["zelfs","even","32"],
+["ik","I","P1"],
+["jij / je","you (informal)","P1"],
+["u","you (formal)","P1"],
+["hij","he","P1"],
+["zij / ze","she / they","P1"],
+["wij / we","we","P1"],
+["het","it","P1"],
+["mij / me","me","P1"],
+["hem","him","P1"],
+["ons","us / our","P1"],
+["mijn","my","P2"],
+["jouw / je","your (informal)","P2"],
+["uw","your (formal)","P2"],
+["zijn","his","P2"],
+["haar","her","P2"],
+["hun","their","P2"],
+["dit","this","P2"],
+["dat","that","P2"],
+["deze","this / these","P2"],
+["die","that / those","P2"],
+["er","there (exists)","P2"],
+["iets","something","P3"],
+["niets","nothing","P3"],
+["elkaar","each other","P3"],
+["zelf","self","P3"],
+["wie","who","P3"],
+["wat","what","P3"],
+["waar","where","P3"],
+["wanneer","when","P3"],
+["hoe","how","P3"],
+["hoeveel","how many / much","P3"],
+["waarom","why","P3"],
+["welk / welke","which","P3"],
+["van","of / from","C1"],
+["naar","to / towards","C1"],
+["met","with","C1"],
+["voor","for / before","C1"],
+["uit","out of / from","C1"],
+["in","in","C1"],
+["op","on","C1"],
+["aan","on / at","C1"],
+["bij","at / near / with","C1"],
+["om","at / around","C1"],
+["per","per","C1"],
+["te","too / to","C2"],
+["na","after","C2"],
+["tot","until / to","C2"],
+["over","about / over","C2"],
+["tussen","between","C2"],
+["onder","under","C2"],
+["boven","above","C2"],
+["tegen","against","C2"],
+["sinds","since","C2"],
+["tijdens","during","C2"],
+["en","and","C3"],
+["maar","but","C3"],
+["of","or","C3"],
+["als","if / when / as","C3"],
+["toen","then / when","C3"],
+["dat","that (conjunction)","C3"],
+["omdat","because","C3"],
+["niet","not","C4"],
+["geen","no / not any","C4"],
+["wel","indeed / yes","C4"],
+["ook","also / too","C4"],
+["vaak","often","C4"],
+["samen","together","C4"],
+["toch","yet / still / right?","C4"],
+["al","already","C4"],
+["nu","now","C4"],
+["dan","then","C4"],
+["hier","here","C4"],
+["daar","there","C4"],
+["heel / erg","very","C4"],
+["alleen","only / alone","C4"],
+["altijd","always","C4"],
+["weer","again","C4"],
+["pas","only / just","C4"],
+["zijn","to be","W1"],
+["hebben","to have","W1"],
+["gaan","to go","W1"],
+["komen","to come","W1"],
+["willen","to want","W1"],
+["kunnen","can / to be able","W1"],
+["mogen","may / to be allowed","W1"],
+["moeten","must / to have to","W1"],
+["zullen","will / shall","W1"],
+["doen","to do","W1"],
+["maken","to make","W2"],
+["zien","to see","W2"],
+["zoeken","to look for","W2"],
+["heten","to be called","W2"],
+["weten","to know (fact)","W2"],
+["kennen","to know (person)","W2"],
+["vinden","to find / to think","W2"],
+["krijgen","to get / receive","W2"],
+["geven","to give","W2"],
+["nemen","to take","W2"],
+["werken","to work","W3"],
+["wonen","to live","W3"],
+["rijden","to drive / ride","W3"],
+["kosten","to cost","W3"],
+["laten","to let","W3"],
+["houden van","to love / to like","W3"],
+["sturen","to send","W3"],
+["helpen","to help","W3"],
+["zeggen","to say","W3"],
+["lezen","to read","W3"],
+["schrijven","to write","W3"],
+["leren","to learn / teach","W3"],
+["beginnen","to begin","W3"],
+["stoppen","to stop","W3"],
+["brengen","to bring","W3"],
+["halen","to fetch / get","W3"],
+["proberen","to try","W3"],
+["begrijpen","to understand","W3"],
+["spreken","to speak","W3"]
 ];
 
 // Speaking exam questions: [question, translation, example answer, topic]
@@ -524,7 +1071,7 @@ let speakTopics = new Set();
 let knsTopics = new Set();
 let speakAnswerVisible = false;
 
-const LESSON_TAG = {P:'Pronouns',C:'Connectors',W:'Verbs'};
+const LESSON_TAG = {P1:'Ik, jij, hij',P2:'Mijn, dit, dat',P3:'Wie, wat, waar',C1:'Voorzetsels 1',C2:'Voorzetsels 2',C3:'Voegwoorden',C4:'Bijwoorden',W1:'Basiswerkwoorden',W2:'Werkwoorden 2',W3:'Werkwoorden 3'};
 function lesTag(l) { return LESSON_TAG[l] ? LESSON_TAG[l] : 'Les ' + l; }
 function getAllLessons() { return [...new Set(ALL_CARDS.map(c => c[2]))].sort((a,b) => { const na=+a,nb=+b; if(!isNaN(na)&&!isNaN(nb)) return na-nb; if(!isNaN(na)) return -1; if(!isNaN(nb)) return 1; return a.localeCompare(b); }); }
 function getFiltered() { return ALL_CARDS.filter(c => activeLessons.has(c[2])); }
@@ -546,7 +1093,7 @@ function sayNL(text) {
   const clean = text.replace(/\(\d+\)/g, '').trim();
   const u = new SpeechSynthesisUtterance(clean);
   u.lang = 'nl-NL';
-  u.rate = 0.85;
+  u.rate = 0.7;
   if (nlVoice) u.voice = nlVoice;
   speechSynthesis.speak(u);
 }
@@ -781,14 +1328,14 @@ function switchTab(tab) {
     document.querySelector('.top-bar h1').textContent = 'Dutch A1';
     modePill.style.display = '';
     drawer.style.display = '';
-    if (mode === 'kns' || mode === 'speak') mode = 'nl';
+    if (mode === 'kns' || mode === 'speak') mode = 'learn';
     buildLessonFilterForTab('vocab');
     setMode(mode);
   } else if (tab === 'words') {
     document.querySelector('.top-bar h1').textContent = 'Basics';
     modePill.style.display = '';
     drawer.style.display = '';
-    if (mode === 'kns' || mode === 'speak') mode = 'nl';
+    if (mode === 'kns' || mode === 'speak') mode = 'learn';
     buildLessonFilterForTab('words');
     setMode(mode);
   } else if (tab === 'speak') {
@@ -864,23 +1411,41 @@ function syncFilterUI() {
   });
 }
 
-const MODE_LABELS = {learn:'Learn',build:'Build',nl:'NL→EN',en:'EN→NL',type:'Type',quiz:'Quiz',match:'Match',kns:'KNS'};
+const MODE_LABELS = {learn:'Learn',build:'Build',type:'Type',quiz:'Quiz',match:'Match',kns:'KNS'};
+const MODE_FLOW = ['learn','build','type','quiz','match'];
+let direction = 'nl'; // 'nl' = NL→EN, 'en' = EN→NL
+
+function setDirection(dir) {
+  direction = dir;
+  document.getElementById('dirNl').classList.toggle('active', dir === 'nl');
+  document.getElementById('dirEn').classList.toggle('active', dir === 'en');
+}
+
+function getNextMode() {
+  const idx = MODE_FLOW.indexOf(mode);
+  if (idx < 0 || idx >= MODE_FLOW.length - 1) return null;
+  return MODE_FLOW[idx + 1];
+}
+
+function goToMode(m) {
+  setMode(m);
+}
 
 function toggleSettings() {
   if (activeTab !== 'vocab' && activeTab !== 'words') return;
   const d = document.getElementById('settingsDrawer');
   d.classList.toggle('open');
-  document.getElementById('modePill').innerHTML = MODE_LABELS[mode] + (d.classList.contains('open') ? ' &#9652;' : ' &#9662;');
+  document.getElementById('modePill').innerHTML = (MODE_LABELS[mode] || mode) + (d.classList.contains('open') ? ' &#9652;' : ' &#9662;');
 }
 
 function setMode(m) {
   mode = m;
-  const modes = ['learn','build','nl','en','type','quiz','match'];
+  const modes = MODE_FLOW;
   const modeToggle = document.getElementById('modeToggle');
   modeToggle.querySelectorAll('.mode-btn').forEach((btn, i) => {
     btn.classList.toggle('active', modes[i] === m);
   });
-  document.getElementById('modePill').innerHTML = MODE_LABELS[m] + ' &#9662;';
+  document.getElementById('modePill').innerHTML = (MODE_LABELS[m] || m) + ' &#9662;';
   document.getElementById('settingsDrawer').classList.remove('open');
 
   startSession();
@@ -908,7 +1473,7 @@ function showCard() {
   else if (mode === 'build') showBuildCard();
   else if (mode === 'type') showTypeCard();
   else if (mode === 'quiz') showQuizCard();
-  else showFlipCard();
+  else showLearnCard();
   updateStats();
 }
 
@@ -933,16 +1498,26 @@ function goToLesson(lesson) {
   activeLessons.clear();
   activeLessons.add(lesson);
   syncFilterUI();
-  startSession();
+  setMode('learn'); // start new lesson from Learn mode
 }
 
 function showDone() {
   const pct = sessionTotal > 0 ? Math.round((known / sessionTotal) * 100) : 0;
   const againFn = mode === 'speak' ? 'startSpeakSession()' : mode === 'kns' ? 'startKnsSession()' : 'startSession()';
-  const nextLes = (mode !== 'speak' && mode !== 'kns') ? getNextLesson() : null;
+  const isCardMode = mode !== 'speak' && mode !== 'kns';
+  const nextMode = isCardMode ? getNextMode() : null;
+  const nextLes = isCardMode && !nextMode ? getNextLesson() : null;
 
   let buttons = '';
-  if (nextLes && pct === 100) {
+  if (nextMode && pct === 100) {
+    // Completed mode at 100% → advance to next mode
+    buttons = `<button class="btn btn-good" onclick="goToMode('${nextMode}')">Next → ${MODE_LABELS[nextMode]}</button>
+      <button class="btn btn-skip" onclick="${againFn}" style="margin-top:10px">Again</button>`;
+  } else if (nextMode) {
+    buttons = `<button class="btn btn-good" onclick="${againFn}">Again</button>
+      <button class="btn btn-skip" onclick="goToMode('${nextMode}')" style="margin-top:10px">Skip → ${MODE_LABELS[nextMode]}</button>`;
+  } else if (nextLes && pct === 100) {
+    // Last mode completed at 100% → advance to next lesson
     buttons = `<button class="btn btn-good" onclick="goToLesson('${nextLes}')">Next → ${lesTag(nextLes)}</button>
       <button class="btn btn-skip" onclick="${againFn}" style="margin-top:10px">Again</button>`;
   } else if (nextLes) {
@@ -1102,11 +1677,14 @@ function pickMatch(el) {
 // ---- LEARN ----
 function showLearnCard() {
   const c = deck[current];
+  const top = direction === 'en' ? c[1] : c[0];
+  const bot = direction === 'en' ? c[0] : c[1];
+  const nl = c[0];
   document.getElementById('mainArea').innerHTML = `
     <div class="learn-card">
       <div class="card-tag">${lesTag(c[2])}</div>
-      <div class="learn-nl">${c[0]} ${ttsBtn(c[0])}</div>
-      <div class="learn-en">${c[1]}</div>
+      <div class="learn-nl">${top} ${ttsBtn(nl)}</div>
+      <div class="learn-en">${bot}</div>
       <div class="learn-count">${current + 1} / ${sessionTotal}</div>
     </div>
     <div class="buttons" id="buttons">
