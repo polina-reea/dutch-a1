@@ -1873,8 +1873,8 @@ function pickQuiz(btn, idx, correct) {
 function showFillCard() {
   const c = deck[current];
   const ex = EXAMPLES[c[0]];
-  // Skip cards without examples
-  if (!ex) { recordCorrect(c, false); known++; current++; showCard(); return; }
+  // Fallback to quiz for cards without examples
+  if (!ex) { showQuizCard(); return; }
   const sentence = ex[0];
   const word = c[0];
   // Find the word in the sentence (case-insensitive, match conjugated forms too)
@@ -1890,7 +1890,7 @@ function showFillCard() {
       if (w.toLowerCase().startsWith(wordLower.substring(0,3)) && w.length >= 2) { gapWord = w; break; }
     }
   }
-  if (!gapWord) { recordCorrect(c, false); known++; current++; showCard(); return; }
+  if (!gapWord) { showQuizCard(); return; }
 
   const gapSentence = sentence.replace(new RegExp('\\b' + gapWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\b', 'i'), '___');
 
@@ -1939,8 +1939,8 @@ function pickFill(btn, correct) {
 function showWriteCard() {
   const c = deck[current];
   const ex = EXAMPLES[c[0]];
-  // Skip cards without examples
-  if (!ex) { recordCorrect(c, false); known++; current++; showCard(); return; }
+  // Fallback to type for cards without examples
+  if (!ex) { showTypeCard(); return; }
   const dutchSentence = ex[0];
   const englishSentence = ex[1];
   document.getElementById('mainArea').innerHTML = `
