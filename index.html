@@ -265,6 +265,9 @@
   .tab-emoji { font-size: 20px; line-height: 1; }
   .tab-label { font-size: 10px; font-weight: 600; }
 
+  .learn-example { font-size: 14px; color: var(--text2); margin-top: 12px; font-style: italic; line-height: 1.5; }
+  .learn-hint { font-size: 12px; color: var(--purple); background: var(--purple-bg); padding: 8px 14px; border-radius: 10px; margin-top: 10px; line-height: 1.5; text-align: left; }
+
   /* KNS top filter (outside drawer) */
   .kns-top-filter { display: none; width: 100%; max-width: 520px; margin-bottom: 16px; }
 </style>
@@ -298,9 +301,11 @@
     <div class="mode-toggle" id="modeToggle">
       <button class="mode-btn" onclick="setMode('learn')">Learn</button>
       <button class="mode-btn" onclick="setMode('build')">Build</button>
+      <button class="mode-btn" onclick="setMode('fill')">Fill</button>
       <button class="mode-btn" onclick="setMode('type')">Type</button>
       <button class="mode-btn" onclick="setMode('quiz')">Quiz</button>
       <button class="mode-btn" onclick="setMode('match')">Match</button>
+      <button class="mode-btn" onclick="setMode('write')">Write</button>
     </div>
   </div>
   <div class="settings-section">
@@ -929,42 +934,170 @@ const ALL_CARDS = [
 ["spreken","to speak","W3"]
 ];
 
+const EXAMPLES = {
+// P1 — Pronouns (subject/object)
+"ik": ["Ik woon in Nederland.", "I live in the Netherlands."],
+"jij / je": ["Jij bent mijn vriend.", "You are my friend."],
+"u": ["Wat is uw naam?", "What is your name?"],
+"hij": ["Hij heeft bruin haar.", "He has brown hair."],
+"zij / ze": ["Zij werkt in Amsterdam.", "She works in Amsterdam."],
+"wij / we": ["Wij gaan naar school.", "We go to school."],
+"het": ["Het is drie uur.", "It is three o'clock."],
+"mij / me": ["Kun je mij helpen?", "Can you help me?"],
+"hem": ["Ik ken hem goed.", "I know him well."],
+"ons": ["Dit is ons huis.", "This is our house."],
+// P2 — Possessives & demonstratives
+"mijn": ["Mijn haar is bruin.", "My hair is brown."],
+"jouw / je": ["Jouw jas is rood.", "Your coat is red."],
+"uw": ["Wat is uw adres?", "What is your address?"],
+"zijn": ["Zijn neus is groot. / Hij is blij.", "His nose is big. / He is happy."],
+"haar": ["Haar ogen zijn blauw.", "Her eyes are blue."],
+"hun": ["Hun kinderen zijn groot.", "Their children are big."],
+"dit": ["Dit is mijn huis.", "This is my house."],
+"dat": ["Dat is een vis. / Ik weet dat hij komt.", "That is a fish. / I know that he comes."],
+"deze": ["Deze bal is rood.", "This ball is red."],
+"die": ["Die man is groot.", "That man is tall."],
+"er": ["Er zijn vijf stoelen.", "There are five chairs.", "er = there (abstract existence) • daar = there (specific place you can point to)"],
+// P3 — Question words & indefinites
+"iets": ["Wil je iets eten?", "Do you want to eat something?"],
+"niets": ["Er is niets in de kop.", "There is nothing in the cup."],
+"elkaar": ["Wij helpen elkaar.", "We help each other."],
+"zelf": ["Ik doe het zelf.", "I do it myself."],
+"wie": ["Wie is dat?", "Who is that?"],
+"wat": ["Wat is dit?", "What is this?"],
+"waar": ["Waar is de school?", "Where is the school?"],
+"wanneer": ["Wanneer kom je?", "When are you coming?", "wanneer = when (in questions + formal) • als = when/if (in statements)"],
+"hoe": ["Hoe gaat het?", "How are you?"],
+"hoeveel": ["Hoeveel kost het?", "How much does it cost?"],
+"waarom": ["Waarom leer je Nederlands?", "Why do you learn Dutch?"],
+"welk / welke": ["Welke kleur is dit?", "Which color is this?"],
+// C1 — Prepositions 1
+"van": ["Ik kom van de markt.", "I come from the market.", "van = from/of (origin, possession) • uit = from (out of a place/country)"],
+"naar": ["Ik ga naar school.", "I go to school.", "naar = to/towards (direction) • tot = until/up to (limit/endpoint)"],
+"met": ["Ik ga met de bus.", "I go by bus.", "met de + transport (разг.): met de bus, met de auto, met het vliegtuig • per + transport (форм., без артикля): per trein, per post"],
+"voor": ["Dit is voor jou.", "This is for you.", "voor = for (purpose/benefit) / before (time) • om = at (clock time) / around / in order to"],
+"uit": ["Ik kom uit Rusland.", "I come from Russia.", "uit = from (out of country/city) • van = from (a place, possession, origin)"],
+"in": ["De vis is in het water.", "The fish is in the water."],
+"op": ["De bal is op de tafel.", "The ball is on the table.", "op = on (surface, on top of) • aan = on (attached to, at a point) • bij = near, at (person/location)"],
+"aan": ["Het schilderij hangt aan de muur.", "The painting hangs on the wall.", "aan = attached to, at (specific point) • bij = near, at (location/person) • op = on top of (surface)"],
+"bij": ["Ik ben bij de dokter.", "I am at the doctor.", "bij = at/near (location, person) • aan = on/at (attached, specific point) • op = on (surface)"],
+"om": ["De les begint om drie uur.", "The lesson starts at three o'clock.", "om = at (time) / around • voor = for / before • over = about / over"],
+"per": ["We gaan per trein.", "We go by train.", "per = formal, без артикля: per trein, per post • met de = разг., с артиклем: met de trein, met de bus"],
+// C2 — Prepositions 2
+"te": ["Het is te koud.", "It is too cold.", "te = too (excessive) / to (formal) — different from 'ook' (also/too)"],
+"na": ["Na het eten ga ik lezen.", "After eating I go read."],
+"tot": ["Van negen tot vijf.", "From nine to five.", "tot = until/up to (endpoint) • naar = to/towards (direction of movement)"],
+"over": ["We praten over het weer.", "We talk about the weather.", "over = about (topic) / over (across) • om = around / at (time)"],
+"tussen": ["Tussen twee en drie uur.", "Between two and three o'clock."],
+"onder": ["De kat zit onder de tafel.", "The cat sits under the table."],
+"boven": ["De lamp hangt boven de tafel.", "The lamp hangs above the table."],
+"tegen": ["De bal is tegen de muur.", "The ball is against the wall."],
+"sinds": ["Ik woon hier sinds twee jaar.", "I live here since two years."],
+"tijdens": ["Tijdens de les lezen wij.", "During the lesson we read."],
+// C3 — Conjunctions
+"en": ["Ik en mijn broer.", "I and my brother."],
+"maar": ["Klein maar sterk.", "Small but strong."],
+"of": ["Koffie of thee?", "Coffee or tea?"],
+"als": ["Als het regent, blijf ik thuis.", "If it rains, I stay home.", "als = if/when (conditional, habitual) • wanneer = when (question, specific time)"],
+"toen": ["Toen ik klein was.", "When I was small.", "toen = then (past) / when (past events) • dan = then (present/future, comparisons)"],
+"omdat": ["Ik leer Nederlands omdat ik hier woon.", "I learn Dutch because I live here."],
+// C4 — Common words
+"niet": ["Ik ben niet groot.", "I am not tall.", "niet = not (negates verbs/adjectives) • geen = no/not any (negates nouns with een/no article)"],
+"geen": ["Ik heb geen geld.", "I have no money.", "geen = no/not any (before nouns) • niet = not (before verbs, adjectives, prepositions)"],
+"wel": ["Ik spreek wel Nederlands.", "I do speak Dutch.", "wel = indeed/emphasis (positive) • toch = yet/still/right? (contrast/insistence)"],
+"ook": ["Ik woon ook in Nederland.", "I also live in the Netherlands."],
+"vaak": ["Ik lees vaak een boek.", "I often read a book."],
+"samen": ["Wij eten samen.", "We eat together."],
+"toch": ["Het is toch goed?", "It is alright, right?", "toch = yet/still/right? (surprise, insistence) • wel = indeed/yes (positive emphasis)"],
+"al": ["Ik ben al klaar.", "I am already done.", "al = already (something happened) • nog = still/yet (something continues or hasn't happened)"],
+"nu": ["Ik ga nu naar huis.", "I go home now."],
+"dan": ["Dan gaan we eten.", "Then we go eat.", "dan = then (future/present) / than (comparison) • toen = then/when (past)"],
+"hier": ["Ik woon hier.", "I live here."],
+"daar": ["De school is daar.", "The school is there.", "daar = there (specific place) • er = there (abstract/existential)"],
+"heel / erg": ["Het is heel koud.", "It is very cold."],
+"alleen": ["Ik woon alleen.", "I live alone."],
+"altijd": ["Hij is altijd blij.", "He is always happy."],
+"weer": ["Het regent weer.", "It rains again."],
+"pas": ["Ik ben pas begonnen.", "I have just started."],
+// W1 — Core verbs
+"hebben": ["Ik heb twee kinderen.", "I have two children."],
+"gaan": ["Wij gaan naar de markt.", "We go to the market."],
+"komen": ["Hij komt uit Duitsland.", "He comes from Germany."],
+"willen": ["Ik wil water, alsjeblieft.", "I want water, please."],
+"kunnen": ["Kun je zwemmen?", "Can you swim?"],
+"mogen": ["Mag ik hier zitten?", "May I sit here?"],
+"moeten": ["Ik moet naar school.", "I must go to school."],
+"zullen": ["Zullen we gaan?", "Shall we go?"],
+"doen": ["Wat doe je?", "What do you do?"],
+// W2 — Common verbs
+"maken": ["Ik maak het eten.", "I make the food."],
+"zien": ["Ik zie de kat.", "I see the cat."],
+"zoeken": ["Ik zoek mijn sleutel.", "I look for my key."],
+"heten": ["Ik heet Polina.", "I am called Polina."],
+"weten": ["Ik weet het niet.", "I don't know.", "weten = to know (a fact) • kennen = to know (a person/place)"],
+"kennen": ["Ik ken die vrouw.", "I know that woman.", "kennen = to know (a person) • weten = to know (a fact/information)"],
+"vinden": ["Ik vind het leuk.", "I think it's nice."],
+"krijgen": ["Ik krijg een brief.", "I get a letter."],
+"geven": ["Ik geef hem een boek.", "I give him a book."],
+"nemen": ["Ik neem de trein.", "I take the train."],
+// W3 — More verbs
+"werken": ["Ik werk in een winkel.", "I work in a shop."],
+"wonen": ["Wij wonen in Amsterdam.", "We live in Amsterdam."],
+"rijden": ["Hij rijdt met de auto.", "He drives the car."],
+"kosten": ["Het kost vijf euro.", "It costs five euros."],
+"laten": ["Laat mij het doen.", "Let me do it."],
+"houden van": ["Ik houd van koffie.", "I love coffee."],
+"sturen": ["Ik stuur een brief.", "I send a letter."],
+"helpen": ["Kun je mij helpen?", "Can you help me?"],
+"zeggen": ["Wat zeg je?", "What do you say?"],
+"lezen": ["Ik lees een boek.", "I read a book."],
+"schrijven": ["Ik schrijf een brief.", "I write a letter."],
+"leren": ["Ik leer Nederlands.", "I learn Dutch."],
+"beginnen": ["De les begint om negen uur.", "The lesson starts at nine o'clock."],
+"stoppen": ["De bus stopt hier.", "The bus stops here."],
+"brengen": ["Ik breng de kinderen naar school.", "I bring the children to school."],
+"halen": ["Ik haal brood bij de bakker.", "I get bread at the baker."],
+"proberen": ["Ik probeer het te begrijpen.", "I try to understand it."],
+"begrijpen": ["Ik begrijp het niet.", "I don't understand it."],
+"spreken": ["Spreekt u Nederlands?", "Do you speak Dutch?"]
+};
+
 // Speaking exam questions: [question, translation, example answer, topic]
 const SPEAK_CARDS = [
 // Persoonlijk / Personal
 ["Hoe gaat het met u?","How are you?","Het gaat goed, dank u.","persoonlijk"],
 ["Wat is uw naam?","What is your name?","Mijn naam is Polina.","persoonlijk"],
-["Wat is uw adres?","What is your address?","Ik woon in de Hoofdstraat 10.","persoonlijk"],
-["Wat is uw telefoonnummer?","What is your phone number?","Mijn telefoonnummer is 06-12345678.","persoonlijk"],
+["Wat is uw adres?","What is your address?","Ik woon op het KIM-prospekt 4.","persoonlijk"],
+["Wat is uw telefoonnummer?","What is your phone number?","Mijn telefoonnummer is 8-960-264-54-89.","persoonlijk"],
 ["Wanneer bent u geboren?","When were you born?","Ik ben geboren in negentienhonderddrieënnegentig (1993).","persoonlijk"],
 ["Waar bent u geboren?","Where were you born?","Ik ben geboren in Rusland.","persoonlijk"],
 ["In welk land bent u geboren?","In which country were you born?","Ik ben geboren in Rusland.","persoonlijk"],
 ["Wanneer bent u blij?","When are you happy?","Ik ben blij als ik met mijn vrienden ben.","persoonlijk"],
 // Familie / Family
-["Hoeveel broers en zussen hebt u?","How many brothers and sisters?","Ik heb één broer en één zus.","familie"],
+["Hoeveel broers en zussen hebt u?","How many brothers and sisters?","Ik heb geen broers en zussen.","familie"],
 ["Hoeveel kinderen hebt u?","How many children do you have?","Ik heb geen kinderen.","familie"],
 ["Waar woont uw familie?","Where does your family live?","Mijn familie woont in Rusland.","familie"],
-["Wie wonen bij u in huis?","Who lives with you?","Ik woon alleen.","familie"],
+["Wie wonen bij u in huis?","Who lives with you?","Ik woon met mijn partner en mijn hond.","familie"],
 ["Wat doet u graag met uw familie?","What do you like doing with family?","Ik kook graag met mijn familie.","familie"],
 ["Wat doet u graag met uw vrienden?","What do you like doing with friends?","Ik ga graag wandelen met mijn vrienden.","familie"],
-["Bij wie gaat u wonen in Nederland?","Who will you live with in NL?","Ik ga alleen wonen.","familie"],
+["Bij wie gaat u wonen in Nederland?","Who will you live with in NL?","Ik ga met mijn partner wonen.","familie"],
 // Wonen / Living
-["Waar woont u?","Where do you live?","Ik woon in Rotterdam.","wonen"],
+["Waar woont u?","Where do you live?","Ik woon in Rusland.","wonen"],
 ["In welke plaats gaat u wonen in Nederland?","Which city will you live in?","Ik ga in Amsterdam wonen.","wonen"],
 ["In wat voor huis gaat u wonen in Nederland?","What kind of house in NL?","Ik ga in een flat wonen.","wonen"],
-["Wat vindt u van uw huis?","What do you think of your house?","Mijn huis is klein maar gezellig.","wonen"],
+["Wat vindt u van uw huis?","What do you think of your house?","Mijn huis is heel gezellig.","wonen"],
 // Werk / Work
 ["Hoe laat begint u met werken?","What time do you start work?","Ik begin om negen uur.","werk"],
-["Hoe laat stopt u met werken?","What time do you stop work?","Ik stop om vijf uur.","werk"],
+["Hoe laat stopt u met werken?","What time do you stop work?","Ik stop om zes uur.","werk"],
 ["Hoeveel dagen in de week werkt u?","How many days a week do you work?","Ik werk vijf dagen per week.","werk"],
 ["Op welke dagen werkt u?","On which days do you work?","Ik werk van maandag tot vrijdag.","werk"],
 ["Met hoeveel mensen werkt u?","How many people do you work with?","Ik werk met tien mensen.","werk"],
 ["Wat voor werk wilt u doen?","What kind of work do you want to do?","Ik wil in een kantoor werken.","werk"],
 // School / Opleiding
-["Hoeveel jaar school hebt u gehad?","How many years of school?","Ik heb vijftien jaar school gehad.","school"],
+["Hoeveel jaar school hebt u gehad?","How many years of school?","Ik heb tien jaar school en vijf jaar universiteit gehad.","school"],
 ["Wat hebt u geleerd op school?","What did you learn at school?","Ik heb Engels en wiskunde geleerd.","school"],
-["Hoeveel talen spreekt u?","How many languages do you speak?","Ik spreek drie talen: Russisch, Engels en een beetje Nederlands.","school"],
-["Welke talen spreekt u?","Which languages do you speak?","Ik spreek Russisch en Engels.","school"],
+["Hoeveel talen spreekt u?","How many languages do you speak?","Ik spreek vier talen: Russisch, Engels, een beetje Frans en een beetje Nederlands.","school"],
+["Welke talen spreekt u?","Which languages do you speak?","Ik spreek Russisch, Engels, een beetje Frans en een beetje Nederlands.","school"],
 // Nederlands leren
 ["Waarom leert u Nederlands?","Why are you learning Dutch?","Ik leer Nederlands omdat ik in Nederland wil wonen.","taal"],
 ["Waar heeft u Nederlands geleerd?","Where did you learn Dutch?","Ik heb Nederlands geleerd met een boek en online.","taal"],
@@ -974,7 +1107,7 @@ const SPEAK_CARDS = [
 // Nederland
 ["Waarom wilt u naar Nederland?","Why do you want to go to NL?","Ik wil in Nederland wonen en werken.","nederland"],
 ["Wanneer wilt u naar Nederland gaan?","When do you want to go to NL?","Ik wil binnenkort naar Nederland gaan.","nederland"],
-["Hoe vaak bent u al in Nederland geweest?","How often have you been to NL?","Ik ben nog nooit in Nederland geweest.","nederland"],
+["Hoe vaak bent u al in Nederland geweest?","How often have you been to NL?","Ik ben twee keer in Nederland geweest.","nederland"],
 ["Wat vindt u van Nederland?","What do you think of the Netherlands?","Ik vind Nederland een mooi land.","nederland"],
 ["Wat vindt u van Nederlandse mensen?","What do you think of Dutch people?","Ik vind Nederlandse mensen aardig.","nederland"],
 ["Hoe bent u hier gekomen?","How did you get here?","Ik ben met het vliegtuig gekomen.","nederland"],
@@ -983,15 +1116,15 @@ const SPEAK_CARDS = [
 ["Hoe laat wordt u 's ochtends wakker?","What time do you wake up?","Ik word om zeven uur wakker.","dagelijks"],
 ["Hoe laat gaat u 's avonds naar bed?","What time do you go to bed?","Ik ga om elf uur naar bed.","dagelijks"],
 ["Welke dag is het vandaag?","What day is it today?","Vandaag is het vrijdag.","dagelijks"],
-["Welke maand is het nu?","What month is it now?","Het is nu maart.","dagelijks"],
+["Welke maand is het nu?","What month is it now?","Het is nu april.","dagelijks"],
 ["Wat gaat u morgen doen?","What will you do tomorrow?","Morgen ga ik boodschappen doen.","dagelijks"],
 ["Wat hebt u gisteren gedaan?","What did you do yesterday?","Gisteren heb ik Nederlands geleerd.","dagelijks"],
 // Reizen / Travel
-["Hoe reist u meestal?","How do you usually travel?","Ik reis meestal met de trein.","reizen"],
-["Hoe gaat u naar uw werk?","How do you get to work?","Ik ga met de fiets naar mijn werk.","reizen"],
+["Hoe reist u meestal?","How do you usually travel?","Ik reis meestal met de auto.","reizen"],
+["Hoe gaat u naar uw werk?","How do you get to work?","Ik werk thuis.","reizen"],
 // Eten & drinken / Food
 ["Hoe vaak eet u op een dag?","How many times a day do you eat?","Ik eet drie keer per dag.","eten"],
-["Wat eet u 's ochtends?","What do you eat in the morning?","Ik eet brood met kaas.","eten"],
+["Wat eet u 's ochtends?","What do you eat in the morning?","Ik eet eieren en kaas.","eten"],
 ["Wat eet u 's avonds?","What do you eat in the evening?","Ik eet groente met rijst.","eten"],
 ["Wat gaat u vandaag eten?","What will you eat today?","Ik ga soep eten.","eten"],
 ["Wat hebt u gisteren gegeten?","What did you eat yesterday?","Ik heb aardappelen met groente gegeten.","eten"],
@@ -1011,10 +1144,10 @@ const SPEAK_CARDS = [
 ["Wat doet u op een feestdag?","What do you do on a holiday?","Op een feestdag ga ik naar mijn familie.","vrije tijd"],
 ["Hoe vaak kijkt u tv?","How often do you watch TV?","Ik kijk soms tv, 's avonds.","vrije tijd"],
 ["Hoe vaak luistert u naar de radio?","How often do you listen to radio?","Ik luister nooit naar de radio.","vrije tijd"],
-["Naar welke muziek luistert u graag?","What music do you like?","Ik luister graag naar popmuziek.","vrije tijd"],
-["Van welke muziek houdt u?","What music do you like?","Ik hou van popmuziek.","vrije tijd"],
-["Welke sport doet u?","What sport do you do?","Ik ga graag wandelen en zwemmen.","vrije tijd"],
-["Welke dieren vindt u leuk?","Which animals do you like?","Ik vind katten leuk.","vrije tijd"],
+["Naar welke muziek luistert u graag?","What music do you like?","Ik luister graag naar indiemuziek.","vrije tijd"],
+["Van welke muziek houdt u?","What music do you like?","Ik hou van indiemuziek.","vrije tijd"],
+["Welke sport doet u?","What sport do you do?","Ik ga graag hardlopen en fietsen.","vrije tijd"],
+["Welke dieren vindt u leuk?","Which animals do you like?","Ik vind honden en paarden leuk.","vrije tijd"],
 // Feest / Celebrations
 ["Wanneer geeft u een feest?","When do you throw a party?","Ik geef een feest als ik jarig ben.","feest"],
 ["Welk feest vindt u leuk?","Which celebration do you like?","Ik vind Kerstmis leuk.","feest"],
@@ -1022,7 +1155,7 @@ const SPEAK_CARDS = [
 // Kleding & weer / Clothes & weather
 ["Wat voor kleren draagt u vaak?","What clothes do you often wear?","Ik draag vaak een broek en een trui.","kleding"],
 ["Wat voor kleren vindt u mooi?","What clothes do you find nice?","Ik vind een jurk mooi.","kleding"],
-["Welke kleur vindt u mooi?","Which color do you find beautiful?","Ik vind blauw mooi.","kleding"],
+["Welke kleur vindt u mooi?","Which color do you find beautiful?","Ik vind wit mooi.","kleding"],
 ["Wat voor weer is het vandaag?","What's the weather like today?","Het is koud en het regent.","kleding"],
 ];
 
@@ -1128,15 +1261,17 @@ const KNS_CARDS = [["1","In welk deel van de wereld ligt Nederland?","Europa","Z
 ["99","Krijgt u in Nederland een uitkering of moet uw partner voor u zorgen?","Ik krijg een uitkering","Mijn partner moet voor mij zorgen","b","werk"],
 ["100","Is het leven in Nederland duur of goedkoop?","duur","goedkoop","a","werk"]];
 
-let mode = 'nl';
+let mode = 'learn';
 let activeTab = 'vocab';
 let activeLessons = new Set();
+const tabLessonsState = { vocab: null, words: null }; // saved lesson selections per tab
 let deck = [], current = 0, known = 0, again = [], sessionTotal = 0;
 let isFlipped = false, typeState = 'input';
 let matchState = {};
 let speakTopics = new Set();
 let knsTopics = new Set();
 let speakAnswerVisible = false;
+let speakMode = 'say'; // 'say' or 'write'
 
 const LESSON_TAG = {P1:'Ik, jij, hij',P2:'Mijn, dit, dat',P3:'Wie, wat, waar',C1:'Voorzetsels 1',C2:'Voorzetsels 2',C3:'Voegwoorden',C4:'Bijwoorden',W1:'Basiswerkwoorden',W2:'Werkwoorden 2',W3:'Werkwoorden 3'};
 function lesTag(l) { return LESSON_TAG[l] ? LESSON_TAG[l] : 'Les ' + l; }
@@ -1144,6 +1279,15 @@ function getAllLessons() { return [...new Set(ALL_CARDS.map(c => c[2]))].sort((a
 function getFiltered() { return ALL_CARDS.filter(c => activeLessons.has(c[2])); }
 function shuffle(a) { for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function norm(s) { return s.toLowerCase().trim().replace(/['']/g,"'").replace(/[éè]/g,'e').replace(/ë/g,'e'); }
+function normSentence(s) {
+  return norm(s).replace(/\bwij\b/g,'we').replace(/\bzij\b/g,'ze').replace(/\bjij\b/g,'je').replace(/\bmij\b/g,'me').replace(/\bu\b/g,'je').replace(/[.!?,]/g,'').replace(/\s+/g,' ').trim();
+}
+function exampleHtml(dutchWord) {
+  const ex = EXAMPLES[dutchWord]; if (!ex) return '';
+  let h = '<div class="learn-example">' + ex[0] + '<br>' + ex[1] + '</div>';
+  if (ex[2]) h += '<div class="learn-hint">' + ex[2] + '</div>';
+  return h;
+}
 
 // ---- TTS ----
 let nlVoice = null;
@@ -1366,7 +1510,12 @@ function getStatsHTML() {
 }
 
 function switchTab(tab) {
+  // Save current tab's lesson selection before switching
+  if (activeTab === 'vocab' || activeTab === 'words') {
+    tabLessonsState[activeTab] = [...activeLessons];
+  }
   activeTab = tab;
+  saveAppState();
 
   // Update tab bar active state
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1431,32 +1580,62 @@ function switchTab(tab) {
   }
 }
 
+function saveTabLessons(tab) {
+  tabLessonsState[tab] = [...activeLessons];
+  saveAppState();
+}
+
+function saveAppState() {
+  localStorage.setItem('dutch-a1-state', JSON.stringify({
+    tab: activeTab, mode, direction,
+    vocabLessons: tabLessonsState.vocab,
+    wordsLessons: tabLessonsState.words
+  }));
+}
+
+function loadAppState() {
+  try {
+    const s = JSON.parse(localStorage.getItem('dutch-a1-state'));
+    if (!s) return;
+    if (s.tab) activeTab = s.tab;
+    if (s.mode) mode = s.mode;
+    if (s.direction) direction = s.direction;
+    if (s.vocabLessons) tabLessonsState.vocab = s.vocabLessons;
+    if (s.wordsLessons) tabLessonsState.words = s.wordsLessons;
+  } catch(e) {}
+}
+
 function buildLessonFilterForTab(tab) {
   const c = document.getElementById('lessonFilter');
   c.innerHTML = '';
   const isNumeric = l => !isNaN(+l);
   const lessons = getAllLessons().filter(l => tab === 'words' ? !isNumeric(l) : isNumeric(l));
 
-  // Reset activeLessons to only include valid lessons for this tab
+  // Restore saved selection or select all
   activeLessons.clear();
-  lessons.forEach(l => activeLessons.add(l));
+  if (tabLessonsState[tab] && tabLessonsState[tab].length > 0) {
+    tabLessonsState[tab].forEach(l => { if (lessons.includes(l)) activeLessons.add(l); });
+  }
+  if (activeLessons.size === 0) lessons.forEach(l => activeLessons.add(l));
 
   const allBtn = document.createElement('button');
-  allBtn.className = 'lesson-btn active'; allBtn.textContent = 'All'; allBtn.id = 'allBtn';
+  allBtn.className = 'lesson-btn' + (lessons.every(l => activeLessons.has(l)) ? ' active' : '');
+  allBtn.textContent = 'All'; allBtn.id = 'allBtn';
   allBtn.onclick = () => {
     const tabLessons = getAllLessons().filter(l => tab === 'words' ? !isNumeric(l) : isNumeric(l));
     const allActive = tabLessons.every(l => activeLessons.has(l));
     if (allActive) { activeLessons.clear(); } else { tabLessons.forEach(l => activeLessons.add(l)); }
-    syncFilterUI(); startSession();
+    saveTabLessons(tab); syncFilterUI(); startSession();
   };
   c.appendChild(allBtn);
 
   lessons.forEach(l => {
     const btn = document.createElement('button');
-    btn.className = 'lesson-btn active'; btn.textContent = LESSON_TAG[l] || l; btn.dataset.les = l;
+    btn.className = 'lesson-btn' + (activeLessons.has(l) ? ' active' : '');
+    btn.textContent = LESSON_TAG[l] || l; btn.dataset.les = l;
     btn.onclick = () => {
       if (activeLessons.has(l)) activeLessons.delete(l); else activeLessons.add(l);
-      syncFilterUI(); startSession();
+      saveTabLessons(tab); syncFilterUI(); startSession();
     };
     c.appendChild(btn);
   });
@@ -1478,12 +1657,13 @@ function syncFilterUI() {
   });
 }
 
-const MODE_LABELS = {learn:'Learn',build:'Build',type:'Type',quiz:'Quiz',match:'Match',kns:'KNS'};
-const MODE_FLOW = ['learn','build','type','quiz','match'];
+const MODE_LABELS = {learn:'Learn',build:'Build',fill:'Fill',type:'Type',quiz:'Quiz',match:'Match',write:'Write',kns:'KNS'};
+const MODE_FLOW = ['learn','build','fill','type','quiz','match','write'];
 let direction = 'nl'; // 'nl' = NL→EN, 'en' = EN→NL
 
 function setDirection(dir) {
   direction = dir;
+  saveAppState();
   document.getElementById('dirNl').classList.toggle('active', dir === 'nl');
   document.getElementById('dirEn').classList.toggle('active', dir === 'en');
 }
@@ -1507,6 +1687,7 @@ function toggleSettings() {
 
 function setMode(m) {
   mode = m;
+  saveAppState();
   const modes = MODE_FLOW;
   const modeToggle = document.getElementById('modeToggle');
   modeToggle.querySelectorAll('.mode-btn').forEach((btn, i) => {
@@ -1538,8 +1719,10 @@ function showCard() {
   }
   if (mode === 'learn') showLearnCard();
   else if (mode === 'build') showBuildCard();
+  else if (mode === 'fill') showFillCard();
   else if (mode === 'type') showTypeCard();
   else if (mode === 'quiz') showQuizCard();
+  else if (mode === 'write') showWriteCard();
   else showLearnCard();
   updateStats();
 }
@@ -1611,7 +1794,7 @@ function showFlipCard() {
   document.getElementById('mainArea').innerHTML = `
     <div class="card-container" onclick="flipCard()"><div class="card" id="card">
       <div class="card-face card-front"><div class="card-tag">${lesTag(c[2])}</div><div class="card-word">${f} ${mode==='nl' ? ttsBtn(nlText) : ''}</div><div class="card-hint">tap to flip</div></div>
-      <div class="card-face card-back"><div class="card-tag">${lesTag(c[2])}</div><div class="card-word">${b} ${mode==='en' ? ttsBtn(nlText) : ''}</div></div>
+      <div class="card-face card-back"><div class="card-tag">${lesTag(c[2])}</div><div class="card-word">${b} ${mode==='en' ? ttsBtn(nlText) : ''}</div>${exampleHtml(c[0])}</div>
     </div></div>
     <div class="buttons" id="buttons"><button class="btn btn-show" onclick="flipCard()">Show</button></div>`;
 }
@@ -1641,9 +1824,9 @@ function checkTyped() {
   const c = deck[current], inp = document.getElementById('typeInput'), ans = document.getElementById('typeAnswer');
   const ok = norm(inp.value) === norm(c[0]);
   inp.disabled = true;
-  if (ok) { inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(c[0]); known++; recordCorrect(c, false);
-    updateStats(); setTimeout(() => { current++; showCard(); }, 1200); return;
-  } else { inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.innerHTML = c[0] + ' ' + ttsBtn(c[0]); again.push(c); recordWrong(c, false); }
+  if (ok) { inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(c[0]) + exampleHtml(c[0]); known++; recordCorrect(c, false);
+    updateStats(); setTimeout(() => { current++; showCard(); }, 1800); return;
+  } else { inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.innerHTML = c[0] + ' ' + ttsBtn(c[0]) + exampleHtml(c[0]); again.push(c); recordWrong(c, false); }
   document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
   updateStats();
 }
@@ -1674,12 +1857,130 @@ function pickQuiz(btn, idx, correct) {
   const btns = document.querySelectorAll('.quiz-opt');
   btns.forEach(b => { b.disabled = true; b.classList.add('dim'); });
   const isCorrect = btn.textContent === correct;
+  const exHtml = exampleHtml(deck[current][0]);
   if (isCorrect) { btn.classList.remove('dim'); btn.classList.add('correct'); known++; recordCorrect(deck[current], false);
-    updateStats(); setTimeout(() => { current++; showCard(); }, 1200); return;
+    if (exHtml) document.getElementById('buttons').innerHTML = exHtml;
+    updateStats(); setTimeout(() => { current++; showCard(); }, 1800); return;
   }
   btn.classList.remove('dim'); btn.classList.add('wrong');
   btns.forEach(b => { if (b.textContent === correct) { b.classList.remove('dim'); b.classList.add('correct'); } });
   again.push(deck[current]); recordWrong(deck[current], false);
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>' + exHtml;
+  updateStats();
+}
+
+// ---- FILL (fill the gap) ----
+function showFillCard() {
+  const c = deck[current];
+  const ex = EXAMPLES[c[0]];
+  // Skip cards without examples
+  if (!ex) { recordCorrect(c, false); known++; current++; showCard(); return; }
+  const sentence = ex[0];
+  const word = c[0];
+  // Find the word in the sentence (case-insensitive, match conjugated forms too)
+  const words = sentence.replace(/[.!?,]/g,'').split(/\s+/);
+  const wordLower = word.toLowerCase().split(' / ')[0].split(' ')[0]; // handle "jij / je" → "jij"
+  let gapWord = null;
+  for (const w of words) {
+    if (w.toLowerCase() === wordLower || norm(w) === norm(wordLower)) { gapWord = w; break; }
+  }
+  // Try partial match for conjugated verbs
+  if (!gapWord) {
+    for (const w of words) {
+      if (w.toLowerCase().startsWith(wordLower.substring(0,3)) && w.length >= 2) { gapWord = w; break; }
+    }
+  }
+  if (!gapWord) { recordCorrect(c, false); known++; current++; showCard(); return; }
+
+  const gapSentence = sentence.replace(new RegExp('\\b' + gapWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\b', 'i'), '___');
+
+  // Get distractors from same lesson
+  const sameLesson = ALL_CARDS.filter(x => x[2] === c[2] && x[0] !== c[0]);
+  const distractorWords = shuffle(sameLesson).slice(0, 3).map(x => {
+    const dw = x[0].split(' / ')[0].split(' ')[0];
+    return dw;
+  });
+  // If not enough distractors, pad with random basics
+  while (distractorWords.length < 3) {
+    const rnd = ALL_CARDS[Math.floor(Math.random() * ALL_CARDS.length)];
+    const rw = rnd[0].split(' / ')[0].split(' ')[0];
+    if (rw !== wordLower && !distractorWords.includes(rw)) distractorWords.push(rw);
+  }
+
+  const opts = shuffle([gapWord, ...distractorWords.slice(0,3)]);
+
+  document.getElementById('mainArea').innerHTML = `
+    <div class="quiz-card"><div class="card-tag">${lesTag(c[2])}</div>
+      <div class="type-prompt">Fill in the gap:</div>
+      <div class="type-word" style="font-size:22px;line-height:1.6">${gapSentence}</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:16px">${ex[1]}</div>
+      <div class="quiz-options">${opts.map(o => `<button class="quiz-opt" onclick="pickFill(this,'${escHtml(gapWord)}')">${o}</button>`).join('')}</div>
+    </div>
+    <div class="buttons" id="buttons"></div>`;
+}
+
+function pickFill(btn, correct) {
+  const btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach(b => { b.disabled = true; b.classList.add('dim'); });
+  const isCorrect = btn.textContent === correct;
+  const c = deck[current];
+  if (isCorrect) {
+    btn.classList.remove('dim'); btn.classList.add('correct'); known++; recordCorrect(c, false);
+    updateStats(); setTimeout(() => { current++; showCard(); }, 1200); return;
+  }
+  btn.classList.remove('dim'); btn.classList.add('wrong');
+  btns.forEach(b => { if (b.textContent === correct) { b.classList.remove('dim'); b.classList.add('correct'); } });
+  again.push(c); recordWrong(c, false);
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
+  updateStats();
+}
+
+// ---- WRITE (sentence) ----
+function showWriteCard() {
+  const c = deck[current];
+  const ex = EXAMPLES[c[0]];
+  // Skip cards without examples
+  if (!ex) { recordCorrect(c, false); known++; current++; showCard(); return; }
+  const dutchSentence = ex[0];
+  const englishSentence = ex[1];
+  document.getElementById('mainArea').innerHTML = `
+    <div class="type-card"><div class="card-tag">${lesTag(c[2])}</div>
+      <div class="type-prompt">Write in Dutch:</div>
+      <div class="type-word">${englishSentence}</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:16px">Use: <strong>${c[0]}</strong> (${c[1]})</div>
+      <input type="text" class="type-input" id="writeInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="..." />
+      <div class="type-answer" id="writeAnswer"></div>
+    </div>
+    <div class="buttons" id="buttons"><button class="btn btn-show" onclick="checkWrite()">Check</button><button class="btn btn-skip" onclick="skipWrite()">Skip</button></div>`;
+  setTimeout(() => {
+    const inp = document.getElementById('writeInput');
+    if (inp) { inp.focus(); inp.onkeydown = e => { if (e.key==='Enter'){e.preventDefault(); if(!inp.disabled)checkWrite();else{current++;showCard();}} }; }
+  }, 50);
+}
+function checkWrite() {
+  const c = deck[current];
+  const ex = EXAMPLES[c[0]];
+  const dutchSentence = ex[0].replace(/[.!?]$/,'');
+  const inp = document.getElementById('writeInput'), ans = document.getElementById('writeAnswer');
+  if (inp.disabled) return;
+  inp.disabled = true;
+  const ok = normSentence(inp.value) === normSentence(dutchSentence);
+  if (ok) { inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(dutchSentence); known++; recordCorrect(c, false);
+    updateStats(); setTimeout(() => { current++; showCard(); }, 1800); return;
+  }
+  inp.classList.add('wrong'); ans.classList.add('show-wrong');
+  ans.innerHTML = ex[0] + ' ' + ttsBtn(dutchSentence);
+  again.push(c); recordWrong(c, false);
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
+  updateStats();
+}
+function skipWrite() {
+  const c = deck[current];
+  const ex = EXAMPLES[c[0]];
+  const inp = document.getElementById('writeInput'), ans = document.getElementById('writeAnswer');
+  inp.disabled = true; inp.classList.add('wrong'); ans.classList.add('show-wrong');
+  ans.innerHTML = ex[0] + ' ' + ttsBtn(ex[0].replace(/[.!?]$/,''));
+  again.push(c); recordWrong(c, false);
   document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showCard()">Next</button>';
   updateStats();
 }
@@ -1752,6 +2053,7 @@ function showLearnCard() {
       <div class="card-tag">${lesTag(c[2])}</div>
       <div class="learn-nl">${top} ${ttsBtn(nl)}</div>
       <div class="learn-en">${bot}</div>
+      ${exampleHtml(c[0])}
       <div class="learn-count">${current + 1} / ${sessionTotal}</div>
     </div>
     <div class="buttons" id="buttons">
@@ -1839,8 +2141,28 @@ function getSpeakFiltered() {
 const TOPIC_LABELS = {persoonlijk:'Persoonlijk',familie:'Familie',wonen:'Wonen',werk:'Werk',school:'School',taal:'Nederlands',nederland:'Nederland',dagelijks:'Dagelijks',reizen:'Reizen',eten:'Eten',boodschappen:'Boodschappen','vrije tijd':'Vrije tijd',feest:'Feest',kleding:'Kleding'};
 
 function showSpeakFilter() {
-  let sf = document.getElementById('speakFilter');
   const container = document.getElementById('speakTopFilter');
+
+  // Say/Write mode toggle
+  let mt = document.getElementById('speakModeToggle');
+  if (!mt) {
+    mt = document.createElement('div');
+    mt.id = 'speakModeToggle';
+    mt.className = 'mode-toggle';
+    mt.style.marginBottom = '10px';
+    container.appendChild(mt);
+  }
+  mt.innerHTML = '';
+  ['say','write'].forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'mode-btn' + (speakMode === m ? ' active' : '');
+    btn.textContent = m === 'say' ? 'Say' : 'Write';
+    btn.onclick = () => { speakMode = m; showSpeakFilter(); startSpeakSession(); };
+    mt.appendChild(btn);
+  });
+
+  // Topic filter
+  let sf = document.getElementById('speakFilter');
   if (!sf) {
     sf = document.createElement('div');
     sf.id = 'speakFilter';
@@ -1880,6 +2202,7 @@ function showSpeakCard() {
     if (again.length > 0) { deck = shuffle(again); again = []; current = 0; showSpeakCard(); return; }
     showDone(); return;
   }
+  if (speakMode === 'write') { showSpeakWriteCard(); return; }
   const c = deck[current]; speakAnswerVisible = false;
   const topic = TOPIC_LABELS[c[3]] || c[3];
   document.getElementById('mainArea').innerHTML = `
@@ -1893,6 +2216,58 @@ function showSpeakCard() {
     <div class="buttons" id="buttons">
       <button class="btn btn-show" onclick="showSpeakAnswer()">Show answer</button>
     </div>`;
+  updateStats();
+}
+
+function showSpeakWriteCard() {
+  const c = deck[current];
+  const topic = TOPIC_LABELS[c[3]] || c[3];
+  document.getElementById('mainArea').innerHTML = `
+    <div class="type-card">
+      <div class="card-tag">${topic}</div>
+      <div class="type-prompt">${c[0]} ${ttsBtn(c[0])}</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:16px">${c[1]}</div>
+      <input type="text" class="type-input" id="speakWriteInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type your answer in Dutch..." />
+      <div class="type-answer" id="speakWriteAnswer"></div>
+    </div>
+    <div class="buttons" id="buttons">
+      <button class="btn btn-show" onclick="checkSpeakWrite()">Check</button>
+      <button class="btn btn-skip" onclick="skipSpeakWrite()">Show answer</button>
+    </div>`;
+  setTimeout(() => {
+    const inp = document.getElementById('speakWriteInput');
+    if (inp) { inp.focus(); inp.onkeydown = e => { if (e.key==='Enter'){e.preventDefault(); if(!inp.disabled)checkSpeakWrite();else{current++;showSpeakCard();}} }; }
+  }, 50);
+  updateStats();
+}
+
+function checkSpeakWrite() {
+  const c = deck[current];
+  const expected = c[2].replace(/[.!?]$/,'');
+  const inp = document.getElementById('speakWriteInput');
+  const ans = document.getElementById('speakWriteAnswer');
+  if (inp.disabled) return;
+  inp.disabled = true;
+  if (normSentence(inp.value) === normSentence(expected)) {
+    inp.classList.add('correct'); ans.innerHTML = 'Correct! ' + ttsBtn(expected);
+    known++; recordCorrect(c, true);
+    updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 1800); return;
+  }
+  inp.classList.add('wrong'); ans.classList.add('show-wrong');
+  ans.innerHTML = c[2] + ' ' + ttsBtn(expected);
+  again.push(c); recordWrong(c, true);
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showSpeakCard()">Next</button>';
+  updateStats();
+}
+
+function skipSpeakWrite() {
+  const c = deck[current];
+  const inp = document.getElementById('speakWriteInput');
+  const ans = document.getElementById('speakWriteAnswer');
+  inp.disabled = true; inp.classList.add('wrong'); ans.classList.add('show-wrong');
+  ans.innerHTML = c[2] + ' ' + ttsBtn(c[2].replace(/[.!?]$/,''));
+  again.push(c); recordWrong(c, true);
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showSpeakCard()">Next</button>';
   updateStats();
 }
 
@@ -2029,10 +2404,9 @@ function doSkip() {
 function enterApp() {
   document.getElementById('welcomeScreen').style.display = 'none';
   document.getElementById('appWrap').style.display = 'flex';
-  buildLessonFilterForTab('vocab');
-  document.getElementById('tabVocab').classList.add('active');
-  activeTab = 'vocab';
-  setMode(mode);
+  loadAppState();
+  setDirection(direction);
+  switchTab(activeTab);
 }
 
 // Auto-enter if user already set or skipped before
@@ -2041,7 +2415,8 @@ if (syncUser || localStorage.getItem('dutch-a1-skipped')) {
 }
 
 document.addEventListener('keydown', e => {
-  if (mode === 'type' || mode === 'quiz' || mode === 'match' || mode === 'build') return;
+  if (mode === 'type' || mode === 'quiz' || mode === 'match' || mode === 'build' || mode === 'write' || mode === 'fill') return;
+  if (mode === 'speak' && speakMode === 'write') return;
   if (mode === 'learn') {
     if (e.key === '1' || e.key === 'ArrowLeft') markAgain();
     if (e.key === '2' || e.key === 'ArrowRight') markGood();
