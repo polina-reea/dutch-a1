@@ -299,13 +299,13 @@
   <div class="settings-section">
     <div class="settings-label">Mode</div>
     <div class="mode-toggle" id="modeToggle">
-      <button class="mode-btn" onclick="setMode('learn')">Learn</button>
-      <button class="mode-btn" onclick="setMode('build')">Build</button>
-      <button class="mode-btn" onclick="setMode('fill')">Fill</button>
-      <button class="mode-btn" onclick="setMode('type')">Type</button>
-      <button class="mode-btn" onclick="setMode('quiz')">Quiz</button>
-      <button class="mode-btn" onclick="setMode('match')">Match</button>
-      <button class="mode-btn" onclick="setMode('write')">Write</button>
+      <button class="mode-btn" data-mode="learn" onclick="setMode('learn')">Learn</button>
+      <button class="mode-btn" data-mode="build" onclick="setMode('build')">Build</button>
+      <button class="mode-btn" data-mode="fill" onclick="setMode('fill')">Fill</button>
+      <button class="mode-btn" data-mode="type" onclick="setMode('type')">Type</button>
+      <button class="mode-btn" data-mode="quiz" onclick="setMode('quiz')">Quiz</button>
+      <button class="mode-btn" data-mode="match" onclick="setMode('match')">Match</button>
+      <button class="mode-btn" data-mode="write" onclick="setMode('write')">Write</button>
     </div>
   </div>
   <div class="settings-section">
@@ -1625,7 +1625,7 @@ function buildLessonFilterForTab(tab) {
     const tabLessons = getAllLessons().filter(l => tab === 'words' ? !isNumeric(l) : isNumeric(l));
     const allActive = tabLessons.every(l => activeLessons.has(l));
     if (allActive) { activeLessons.clear(); } else { tabLessons.forEach(l => activeLessons.add(l)); }
-    saveTabLessons(tab); syncFilterUI(); startSession();
+    saveTabLessons(tab); syncFilterUI(); updateAvailableModes(); startSession();
   };
   c.appendChild(allBtn);
 
@@ -1635,7 +1635,7 @@ function buildLessonFilterForTab(tab) {
     btn.textContent = LESSON_TAG[l] || l; btn.dataset.les = l;
     btn.onclick = () => {
       if (activeLessons.has(l)) activeLessons.delete(l); else activeLessons.add(l);
-      saveTabLessons(tab); syncFilterUI(); startSession();
+      saveTabLessons(tab); syncFilterUI(); updateAvailableModes(); startSession();
     };
     c.appendChild(btn);
   });
@@ -1669,9 +1669,17 @@ function setDirection(dir) {
 }
 
 function getNextMode() {
+  const filtered = getFiltered();
+  const hasExamples = filtered.some(c => EXAMPLES[c[0]]);
+  const hasEnoughCards = filtered.length >= 4;
   const idx = MODE_FLOW.indexOf(mode);
-  if (idx < 0 || idx >= MODE_FLOW.length - 1) return null;
-  return MODE_FLOW[idx + 1];
+  for (let i = idx + 1; i < MODE_FLOW.length; i++) {
+    const m = MODE_FLOW[i];
+    if ((m === 'fill' || m === 'write') && !hasExamples) continue;
+    if ((m === 'match' || m === 'quiz') && !hasEnoughCards) continue;
+    return m;
+  }
+  return null;
 }
 
 function goToMode(m) {
@@ -1685,13 +1693,28 @@ function toggleSettings() {
   document.getElementById('modePill').innerHTML = (MODE_LABELS[mode] || mode) + (d.classList.contains('open') ? ' &#9652;' : ' &#9662;');
 }
 
+function updateAvailableModes() {
+  const filtered = getFiltered();
+  const hasExamples = filtered.some(c => EXAMPLES[c[0]]);
+  const hasEnoughCards = filtered.length >= 4;
+  const modeToggle = document.getElementById('modeToggle');
+  modeToggle.querySelectorAll('.mode-btn').forEach(btn => {
+    const m = btn.dataset.mode;
+    if (m === 'fill' || m === 'write') {
+      btn.style.display = hasExamples ? '' : 'none';
+    } else if (m === 'match' || m === 'quiz') {
+      btn.style.display = hasEnoughCards ? '' : 'none';
+    }
+  });
+}
+
 function setMode(m) {
   mode = m;
   saveAppState();
-  const modes = MODE_FLOW;
+  updateAvailableModes();
   const modeToggle = document.getElementById('modeToggle');
-  modeToggle.querySelectorAll('.mode-btn').forEach((btn, i) => {
-    btn.classList.toggle('active', modes[i] === m);
+  modeToggle.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === m);
   });
   document.getElementById('modePill').innerHTML = (MODE_LABELS[m] || m) + ' &#9662;';
   document.getElementById('settingsDrawer').classList.remove('open');
