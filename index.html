@@ -1671,11 +1671,14 @@ function setDirection(dir) {
 function getNextMode() {
   const filtered = getFiltered();
   const hasExamples = filtered.some(c => EXAMPLES[c[0]]);
+  const hasSentences = filtered.some(c => c[0].includes(' ') && c[0].split(' ').length >= 3);
+  const hasFillContent = hasExamples || hasSentences;
   const hasEnoughCards = filtered.length >= 4;
   const idx = MODE_FLOW.indexOf(mode);
   for (let i = idx + 1; i < MODE_FLOW.length; i++) {
     const m = MODE_FLOW[i];
-    if ((m === 'fill' || m === 'write') && !hasExamples) continue;
+    if (m === 'fill' && !hasFillContent) continue;
+    if (m === 'write' && !hasExamples) continue;
     if ((m === 'match' || m === 'quiz') && !hasEnoughCards) continue;
     return m;
   }
@@ -1696,11 +1699,15 @@ function toggleSettings() {
 function updateAvailableModes() {
   const filtered = getFiltered();
   const hasExamples = filtered.some(c => EXAMPLES[c[0]]);
+  const hasSentences = filtered.some(c => c[0].includes(' ') && c[0].split(' ').length >= 3);
+  const hasFillContent = hasExamples || hasSentences;
   const hasEnoughCards = filtered.length >= 4;
   const modeToggle = document.getElementById('modeToggle');
   modeToggle.querySelectorAll('.mode-btn').forEach(btn => {
     const m = btn.dataset.mode;
-    if (m === 'fill' || m === 'write') {
+    if (m === 'fill') {
+      btn.style.display = hasFillContent ? '' : 'none';
+    } else if (m === 'write') {
       btn.style.display = hasExamples ? '' : 'none';
     } else if (m === 'match' || m === 'quiz') {
       btn.style.display = hasEnoughCards ? '' : 'none';
@@ -1896,38 +1903,50 @@ function pickQuiz(btn, idx, correct) {
 function showFillCard() {
   const c = deck[current];
   const ex = EXAMPLES[c[0]];
-  // Fallback to quiz for cards without examples
-  if (!ex) { showQuizCard(); return; }
-  const sentence = ex[0];
-  const word = c[0];
-  // Find the word in the sentence (case-insensitive, match conjugated forms too)
-  const words = sentence.replace(/[.!?,]/g,'').split(/\s+/);
-  const wordLower = word.toLowerCase().split(' / ')[0].split(' ')[0]; // handle "jij / je" → "jij"
-  let gapWord = null;
-  for (const w of words) {
-    if (w.toLowerCase() === wordLower || norm(w) === norm(wordLower)) { gapWord = w; break; }
-  }
-  // Try partial match for conjugated verbs
-  if (!gapWord) {
+  let sentence, translation, gapWord;
+
+  if (ex) {
+    // Use example sentence (Basics cards)
+    sentence = ex[0];
+    translation = ex[1];
+    const word = c[0];
+    const words = sentence.replace(/[.!?,]/g,'').split(/\s+/);
+    const wordLower = word.toLowerCase().split(' / ')[0].split(' ')[0];
     for (const w of words) {
-      if (w.toLowerCase().startsWith(wordLower.substring(0,3)) && w.length >= 2) { gapWord = w; break; }
+      if (w.toLowerCase() === wordLower || norm(w) === norm(wordLower)) { gapWord = w; break; }
     }
+    if (!gapWord) {
+      for (const w of words) {
+        if (w.toLowerCase().startsWith(wordLower.substring(0,3)) && w.length >= 2) { gapWord = w; break; }
+      }
+    }
+  } else if (c[0].includes(' ') && c[0].split(' ').length >= 3) {
+    // Card IS a sentence (lessons 14-32) — blank out a random content word
+    sentence = c[0];
+    translation = c[1];
+    const words = sentence.replace(/[.!?,]/g,'').split(/\s+/);
+    const skipWords = new Set(['ik','jij','je','u','hij','zij','ze','wij','we','het','de','een','is','ben','bent','dat','dit','en','of','maar','van','in','op','aan','met','te','er','naar','voor']);
+    const candidates = words.filter(w => w.length >= 3 && !skipWords.has(w.toLowerCase()));
+    if (candidates.length > 0) gapWord = candidates[Math.floor(Math.random() * candidates.length)];
   }
+
   if (!gapWord) { showQuizCard(); return; }
 
   const gapSentence = sentence.replace(new RegExp('\\b' + gapWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + '\\b', 'i'), '___');
 
   // Get distractors from same lesson
   const sameLesson = ALL_CARDS.filter(x => x[2] === c[2] && x[0] !== c[0]);
-  const distractorWords = shuffle(sameLesson).slice(0, 3).map(x => {
-    const dw = x[0].split(' / ')[0].split(' ')[0];
-    return dw;
+  const distractorWords = [];
+  shuffle(sameLesson).forEach(x => {
+    if (distractorWords.length >= 3) return;
+    const xWords = x[0].replace(/[.!?,]/g,'').split(/\s+/);
+    const dw = xWords.find(w => w.length >= 3) || xWords[0];
+    if (dw && dw !== gapWord && !distractorWords.includes(dw)) distractorWords.push(dw);
   });
-  // If not enough distractors, pad with random basics
   while (distractorWords.length < 3) {
     const rnd = ALL_CARDS[Math.floor(Math.random() * ALL_CARDS.length)];
-    const rw = rnd[0].split(' / ')[0].split(' ')[0];
-    if (rw !== wordLower && !distractorWords.includes(rw)) distractorWords.push(rw);
+    const rw = rnd[0].split(/\s+/)[0];
+    if (rw !== gapWord && !distractorWords.includes(rw) && rw.length >= 2) distractorWords.push(rw);
   }
 
   const opts = shuffle([gapWord, ...distractorWords.slice(0,3)]);
@@ -1936,7 +1955,7 @@ function showFillCard() {
     <div class="quiz-card"><div class="card-tag">${lesTag(c[2])}</div>
       <div class="type-prompt">Fill in the gap:</div>
       <div class="type-word" style="font-size:22px;line-height:1.6">${gapSentence}</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:16px">${ex[1]}</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:16px">${translation}</div>
       <div class="quiz-options">${opts.map(o => `<button class="quiz-opt" onclick="pickFill(this,'${escHtml(gapWord)}')">${o}</button>`).join('')}</div>
     </div>
     <div class="buttons" id="buttons"></div>`;
