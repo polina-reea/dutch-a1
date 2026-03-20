@@ -316,6 +316,13 @@
     </div>
   </div>
   <div class="settings-section">
+    <div class="settings-label">Filter</div>
+    <label class="toggle-row" style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;color:var(--text2);padding:4px 0;">
+      <input type="checkbox" id="hideLearned" onchange="toggleHideLearned()" style="width:18px;height:18px;accent-color:var(--purple-strong);">
+      Hide learned cards
+    </label>
+  </div>
+  <div class="settings-section">
     <div class="settings-label">Lessons</div>
     <div class="lesson-filter" id="lessonFilter"></div>
   </div>
@@ -1870,7 +1877,20 @@ let speakMode = 'say'; // 'say' or 'write'
 const LESSON_TAG = {P1:'Ik, jij, hij',P2:'Mijn, dit, dat',P3:'Wie, wat, waar',C1:'Voorzetsels 1',C2:'Voorzetsels 2',C3:'Voegwoorden',C4:'Bijwoorden',W1:'Basiswerkwoorden',W2:'Werkwoorden 2',W3:'Werkwoorden 3'};
 function lesTag(l) { return LESSON_TAG[l] ? LESSON_TAG[l] : 'Les ' + l; }
 function getAllLessons() { return [...new Set(ALL_CARDS.map(c => c[2]))].sort((a,b) => { const na=+a,nb=+b; if(!isNaN(na)&&!isNaN(nb)) return na-nb; if(!isNaN(na)) return -1; if(!isNaN(nb)) return 1; return a.localeCompare(b); }); }
-function getFiltered() { return ALL_CARDS.filter(c => activeLessons.has(c[2])); }
+let hideLearned = false;
+function getFiltered() {
+  let cards = ALL_CARDS.filter(c => activeLessons.has(c[2]));
+  if (hideLearned) {
+    const p = loadProgress();
+    cards = cards.filter(c => { const d = p[cardKey(c)]; return !(d && d.correct >= MASTERED_THRESHOLD); });
+  }
+  return cards;
+}
+function toggleHideLearned() {
+  hideLearned = document.getElementById('hideLearned').checked;
+  saveAppState();
+  startSession();
+}
 function shuffle(a) { for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 function norm(s) { return s.toLowerCase().trim().replace(/['']/g,"'").replace(/[éè]/g,'e').replace(/ë/g,'e'); }
 function normSentence(s) {
@@ -2181,7 +2201,7 @@ function saveTabLessons(tab) {
 
 function saveAppState() {
   localStorage.setItem('dutch-a1-state', JSON.stringify({
-    tab: activeTab, mode, direction,
+    tab: activeTab, mode, direction, hideLearned,
     vocabLessons: tabLessonsState.vocab,
     wordsLessons: tabLessonsState.words
   }));
@@ -2194,6 +2214,7 @@ function loadAppState() {
     if (s.tab) activeTab = s.tab;
     if (s.mode) mode = s.mode;
     if (s.direction) direction = s.direction;
+    if (s.hideLearned !== undefined) hideLearned = s.hideLearned;
     if (s.vocabLessons) tabLessonsState.vocab = s.vocabLessons;
     if (s.wordsLessons) tabLessonsState.words = s.wordsLessons;
   } catch(e) {}
@@ -3042,6 +3063,7 @@ function enterApp() {
   document.getElementById('appWrap').style.display = 'flex';
   loadAppState();
   setDirection(direction);
+  document.getElementById('hideLearned').checked = hideLearned;
   switchTab(activeTab);
 }
 
