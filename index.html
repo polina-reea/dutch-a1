@@ -2494,6 +2494,19 @@ function getStatsHTML() {
     <div style="font-size:12px;color:var(--text2);margin-top:8px;">Same nickname on all devices = shared progress</div>
   </div>`;
 
+  // AI key for smart answer checking
+  const aiKey = getAIKey();
+  html += `<div class="lesson-progress" style="margin-top:16px;">
+    <div class="lp-header"><span class="lp-label">AI Answer Check</span><span class="lp-count">${aiKey ? 'Active' : 'Off'}</span></div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">Anthropic API key for smart checking in Aanvulzinnen</div>
+    <div style="display:flex;gap:8px;">
+      <input type="password" id="aiKeyInput" placeholder="sk-ant-..." value="${aiKey}"
+        style="flex:1;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none;" />
+      <button onclick="localStorage.setItem('dutch-a1-ai-key',document.getElementById('aiKeyInput').value);${refreshFn};"
+        style="padding:12px 18px;border:none;border-radius:var(--radius);background:var(--purple-strong);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Save</button>
+    </div>
+  </div>`;
+
   html += `<button class="stats-reset" onclick="if(confirm('Reset all progress?')){localStorage.removeItem('dutch-a1-progress');cloudPush();${refreshFn};}">Reset progress</button>`;
   html += `</div>`;
   return html;
@@ -3354,18 +3367,56 @@ function showAanvulCard() {
   updateStats();
 }
 
-function checkAanvul() {
+function getAIKey() { return localStorage.getItem('dutch-a1-ai-key') || ''; }
+
+async function aiCheckAnswer(sentence, userAnswer, bookAnswer) {
+  const key = getAIKey();
+  if (!key) return null; // no key = skip AI check
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20241022',
+        max_tokens: 10,
+        messages: [{ role: 'user', content: `Dutch A1 sentence completion. The sentence is: "${sentence}" The book answer is: "${bookAnswer}". The student answered: "${userAnswer}". Is the student's answer a grammatically and logically valid completion? Reply only YES or NO.` }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text?.trim().toUpperCase() || '';
+    return text.startsWith('YES');
+  } catch(e) { return null; }
+}
+
+async function checkAanvul() {
   const c = deck[current];
   const expected = c[1].replace(/[.!?]$/,'');
   const inp = document.getElementById('aanvulInput');
   const ans = document.getElementById('aanvulAnswer');
   if (inp.disabled) return;
   inp.disabled = true;
+
+  // Exact match
   if (normSentence(inp.value) === normSentence(expected)) {
     inp.classList.add('correct'); ans.textContent = 'Correct!';
     known++; recordCorrect(c, 'aanvul');
     updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 1800); return;
   }
+
+  // AI check if key is set
+  const aiKey = getAIKey();
+  if (aiKey && inp.value.trim().length > 0) {
+    ans.textContent = 'Checking...'; ans.style.color = 'var(--text2)';
+    const ok = await aiCheckAnswer(c[0], inp.value.trim(), c[1]);
+    if (ok === true) {
+      inp.classList.add('correct'); ans.textContent = 'Correct! (book: ' + c[1] + ')'; ans.style.color = '';
+      known++; recordCorrect(c, 'aanvul');
+      updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 2200); return;
+    }
+    ans.style.color = '';
+  }
+
+  // Wrong
   inp.classList.add('wrong'); ans.classList.add('show-wrong');
   ans.textContent = c[1];
   again.push(c); recordWrong(c, 'aanvul');
@@ -3374,7 +3425,6 @@ function checkAanvul() {
 }
 
 function acceptAanvul() {
-  // Undo the wrong, count as correct
   const c = again.pop();
   known++; recordCorrect(c, 'aanvul');
   updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 800);
