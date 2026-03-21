@@ -3369,8 +3369,15 @@ function checkAanvul() {
   inp.classList.add('wrong'); ans.classList.add('show-wrong');
   ans.textContent = c[1];
   again.push(c); recordWrong(c, 'aanvul');
-  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showSpeakCard()">Next</button>';
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-good" onclick="acceptAanvul()">Accept my answer</button><button class="btn btn-next" onclick="current++;showSpeakCard()" style="margin-top:8px">Next</button>';
   updateStats();
+}
+
+function acceptAanvul() {
+  // Undo the wrong, count as correct
+  const c = again.pop();
+  known++; recordCorrect(c, 'aanvul');
+  updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 800);
 }
 
 function skipAanvul() {
