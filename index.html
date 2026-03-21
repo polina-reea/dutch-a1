@@ -1760,6 +1760,380 @@ const SPEAK_CARDS = [
 ["Wat voor weer is het vandaag?","What's the weather like today?","Het is koud en het regent.","kleding"],
 ];
 
+// Aanvulzinnen (sentence completion) — Speaking exam
+const AANVUL_CARDS = [
+// Set 1
+["Michael houdt niet van tennis. Hij houdt meer van...","voetbal","1"],
+["Mijn vader loopt met een stok. Mijn vader is ...","oud","1"],
+["Jie is op de markt. Hij ziet ...","fruit","1"],
+["Iwan wil gezond zijn. Hij drinkt geen ...","bier","1"],
+["Rico krijgt een prik. Hij is ...","bang","1"],
+["Tess eet veel fruit. Fruit is ...","gezond","1"],
+["Anna is bij de dokter. Ze krijgt ...","medicijnen","1"],
+["Arif wacht op de bus. De bus komt ...","laat","1"],
+["Lia wil meer geld voor haar werk. Dan kan ze ...","op vakantie","1"],
+["Abdul stuurt zijn familie elke week een e-mail. Hij schrijft dan over ...","zijn werk","1"],
+["Laila moet elke dag vroeg opstaan. Soms is ze ...","laat","1"],
+["Christo heeft dorst. Hij drinkt een glas ...","water","1"],
+["Het is koud in het huis van Faiz. Hij wil ...","warm zijn","1"],
+["Sjaak werkt in een fabriek. Daar werkt hij ...","elke dag","1"],
+["Ana is niet blij met haar huis. Ze vindt haar huis ...","niet mooi","1"],
+["Paul gaat vroeg naar bed. Hij moet morgen ...","werken","1"],
+["Imani vindt school leuk. Zij houdt van ...","studeren","1"],
+["Alex is ziek. Hij heeft pijn aan ...","zijn hoofd","1"],
+["Amel sport graag. Sporten is ...","gezond","1"],
+["Lea is in het ziekenhuis. Ze wil ...","naar huis","1"],
+["Manuel is buschauffeur. Hij rijdt ...","snel","1"],
+["Het is stil in de klas. De leerlingen ...","schrijven","1"],
+["Mijn broer zingt veel. Hij is ...","artiest","1"],
+["Kwasi is chauffeur. Hij rijdt ...","in een taxi","1"],
+["Omid leest 's ochtends altijd eerst de krant. Daarna gaat hij ...","werken","1"],
+["In een grote stad wonen veel mensen. Ik vind dat ...","leuk","1"],
+["Het is slecht weer. Gaan we met de ...","auto?","1"],
+["Han heeft zijn diploma gehaald. Hij gaat nu ...","werken","1"],
+["Ik eet nooit kip. Dat vind ik ...","niet lekker","1"],
+["De koning is op het nieuws. Hij vertelt over ...","de economie","1"],
+["Mo en zijn familie spelen een spel. Daarna gaan ze ...","naar huis","1"],
+["Het is druk in de stad. Er zijn veel ...","mensen","1"],
+["Mevrouw Perez heeft geen auto meer. Nu moet ze ...","lopen","1"],
+["Lea eet graag in een restaurant. Ze vindt dat ...","leuk","1"],
+["Jessie moet langer werken vandaag. Ze mag pas om acht uur ...","naar huis","1"],
+["Lucia heeft haar been gebroken. Nu kan ze niet ...","lopen","1"],
+// Set 2
+["De baas van Patrick is boos. Patrick vindt dat ...","niet leuk","2"],
+["Katya volgt een opleiding. Ze wil ...","een diploma","2"],
+["Sasha heeft een hond. Ze heeft ook ...","een kat","2"],
+["Stanley wil een groter huis. Hij wil ook ...","een auto","2"],
+["Said is te laat op zijn werk. Zijn baas is ...","boos","2"],
+["Wil jij op mijn kinderen passen? Ik ga vanavond ...","naar een restaurant","2"],
+["Fico woont ver van zijn werk. Hij moet elke dag ...","in de metro","2"],
+["Mijn telefoon is kapot. Nu kan ik niet ...","bellen","2"],
+["De dokter praat met Sofia. De dokter geeft Sofia ...","medicijnen","2"],
+["Ahmed brengt zijn zoon naar het vliegveld. Zijn zoon gaat ...","op vakantie","2"],
+["Noah leest een bericht in de krant. Het bericht gaat over ...","economie","2"],
+["Er is ingebroken bij Ben. Hij belt naar ...","de politie","2"],
+["Martin stelt een vraag aan de docent. De vraag gaat over ...","het examen","2"],
+["Achmed is klaar met school. Hij gaat ...","werken","2"],
+["Paul viert zijn verjaardag. Hij is ...","blij","2"],
+["Martin eet elke ochtend een ei. Zijn vrouw eet meestal ...","brood","2"],
+["Sita geeft taart aan haar opa. Hij vindt dat ...","lekker","2"],
+["Jack koopt tomaten. Hij koopt ook ...","bananen","2"],
+["Hue wil naar de markt. Ze gaat ...","fruit kopen","2"],
+["Dylan is bij de tandarts. Dat is ...","niet leuk","2"],
+["Arnold is schoonmaker. Hij werkt in ...","de fabriek","2"],
+["Dimitri werkt in een garage. Hij maakt ...","de auto","2"],
+["Iedereen is blij. Het is ...","vakantie","2"],
+["Wil je mijn huis zien? Ik woon hier ...","met mijn man","2"],
+["Maria leest een boek. Ze vindt het ...","leuk","2"],
+["Ananda is aan het koken. Ze maakt ...","pasta","2"],
+["Halil rijdt in een vrachtwagen. Hij vindt dat ...","leuk","2"],
+["Het is warm vandaag. Ana wil ...","zwemmen","2"],
+["Jafar houdt niet van dansen. Hij vindt dansen ...","niet leuk","2"],
+["Shun wil niet eten. Hij wil liever ...","spelen","2"],
+["Jacques is leraar. Hij geeft ...","een cursus","2"],
+["Sophie is vaak in het bos. Ze kijkt graag naar ...","de bomen","2"],
+["Filiz koopt een nieuwe jas. Ze koopt ook ...","een hoed","2"],
+["Odara ruimt het huis op. Ze legt de kleren ...","in de kast","2"],
+["Sylvia is kapper. Ze moet vandaag veel ...","werken","2"],
+["Hetty is klaar met koken. Ze roept ...","haar man","2"],
+// Set 3
+["Simon wil leraar worden. Hij moet veel ...","studeren","3"],
+["Robin loopt snel naar school. Hij is ...","laat","3"],
+["Priya doet een opleiding. Later wordt ze ...","dokter","3"],
+["Het fruit is op. Ik ga nu naar ...","de winkel","3"],
+["De klas is leeg. Iedereen is ...","naar huis","3"],
+["Wayan drinkt koffie met zijn buurman. Hij vindt dat ...","leuk","3"],
+["Maria kan goed koken. Ze kookt meestal ...","groente","3"],
+["Mike heeft pijn aan zijn been. Hij heeft ook pijn aan zijn ...","arm","3"],
+["Jack wil de muziek niet horen. Hij vindt de muziek ...","niet leuk","3"],
+["Noor werkt in een winkel. Ze verkoopt broeken en ook ...","T-shirts","3"],
+["Joel heeft een vieze keuken. Hij moet ...","schoonmaken","3"],
+["Franco gaat verhuizen. Zijn nieuwe huis heeft een ...","tuin","3"],
+["Nikki zoekt een nieuw huis. Ze wil graag ...","een groot huis","3"],
+["Leyla slaapt samen met haar zus in een kamer. Zij vinden dat ...","leuk","3"],
+["Sou eet graag mais. Ze eet mais meestal met ...","haar handen","3"],
+["Andres werkt op het land. Het werk is ...","gezond","3"],
+["Anna's huis is te klein. Ze wil snel ...","een groot huis","3"],
+["Felipe houdt van lezen. Hij koopt elke maand ...","een boek","3"],
+["Hannah maakt haar huis schoon. Ze doet dat ...","elke dag","3"],
+["Jara is zwanger. Ze krijgt ...","een baby","3"],
+["Fausia stapt uit de boot. Ze loopt naar ...","huis","3"],
+["Mijn opa zit op de bank. Hij kijkt naar ...","de televisie","3"],
+["Liam kan niet goed zien. Hij moet ...","een bril kopen","3"],
+["De zoon van Samira gaat naar school. Samira vindt dat ...","goed","3"],
+["Lizzie en haar moeder gaan met het vliegtuig. Lizzie vindt dat ...","leuk","3"],
+["De bus rijdt langzaam. Lia wil ...","snel","3"],
+["Er ligt rommel op straat. Dat is ...","vies","3"],
+["Claire leert Nederlands. Ze vindt Nederlands ...","moeilijk","3"],
+["Ik heb deze krant gelezen. Wil jij de krant nu ...","lezen","3"],
+["Emma wast haar handen. Ze gaat ...","koken","3"],
+["Alex wil nieuwe schoenen. Hij gaat naar ...","de winkel","3"],
+["Nadia heeft kip gekocht. Ze gaat de kip eerst ...","betalen","3"],
+["Christina belt met haar moeder. Ze praten over ...","familie","3"],
+["Inez en Luis bouwen een huis. Het huis heeft nog geen ...","dak","3"],
+["Mijn vader luistert graag naar het nieuws. Hij luistert ook naar ...","muziek","3"],
+["Jim heeft haast. Hij moet snel naar ...","huis","3"],
+// Set 4
+["Nina speelt in de tuin. Ze speelt met ...","water","4"],
+["Monica maakt graag foto's. Ze maakt het liefst foto's van ...","de natuur","4"],
+["Hassan maakt zijn brommer. Het wiel is ...","kapot","4"],
+["Mo zit aan tafel. Hij schrijft een brief aan zijn ...","moeder","4"],
+["Lucia wil nieuw werk. Ze vindt haar oude werk ...","niet leuk","4"],
+["Xuan is in de supermarkt. Ze wil ... koffie","kopen","4"],
+["Het bord van Sahid is gevallen. Sahid is ...","niet blij","4"],
+["Arjun moet elke dag reizen naar zijn werk. Hij werkt in ...","de stad","4"],
+["Bob houdt niet van zwemmen. Hij gaat liever ...","lopen","4"],
+["Thirza wil later in het ziekenhuis werken. Ze moet eerst ...","studeren","4"],
+["Tuan zit op school. Hij heeft volgende week ...","examen","4"],
+["Mijn baas fietst elke dag. Ik doe dat ...","niet","4"],
+["Fanya is op de markt. Ze zoekt ...","kleding","4"],
+["Jamila maakt kleding. Die kleding is voor ...","de winkel","4"],
+["Rafael heeft een telefoon. Hij belt elke dag met zijn ...","moeder","4"],
+["Wij willen wat leuks doen. We gaan ...","naar de discotheek","4"],
+["David werkt in een ziekenhuis. Hij is ...","dokter","4"],
+["David en Maria rijden naar de stad. Ze zoeken ...","een parkeerplaats","4"],
+["Kun je mij een lepel geven? Ik wil ...","eten","4"],
+["Malik heeft een nieuwe bank gekocht. De oude bank was ...","kapot","4"],
+["Diego houdt van koken. Hij kookt graag voor ...","zijn vrouw","4"],
+["Zola maakt het huis schoon. Ze doet dat ...","elke dag","4"],
+["Nick zoekt werk. Hij wil graag werken bij ...","de politie","4"],
+["Selim kan zijn broer niet bellen. Hij stuurt zijn broer een ...","brief","4"],
+["Ryan wil een film zien. Hij gaat naar ...","de bioscoop","4"],
+["Jessie houdt van muziek. Ze speelt graag ...","piano","4"],
+["Sonya houdt van muziek. Ze luistert ...","naar de radio","4"],
+["Pedro woont op een boerderij. Hij heeft daar ...","koeien","4"],
+["Simon bouwt een huis. Het huis wordt ...","groot","4"],
+["Karim heeft pijn in zijn rug. Hij moet ...","naar de dokter","4"],
+["Het regent al de hele dag. William wil ...","buiten spelen","4"],
+["Grace houdt niet van groente. Ze vindt dat ...","vies","4"],
+["Tamal moet remmen. Hij ziet een ...","man","4"],
+["Chen verkoopt bloemen. Ze doet dat ...","elke dag","4"],
+["Ming rijdt vaak op zijn scooter. Hij wil niet ...","lopen","4"],
+["Jamal heeft een nieuwe scooter. Hij kan nu ...","snel naar school","4"],
+// Set 5
+["Ik eet nooit druiven. Ik vind druiven ...","niet lekker","5"],
+["Peter speelt met zijn zoon. Ze zijn ...","buiten","5"],
+["Ik ga een taart maken. Wil jij ...","taart eten","5"],
+["Mijn trein vertrekt over een half uur. Ik ga nu ...","instappen","5"],
+["Johnny is vrij op zaterdag. Hij gaat ...","naar het park","5"],
+["Sophia houdt van rijst. Ze kookt dat ...","elke dag","5"],
+["Yun eet 's ochtends niet veel. Ze eet dan alleen ...","pap","5"],
+["Hannah leert Nederlands. Ze leert ook ...","Engels","5"],
+["Gina kijkt vaak televisie. Ze houdt van programma's over ...","koken","5"],
+["Carlos gaat vroeg slapen. Hij is ...","moe","5"],
+["Mohammed maakt auto's. Dat vindt hij ...","leuk","5"],
+["Jonas werkt altijd buiten. Dat is ...","gezond","5"],
+["Lei speelt op straat. Dat is ...","gezond","5"],
+["Jasmine gaat naar het ziekenhuis. In het ziekenhuis zijn ...","dokters","5"],
+["Monica wil graag een huis met een tuin. Ze vindt dat ...","mooi","5"],
+["Jason gaat graag naar school. Hij kan goed ...","studeren","5"],
+["Paula heeft een brief gekregen. De brief is van ...","haar moeder","5"],
+["Aiden is bij de bakker. Hij wil ...","brood eten","5"],
+["Daniel heeft pijn aan zijn kies. Hij gaat naar ...","de tandarts","5"],
+["Mijn auto is kapot. Nu moet ik ...","lopen","5"],
+["Kenji rookt al twintig jaar sigaretten. Dat is ...","niet gezond","5"],
+["Michelle kijkt vaak films. Ze houdt van films over ...","de liefde","5"],
+["Sabir heeft een nieuwe baan. Hij werkt bij ...","McDonalds","5"],
+["Maria heeft griep. Ze moet ...","naar bed","5"],
+["Jing maakt de borden schoon. Daarna gaat ze ...","naar school","5"],
+["Raheem heeft een fijn huis. Hij woont daar met ...","familie","5"],
+["Ons dak is kapot. Wij moeten ...","repareren","5"],
+["Claire kijk uit het raam. Ze kijkt naar ...","buiten","5"],
+["Het is druk op de weg. Emir vindt dat ...","niet leuk","5"],
+["Melissa wacht op het station. Ze wacht op haar ...","vriendin","5"],
+["Ik lees het nieuws op mijn telefoon. Mijn man leest het nieuws ...","in de krant","5"],
+["Zina kookt met veel kruiden. Zo wordt haar eten ...","lekker","5"],
+["Pablo gaat vaak met de trein. Hij gaat dan naar ...","school","5"],
+["Esra is ziek. Ze vindt dat ...","niet leuk","5"],
+["Mijn zus rijdt altijd hard. Ik vind dat ...","niet goed","5"],
+["Nancy en Oscar zitten in de bioscoop. Ze vinden de film ...","mooi","5"],
+// Set 6
+["Caro gaat vaak met de bus naar school. Soms gaat ze ...","met de fiets","6"],
+["Scott doet een opleiding. Hij vindt leren ...","leuk","6"],
+["Ik eet graag brood. Ik houd niet van ...","patat","6"],
+["Nick wil naar zijn familie. Hij reist met ...","de trein","6"],
+["Marco heeft zin in koffie. Hij wil ook ...","brood","6"],
+["Tara wil een motor kopen. Een motor is ...","leuk","6"],
+["John houdt van paarden. Hij vindt paarden ...","leuk","6"],
+["Salih is bakker. Hij werkt meestal ...","in de nacht","6"],
+["Frank leest de krant. Hij leest over ...","economie","6"],
+["Barry is geslaagd voor zijn examen. Hij krijgt ...","een diploma","6"],
+["Chris heeft een computer. Hij gebruikt de computer om te ...","studeren","6"],
+["Peter maakt machines. Hij werkt vaak ...","in de nacht","6"],
+["Mia maakt zelf kleren. Vandaag maakt ze een ...","broek","6"],
+["Said heeft vakantie. Hij gaat ...","zwemmen","6"],
+["Die sinaasappel is oud. Je moet de sinaasappel ...","weggooien","6"],
+["Het is zondag. Eva gaat op zondag altijd naar ...","de kerk","6"],
+["Pascal vindt zijn werk moeilijk. Hij wil ...","vakantie","6"],
+["Aaron is dokter. Hij werkt ...","in het ziekenhuis","6"],
+["Ryan heeft weinig geld. Hij werkt ...","niet veel","6"],
+["Jamal woont in een flatgebouw. Hij wil graag ...","een ander huis","6"],
+["Judy leest een tijdschrift. Soms leest ze ook ...","een boek","6"],
+["Ik drink geen alcohol. Ik drink wel graag ...","water","6"],
+["Karl gaat met zijn dochter naar de dierentuin. Ze kijken naar ...","de dieren","6"],
+["Dael heeft veel geld. Hij werkt ...","altijd","6"],
+["Orma heeft leuke buren. Ze gaat met haar buren ...","koffie drinken","6"],
+["Is dat boek leuk? Ik wil het boek ook graag ...","lezen","6"],
+["Kevin heeft huiswerk. Hij moet veel ...","studeren","6"],
+["Alice werkt in een ziekenhuis. Zij is daar ...","dokter","6"],
+["Ik ben ziek. Ik ga morgen niet ...","werken","6"],
+["Lin zoekt werk. Ze gaat naar ...","het uitzendbureau","6"],
+["Olga is ziek. Ze moet ...","slapen","6"],
+["Finn kijkt nu televisie. Hij gaat straks ...","naar bed","6"],
+["Rasha werkt op een kantoor. Het kantoor is ...","modern","6"],
+["Ik wil zieke mensen helpen. Ik vind dat ...","goed","6"],
+["Kevin werkt in een restaurant. Hij maakt vandaag ...","pizza","6"],
+["Maryam kookt voor Dina. Maryam maakt ...","salade","6"],
+// Set 7
+["Laiqa werkt elke dag buiten. Ze houdt van ...","buiten werken","7"],
+["Myra en Liz gaan naar een cafe. Ze willen graag ...","koffie drinken","7"],
+["Khalid is visser. Na het werk is hij vaak ...","moe","7"],
+["Kei eet 's avonds met zijn familie. Dat vindt hij ...","leuk","7"],
+["Malik gaat vandaag niet sporten. Hij heeft geen ...","tijd","7"],
+["Madee heeft een auto. Ze gaat met de auto naar ...","het werk","7"],
+["Quito eet vandaag niet thuis. Hij eet ...","in een restaurant","7"],
+["Rahime heeft Nederlandse les. Ze vindt haar docent ...","heel goed","7"],
+["Ali kan niet goed lopen. Hij heeft pijn aan zijn ...","knie","7"],
+["Max draagt een helm op zijn werk. Dat moet van zijn ...","chef","7"],
+["Janine leert Nederlands. Ze praat met de lerares over ...","het boek","7"],
+["De trein is vol. Hanna moet ...","staan","7"],
+["Philippa zit in de tuin. Ze zit ook vaak ...","binnen","7"],
+["Karim leest het weerbericht. Het weer wordt ...","goed","7"],
+["Een mug heeft mij geprikt. Nu krijg ik ...","pijn","7"],
+["Siham volgt een cursus. Ze leert ...","veel dingen","7"],
+["Samuel vindt de pauze leuk. Hij gaat dan ...","koffie drinken","7"],
+["Johanna doet suiker in haar koffie. Suiker is ...","zoet","7"],
+["Harold is niet alleen. Hij heeft ...","een vriend","7"],
+["Esma wil lerares worden. Zij gaat ...","studeren","7"],
+["Paul heeft honger. Zijn moeder geeft hem ...","melk","7"],
+["Mae heeft een nieuwe auto. Ze kan nu ...","rijden","7"],
+["Het vliegveld is ver weg. We gaan naar het vliegveld met ...","de trein","7"],
+["Kay zoekt een nieuw huis. Hij vindt zijn oude huis ...","niet mooi","7"],
+["Rima en haar dochter zijn in de keuken. Haar dochter wil ...","helpen","7"],
+["Nasira woont bij de supermarkt. Ze woont ook bij ...","het station","7"],
+["Aaron is schilder. Hij schildert meestal ...","in huis","7"],
+["Aaron gaat donderdag op reis. Hij vindt dat ...","leuk","7"],
+["Mijn vader heeft een paard. Hij gaat ...","rijden","7"],
+["Anisa maakt huiswerk op de computer. Ze doet dat ...","elke dag","7"],
+["Julio gaat verhuizen. Hij moet ...","inpakken","7"],
+["Leon is verkouden. Hij moet ...","naar bed","7"],
+["Mijn opa gaat elke dag wandelen. Dat is ...","gezond","7"],
+["Mijn benzine is op. Nu moet ik ...","lopen","7"],
+["Aaliyah pakt eerst een kopje koffie. Daarna gaat ze ...","werken","7"],
+["Sari zoekt een cursusboek. Ze gaat naar ...","de bibliotheek","7"],
+// Set 8
+["Alec gaat naar school. Hij wil graag ...","boeken lezen","8"],
+["Jim gaat naar het strand. Het is daar ...","mooi","8"],
+["Inez gaat naar een concert. Ze gaat ...","dansen","8"],
+["Zarina moet de vis eerst schoonmaken. Daarna gaat ze hem ...","bakken","8"],
+["Pia woont naast een park. Ze gaat daar ...","lopen","8"],
+["Dave is niet blij met zijn haar. Zijn haar is ...","lelijk","8"],
+["Mijn buurman maakt graag muziek. Dat vind ik ...","mooi","8"],
+["Michelle maakt huiswerk. Ze vindt het huiswerk ...","moeilijk","8"],
+["Dafne kan goed zingen. Ze kan ook goed ...","dansen","8"],
+["John en zijn dochter bakken samen taart. Ze vinden dat ...","leuk","8"],
+["Tony eet brood. Hij eet het brood met ...","tomaat","8"],
+["Kevin zit in de klas. Hij heeft een vraag over ...","het boek","8"],
+["Samir is te laat voor de trein. Hij moet nu ...","wachten","8"],
+["Er komen nieuwe huizen in onze buurt. Ik vind dat ...","mooi","8"],
+["Priya maakt saus. Haar dochters willen ...","helpen","8"],
+["Stephan moet sporten van de dokter. Hij gaat ...","lopen","8"],
+["Stefan belt met zijn zus. Zijn zus is ...","blij","8"],
+["Aziz loopt elke dag. Hij loopt naar ...","zijn werk","8"],
+["Bart gaat bijna elke dag met de auto. Hij rijdt dan naar ...","zijn werk","8"],
+["Simone leest graag een krant. Ze koopt hem ...","elke dag","8"],
+["Hassan werkt in een restaurant. Hij leert daar ...","koken","8"],
+["In het eten zitten pepers. Ik vind dat ...","lekker","8"],
+["Mijn broer houdt niet van varen. Hij wordt altijd ziek op ...","het water","8"],
+["In de stad rijden veel brommers. Ik vind dat ...","niet goed","8"],
+["'s Avonds doe ik mijn ring af. Ik leg mijn ring altijd ...","onder het bed","8"],
+["Maja maakt soep. De soep is ...","niet lekker","8"],
+["Ik ga naar mijn zus. Mijn zus woont ...","in de stad","8"],
+["Tim is jarig. Zijn zus geeft hem een ...","cadeau","8"],
+["Pablo speelt gitaar. Hij oefent ...","elke dag","8"],
+["Ayla eet haar ontbijt snel op. Ze heeft ...","honger","8"],
+["Carlos is vrij. Hij gaat ...","naar huis","8"],
+["Yaira werkt bij een apotheek. Ze werkt daar ...","elke dag","8"],
+["Tanya is bakker. Ze verkoopt ...","brood","8"],
+["De man belt in de auto. Dat is ...","niet goed","8"],
+["Ik ben op zoek naar het treinstation. Kunt u mij ...","helpen","8"],
+["Ik ga straks naar Hamza. Hij is ...","mijn broer","8"],
+// Set 9
+["Mandy eet vaak chips als ze een film kijkt. Ze eet soms ook ...","koekjes","9"],
+["Ivan is niet blij met zijn werk. Hij vindt zijn werk te ...","moeilijk","9"],
+["Johnny is moe. Hij wil ...","slapen","9"],
+["Carlos maakt muziek. Hij doet dat ...","elke dag","9"],
+["Naima wil kapper worden. Ze leert ...","knippen","9"],
+["Samira gaat naar haar ouders. Ze gaan samen ...","koffie drinken","9"],
+["Josh koopt een krant in de winkel. Hij koopt ook ...","een boek","9"],
+["Ik ga vaak met de bus. Ik ga dan naar ...","school","9"],
+["Danielle gaat studeren. Ze pakt haar ...","boeken","9"],
+["Gary woont bij het strand. Hij wil het liefst ...","zwemmen","9"],
+["Adam is aan het koken. Hij maakt ...","soep","9"],
+["Pedro doet de lamp aan. Het is ...","nacht","9"],
+["Victor heeft een nieuw huis. Hij gaat morgen ...","verhuizen","9"],
+["Samira heeft pijn aan haar rug. Ze kan niet goed ...","werken","9"],
+["Samira heeft een gesprek met haar baas. Ze praten over ...","salaris","9"],
+["Louis gaat op de scooter naar zijn werk. Hij doet dat ...","elke dag","9"],
+["Kun je mij naar het station brengen. Ik moet op tijd ...","naar school","9"],
+["De dochter van Sophia kijkt veel tv. Ze kan beter gaan ...","slapen","9"],
+["Cai werkt met hout. Hij maakt ...","de vloer","9"],
+["Emma doet een opleiding. Dat is ...","moeilijk","9"],
+["We gaan mijn broer ophalen. Hij heeft geen ...","auto","9"],
+["Ik ga naar de huisarts. Hij geeft mij ...","medicijnen","9"],
+["Younes heeft veel vrienden. Hij gaat vaak met ze naar ...","het cafe","9"],
+["Alex gaat altijd met de trein. Ik ga graag met ...","de auto","9"],
+["Roy wil zijn vriend spreken. Hij gaat ...","bellen","9"],
+["Ella bakt koekjes. Ze bakt de koekjes voor ...","haar man","9"],
+["Pari gaat elke dag met de bus. Vandaag gaat ze ...","met de fiets","9"],
+["Sasha eet niet altijd thuis. Ze gaat vaak naar ...","een restaurant","9"],
+["Het is donker. Ik reis dan liever niet met ...","de bus","9"],
+["De bus is vaak te laat. Paul vindt dat ...","niet leuk","9"],
+["Chris neemt zijn pillen. Hij heeft pijn in zijn ...","hoofd","9"],
+["Romeo werkt op een school. Hij geeft les aan ...","kinderen","9"],
+["Mia moet snel naar huis. Ze gaat met de ...","auto","9"],
+["Maya doet de gordijnen dicht. Ze gaat ...","slapen","9"],
+["Laura heeft veel collega's. Ze gaan samen ...","drinken","9"],
+["Kevin eet een salade met paprika. In de salade zit ook ...","tomaat","9"],
+// Set 10
+["David heeft een boot. Hij gebruikt de boot om te ...","varen","10"],
+["Emma schrijft alles op. Daarna gaat ze ...","naar huis","10"],
+["Isabel speelt graag met haar pop. Soms speelt ze ook met ...","een auto","10"],
+["Stefana vindt wandelen leuk. Ze doet dat ...","elke dag","10"],
+["Mira heeft zin in koffie. Ze drinkt koffie met ...","melk","10"],
+["Samuel heeft vandaag les. Hij gaat morgen ...","examen doen","10"],
+["Het is druk op het station. Er zijn veel ...","mensen","10"],
+["Rhonda is haar sleutel kwijt. Nu moet ze ...","lopen","10"],
+["Sandra moet vandaag veel doen. Ze moet ...","studeren","10"],
+["Het eten is heel warm! Je moet ...","wachten","10"],
+["Ik ga morgen brood kopen. Brood koop ik meestal ...","bij de bakker","10"],
+["Ik heb geen auto. Een auto is ...","duur","10"],
+["Liyen gaat vanavond koken. Ze gaat eerst ...","boodschappen doen","10"],
+["Masha kan vandaag zitten in de bus. Soms moet ze ...","staan","10"],
+["Nora en Souffian wonen in een dorp. Ze wonen liever ...","in een stad","10"],
+["Hannah eet graag vis. Ze haalt die vis ...","in de supermarkt","10"],
+["Tara zoekt werk. Ze kijkt in ...","de krant","10"],
+["Abel is op school. Hij heeft ...","examen","10"],
+["Kenny zoekt op internet. Hij zoekt naar ...","informatie","10"],
+["William neemt een drankje. Dat helpt tegen ...","de dorst","10"],
+["Karima gaat naar de dokter. Ze voelt zich ...","niet goed","10"],
+["Leon speelt gitaar. Hij doet dat ...","elke dag","10"],
+["Dave lust geen koffie. Hij drinkt liever ...","thee","10"],
+["Dunya gaat naar een feest. Het feest is van haar ...","broer","10"],
+["Dario zit op school. Hij maakt een ...","test","10"],
+["Jakob zoekt een taxi. Hij wil ...","naar huis","10"],
+["Fred gaat naar school. Hij heeft les tot ...","5 uur","10"],
+["Josh heeft de hele dag gelopen. Hij wil nu ...","zitten","10"],
+["De les begint om 11 uur. Hetty gaat ...","naar school","10"],
+["Dave werkt in een cafe. Hij moet daar ...","koffie maken","10"],
+["Vera doet suiker in haar thee. Haar thee wordt zo ...","zoet","10"],
+["Miguel stopt met werken. Hij is ...","moe","10"],
+["Karin kijkt naar het journaal. Ze doet dat ...","elke dag","10"],
+["Thomas ligt in het ziekenhuis. Hij vindt dat ...","niet leuk","10"],
+["Marco is ziek. Hij belt ...","de dokter","10"],
+["Souad koopt bananen op de markt. Ze koopt ook ...","citroenen","10"]
+];
+
 // KNS (Kennis van de Nederlandse Samenleving) — Fotoboek exam questions
 const KNS_CARDS = [["1","In welk deel van de wereld ligt Nederland?","Europa","Zuid-Amerika","a","land"],
 ["2","Welk land ligt ten zuiden van Nederland?","België","Duitsland","a","land"],
@@ -1872,7 +2246,8 @@ let matchState = {};
 let speakTopics = new Set();
 let knsTopics = new Set();
 let speakAnswerVisible = false;
-let speakMode = 'say'; // 'say' or 'write'
+let speakMode = 'say'; // 'say', 'write', or 'aanvul'
+let aanvulSets = new Set();
 
 const LESSON_TAG = {P1:'Ik, jij, hij',P2:'Mijn, dit, dat',P3:'Wie, wat, waar',C1:'Voorzetsels 1',C2:'Voorzetsels 2',C3:'Voegwoorden',C4:'Bijwoorden',W1:'Basiswerkwoorden',W2:'Werkwoorden 2',W3:'Werkwoorden 3'};
 function lesTag(l) { return LESSON_TAG[l] ? LESSON_TAG[l] : 'Les ' + l; }
@@ -2017,6 +2392,7 @@ if (syncUser) cloudPull();
 const MASTERED_THRESHOLD = 3;
 function cardKey(c) { return c[0] + '|' + c[2]; }
 function speakKey(c) { return 'sp|' + c[0]; }
+function aanvulKey(c) { return 'av|' + c[0].substring(0, 40); }
 function knsKey(c) { return 'kns|' + c[0]; }
 
 function loadProgress() {
@@ -2026,7 +2402,7 @@ function saveProgress(p) { localStorage.setItem('dutch-a1-progress', JSON.string
 
 function recordCorrect(c, isSpeakCard) {
   const p = loadProgress();
-  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
+  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard === 'aanvul' ? aanvulKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
   if (!p[k]) p[k] = { correct: 0, total: 0 };
   p[k].correct++;
   p[k].total++;
@@ -2035,7 +2411,7 @@ function recordCorrect(c, isSpeakCard) {
 }
 function recordWrong(c, isSpeakCard) {
   const p = loadProgress();
-  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
+  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard === 'aanvul' ? aanvulKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
   if (!p[k]) p[k] = { correct: 0, total: 0 };
   p[k].correct = 0; // reset streak
   p[k].total++;
@@ -2044,7 +2420,7 @@ function recordWrong(c, isSpeakCard) {
 }
 function isMastered(c, isSpeakCard) {
   const p = loadProgress();
-  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
+  const k = isSpeakCard === 'kns' ? knsKey(c) : isSpeakCard === 'aanvul' ? aanvulKey(c) : isSpeakCard ? speakKey(c) : cardKey(c);
   return p[k] && p[k].correct >= MASTERED_THRESHOLD;
 }
 
@@ -2810,15 +3186,15 @@ function showSpeakFilter() {
     container.appendChild(mt);
   }
   mt.innerHTML = '';
-  ['say','write'].forEach(m => {
+  ['say','write','aanvul'].forEach(m => {
     const btn = document.createElement('button');
     btn.className = 'mode-btn' + (speakMode === m ? ' active' : '');
-    btn.textContent = m === 'say' ? 'Say' : 'Write';
+    btn.textContent = m === 'say' ? 'Say' : m === 'write' ? 'Write' : 'Aanvulzinnen';
     btn.onclick = () => { speakMode = m; showSpeakFilter(); startSpeakSession(); };
     mt.appendChild(btn);
   });
 
-  // Topic filter
+  // Topic/Set filter
   let sf = document.getElementById('speakFilter');
   if (!sf) {
     sf = document.createElement('div');
@@ -2828,25 +3204,52 @@ function showSpeakFilter() {
   if (sf.parentElement !== container) container.appendChild(sf);
   sf.style.display = 'flex';
   sf.innerHTML = '';
-  const allBtn = document.createElement('button');
-  allBtn.className = 'speak-filter-btn' + (speakTopics.size === 0 ? ' active' : '');
-  allBtn.textContent = 'All';
-  allBtn.onclick = () => { speakTopics.clear(); showSpeakFilter(); startSpeakSession(); };
-  sf.appendChild(allBtn);
-  getAllSpeakTopics().forEach(t => {
-    const btn = document.createElement('button');
-    btn.className = 'speak-filter-btn' + (speakTopics.has(t) ? ' active' : '');
-    btn.textContent = TOPIC_LABELS[t] || t;
-    btn.onclick = () => {
-      if (speakTopics.has(t)) speakTopics.delete(t); else speakTopics.add(t);
-      showSpeakFilter(); startSpeakSession();
-    };
-    sf.appendChild(btn);
-  });
+
+  if (speakMode === 'aanvul') {
+    // Set filter for aanvulzinnen
+    const allSets = [...new Set(AANVUL_CARDS.map(c => c[2]))].sort((a,b) => +a - +b);
+    const allBtn = document.createElement('button');
+    allBtn.className = 'speak-filter-btn' + (aanvulSets.size === 0 ? ' active' : '');
+    allBtn.textContent = 'All';
+    allBtn.onclick = () => { aanvulSets.clear(); showSpeakFilter(); startSpeakSession(); };
+    sf.appendChild(allBtn);
+    allSets.forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'speak-filter-btn' + (aanvulSets.has(s) ? ' active' : '');
+      btn.textContent = 'Set ' + s;
+      btn.onclick = () => {
+        if (aanvulSets.has(s)) aanvulSets.delete(s); else aanvulSets.add(s);
+        showSpeakFilter(); startSpeakSession();
+      };
+      sf.appendChild(btn);
+    });
+  } else {
+    // Topic filter for say/write
+    const allBtn = document.createElement('button');
+    allBtn.className = 'speak-filter-btn' + (speakTopics.size === 0 ? ' active' : '');
+    allBtn.textContent = 'All';
+    allBtn.onclick = () => { speakTopics.clear(); showSpeakFilter(); startSpeakSession(); };
+    sf.appendChild(allBtn);
+    getAllSpeakTopics().forEach(t => {
+      const btn = document.createElement('button');
+      btn.className = 'speak-filter-btn' + (speakTopics.has(t) ? ' active' : '');
+      btn.textContent = TOPIC_LABELS[t] || t;
+      btn.onclick = () => {
+        if (speakTopics.has(t)) speakTopics.delete(t); else speakTopics.add(t);
+        showSpeakFilter(); startSpeakSession();
+      };
+      sf.appendChild(btn);
+    });
+  }
+}
+
+function getAanvulFiltered() {
+  if (aanvulSets.size === 0) return AANVUL_CARDS;
+  return AANVUL_CARDS.filter(c => aanvulSets.has(c[2]));
 }
 
 function startSpeakSession() {
-  const filtered = getSpeakFiltered();
+  const filtered = speakMode === 'aanvul' ? getAanvulFiltered() : getSpeakFiltered();
   deck = shuffle(filtered.map(c => [...c]));
   sessionTotal = deck.length;
   current = 0; known = 0; again = []; speakAnswerVisible = false;
@@ -2860,6 +3263,7 @@ function showSpeakCard() {
     showDone(); return;
   }
   if (speakMode === 'write') { showSpeakWriteCard(); return; }
+  if (speakMode === 'aanvul') { showAanvulCard(); return; }
   const c = deck[current]; speakAnswerVisible = false;
   const topic = TOPIC_LABELS[c[3]] || c[3];
   document.getElementById('mainArea').innerHTML = `
@@ -2924,6 +3328,58 @@ function skipSpeakWrite() {
   inp.disabled = true; inp.classList.add('wrong'); ans.classList.add('show-wrong');
   ans.innerHTML = c[2] + ' ' + ttsBtn(c[2].replace(/[.!?]$/,''));
   again.push(c); recordWrong(c, true);
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showSpeakCard()">Next</button>';
+  updateStats();
+}
+
+// ---- AANVULZINNEN ----
+function showAanvulCard() {
+  const c = deck[current];
+  const setLabel = 'Set ' + c[2];
+  document.getElementById('mainArea').innerHTML = `
+    <div class="type-card">
+      <div class="card-tag">${setLabel}</div>
+      <div class="type-word" style="font-size:22px;line-height:1.5">${c[0]}</div>
+      <input type="text" class="type-input" id="aanvulInput" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Complete the sentence..." />
+      <div class="type-answer" id="aanvulAnswer"></div>
+    </div>
+    <div class="buttons" id="buttons">
+      <button class="btn btn-show" onclick="checkAanvul()">Check</button>
+      <button class="btn btn-skip" onclick="skipAanvul()">Show answer</button>
+    </div>`;
+  setTimeout(() => {
+    const inp = document.getElementById('aanvulInput');
+    if (inp) { inp.focus(); inp.onkeydown = e => { if (e.key==='Enter'){e.preventDefault(); if(!inp.disabled)checkAanvul();else{current++;showSpeakCard();}} }; }
+  }, 50);
+  updateStats();
+}
+
+function checkAanvul() {
+  const c = deck[current];
+  const expected = c[1].replace(/[.!?]$/,'');
+  const inp = document.getElementById('aanvulInput');
+  const ans = document.getElementById('aanvulAnswer');
+  if (inp.disabled) return;
+  inp.disabled = true;
+  if (normSentence(inp.value) === normSentence(expected)) {
+    inp.classList.add('correct'); ans.textContent = 'Correct!';
+    known++; recordCorrect(c, 'aanvul');
+    updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 1800); return;
+  }
+  inp.classList.add('wrong'); ans.classList.add('show-wrong');
+  ans.textContent = c[1];
+  again.push(c); recordWrong(c, 'aanvul');
+  document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showSpeakCard()">Next</button>';
+  updateStats();
+}
+
+function skipAanvul() {
+  const c = deck[current];
+  const inp = document.getElementById('aanvulInput');
+  const ans = document.getElementById('aanvulAnswer');
+  inp.disabled = true; inp.classList.add('wrong'); ans.classList.add('show-wrong');
+  ans.textContent = c[1];
+  again.push(c); recordWrong(c, 'aanvul');
   document.getElementById('buttons').innerHTML = '<button class="btn btn-next" onclick="current++;showSpeakCard()">Next</button>';
   updateStats();
 }
@@ -3074,7 +3530,7 @@ if (syncUser || localStorage.getItem('dutch-a1-skipped')) {
 
 document.addEventListener('keydown', e => {
   if (mode === 'type' || mode === 'quiz' || mode === 'match' || mode === 'build' || mode === 'write' || mode === 'fill') return;
-  if (mode === 'speak' && speakMode === 'write') return;
+  if (mode === 'speak' && (speakMode === 'write' || speakMode === 'aanvul')) return;
   if (mode === 'learn') {
     if (e.key === '1' || e.key === 'ArrowLeft') markAgain();
     if (e.key === '2' || e.key === 'ArrowRight') markGood();
