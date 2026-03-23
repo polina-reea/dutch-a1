@@ -3371,20 +3371,29 @@ function getAIKey() { return localStorage.getItem('dutch-a1-ai-key') || ''; }
 
 async function aiCheckAnswer(sentence, userAnswer, bookAnswer) {
   const key = getAIKey();
-  if (!key) return null; // no key = skip AI check
+  if (!key) return null;
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20241022',
-        max_tokens: 10,
-        messages: [{ role: 'user', content: `Dutch A1 sentence completion. The sentence is: "${sentence}" The book answer is: "${bookAnswer}". The student answered: "${userAnswer}". Is the student's answer a grammatically and logically valid completion? Reply only YES or NO.` }]
+        max_tokens: 150,
+        messages: [{ role: 'user', content: `Dutch A1 sentence completion exercise. Sentence: "${sentence}" Book answer: "${bookAnswer}". Student answered: "${userAnswer}".
+
+Is the student's answer a grammatically and logically valid completion?
+
+Reply in this exact format:
+YES or NO
+Then on a new line, a short explanation in Russian (1-2 sentences) why the answer is correct or incorrect, and what would be better if incorrect.` }]
       })
     });
     const data = await res.json();
-    const text = data.content?.[0]?.text?.trim().toUpperCase() || '';
-    return text.startsWith('YES');
+    const text = data.content?.[0]?.text?.trim() || '';
+    const lines = text.split('\n');
+    const isCorrect = lines[0].toUpperCase().startsWith('YES');
+    const explanation = lines.slice(1).join(' ').trim();
+    return { ok: isCorrect, explanation };
   } catch(e) { return null; }
 }
 
@@ -3407,16 +3416,24 @@ async function checkAanvul() {
   const aiKey = getAIKey();
   if (aiKey && inp.value.trim().length > 0) {
     ans.textContent = 'Checking...'; ans.style.color = 'var(--text2)';
-    const ok = await aiCheckAnswer(c[0], inp.value.trim(), c[1]);
-    if (ok === true) {
-      inp.classList.add('correct'); ans.textContent = 'Correct! (book: ' + c[1] + ')'; ans.style.color = '';
+    const result = await aiCheckAnswer(c[0], inp.value.trim(), c[1]);
+    if (result && result.ok) {
+      inp.classList.add('correct'); ans.style.color = '';
+      ans.innerHTML = '<span style="color:var(--green)">Correct!</span> (book: ' + c[1] + ')' + (result.explanation ? '<br><span style="font-size:13px;color:var(--text2)">' + result.explanation + '</span>' : '');
       known++; recordCorrect(c, 'aanvul');
-      updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 2200); return;
+      updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 2500); return;
+    }
+    if (result && !result.ok) {
+      inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.style.color = '';
+      ans.innerHTML = '<span style="color:var(--red)">' + c[1] + '</span>' + (result.explanation ? '<br><span style="font-size:13px;color:var(--text2);font-style:italic">' + result.explanation + '</span>' : '');
+      again.push(c); recordWrong(c, 'aanvul');
+      document.getElementById('buttons').innerHTML = '<button class="btn btn-good" onclick="acceptAanvul()">Accept my answer</button><button class="btn btn-next" onclick="current++;showSpeakCard()" style="margin-top:8px">Next</button>';
+      updateStats(); return;
     }
     ans.style.color = '';
   }
 
-  // Wrong
+  // Fallback (no AI key or error)
   inp.classList.add('wrong'); ans.classList.add('show-wrong');
   ans.textContent = c[1];
   again.push(c); recordWrong(c, 'aanvul');
