@@ -270,6 +270,35 @@
 
   /* KNS top filter (outside drawer) */
   .kns-top-filter { display: none; width: 100%; max-width: 520px; margin-bottom: 16px; }
+
+  /* Lezen (Reading) */
+  .lezen-filter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .lezen-filter-btn { padding: 7px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border); background: var(--surface); color: var(--text2); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .lezen-filter-btn.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  .lezen-text-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; font-size: 15px; line-height: 1.7; color: var(--text); }
+  .lezen-text-num { font-size: 12px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .lezen-q-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 10px; }
+  .lezen-q-text { font-size: 15px; font-weight: 600; margin-bottom: 12px; line-height: 1.4; }
+  .lezen-options { display: flex; flex-direction: column; gap: 8px; }
+  .lezen-opt { padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 14px; cursor: pointer; font-family: inherit; text-align: left; transition: all 0.2s; font-weight: 500; }
+  .lezen-opt:active { transform: scale(0.98); }
+  .lezen-opt.selected { border-color: var(--purple-strong); background: var(--purple-bg); color: var(--purple-strong); }
+  .lezen-opt.correct { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+  .lezen-opt.wrong { border-color: var(--red); background: var(--red-bg); color: var(--red); opacity: 0.7; }
+  .lezen-opt.correct-reveal { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+  .lezen-opt[disabled] { cursor: default; }
+  .lezen-next { margin-top: 16px; width: 100%; padding: 16px; border: none; border-radius: var(--radius); background: var(--purple-strong); color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.2s; }
+  .lezen-next:active { transform: scale(0.97); filter: brightness(0.9); }
+  .lezen-timer { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--text2); margin-bottom: 12px; }
+  .lezen-timer.warning { color: var(--red); }
+  .lezen-score { text-align: center; padding: 40px 20px; }
+  .lezen-score-num { font-size: 56px; font-weight: 700; color: var(--accent); margin-bottom: 8px; }
+  .lezen-score-label { font-size: 16px; color: var(--text2); margin-bottom: 4px; }
+  .lezen-score-pass { font-size: 18px; font-weight: 600; margin-top: 12px; }
+  .lezen-progress-dots { display: flex; gap: 6px; margin-bottom: 16px; justify-content: center; }
+  .lezen-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--surface2); }
+  .lezen-dot.done { background: var(--green); }
+  .lezen-dot.current { background: var(--purple-strong); }
 </style>
 </head>
 <body>
@@ -331,6 +360,7 @@
 <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 <div class="kns-top-filter" id="speakTopFilter"></div>
 <div class="kns-top-filter" id="knsTopFilter"></div>
+<div class="kns-top-filter" id="lezenTopFilter"></div>
 <div id="mainArea" style="width:100%;max-width:520px;"></div>
 
 <nav class="tab-bar" id="tabBar">
@@ -349,6 +379,10 @@
   <button class="tab" id="tabKns" onclick="switchTab('kns')">
     <span class="tab-emoji">🖼</span>
     <span class="tab-label">KNS</span>
+  </button>
+  <button class="tab" id="tabLezen" onclick="switchTab('lezen')">
+    <span class="tab-emoji">📄</span>
+    <span class="tab-label">Lezen</span>
   </button>
   <button class="tab" id="tabStats" onclick="switchTab('stats')">
     <span class="tab-emoji">📊</span>
@@ -2316,6 +2350,291 @@ const KNS_CARDS = [["1","In welk deel van de wereld ligt Nederland?","Europa","Z
 ["99","Krijgt u in Nederland een uitkering of moet uw partner voor u zorgen?","Ik krijg een uitkering","Mijn partner moet voor mij zorgen","b","werk"],
 ["100","Is het leven in Nederland duur of goedkoop?","duur","goedkoop","a","werk"]];
 
+const LEZEN_DATA = [
+  {
+    test: 1,
+    texts: [
+      {
+        text: "Het is tien uur in de avond. Kees zit in zijn huis op de bank. Hij kijkt naar de televisie. Het programma is saai en hij valt in slaap. Dan hoort Kees zijn naam. Hij doet langzaam zijn ogen open. Hij ziet dat zijn vrouw van Kees de televisie uitdoet. Hij krijgt een zoen van haar. De vrouw zegt: 'Kom mee naar bed lieverd, want slapen doe je in de slaapkamer en niet op de bank bij de televisie.'",
+        questions: [
+          { q: "Wie doet de televisie uit?", options: ["Kees.", "De vrouw.", "Het programma."], correct: 1 },
+          { q: "Waar gaan Kees en zijn vrouw slapen?", options: ["In de slaapkamer.", "Op de bank.", "In de avond."], correct: 0 }
+        ]
+      },
+      {
+        text: "Maria is ongeveer zeventig jaar. Zij heeft geen kinderen. Ze is niet getrouwd. Zij woont in haar kleine huis samen met twee varkens. Het huis heeft een klein tuintje. Soms zijn de varkens in de tuin, maar heel vaak zijn ze binnen. 's Nachts slapen ze in de woonkamer op de bank. Maria en de twee varkens zijn samen heel gelukkig. Maar de buren van Maria zijn niet zo blij met de varkens. Zij vinden dat de varkens vies zijn.",
+        questions: [
+          { q: "Hoe oud is Maria ongeveer?", options: ["70 jaar.", "17 jaar.", "2 jaar.", "77 jaar."], correct: 0 },
+          { q: "Waar slapen de varkens?", options: ["In de tuin.", "In de woonkamer.", "De buren."], correct: 1 }
+        ]
+      },
+      {
+        text: "In het gras lopen drie\u00ebntwintig mannen. Zij spelen met een bal. Elf personen dragen blauwe kleren. Elf andere mensen hebben oranje kleren aan. Een man loopt in een zwart T-shirt en in een korte zwarte broek. Deze man heeft een fluitje in zijn hand. Soms blaast hij op zijn fluit. Dan stopt iedereen met spelen. Maar daarna gaan de drie\u00ebntwintig mannen weer spelen met de bal. Veel mensen kijken naar het spel. Dit spel heet voetbal.",
+        questions: [
+          { q: "Hoeveel mannen lopen in blauwe kleren?", options: ["23.", "11.", "1."], correct: 1 },
+          { q: "Wat is de naam van dit spel?", options: ["Oranje.", "Zwart.", "Blauw.", "Voetbal."], correct: 3 }
+        ]
+      },
+      {
+        text: "Een muis is een heel klein dier. In bijna ieder huis loopt soms een muis. Een muis zoekt altijd iets om te eten. Kaas of brood is heel lekker voor een muis. En in elk huis is er brood of kaas. Wie is er bang voor een muis? De kat is niet bang voor een muis. De muis en de kat lopen allebei snel door het huis. De kat wil de muis graag vangen en opeten. Maar vaak is de muis sneller dan de kat.",
+        questions: [
+          { q: "Wie is vaak sneller?", options: ["Kat.", "Muis.", "Kaas."], correct: 1 },
+          { q: "Wat wil de kat met de muis doen?", options: ["Opeten.", "Bang.", "Snel.", "Lekker."], correct: 0 }
+        ]
+      },
+      {
+        text: "Ik heb veel pijn in mijn voet. Dus ik ga naar de dokter. De dokter zegt: 'Goedemorgen. Wat is het probleem?' Ik zeg: 'Dokter, ik heb pijn.' De dokter vraagt: 'Waar heeft u pijn?' Dan zeg ik dat ik pijn in mijn linkervoet heb. De dokter zegt: 'Doe uw linkerschoen en linkersok uit.' De dokter kijkt naar mijn linkervoet. Ik doe mijn linkerschoen en mijn linkersok uit. Ik doe mijn voet en ik schreeuw. De dokter stuurt mij naar het ziekenhuis.",
+        questions: [
+          { q: "Waar heb ik pijn?", options: ["Bij de dokter.", "In mijn linkerschoen.", "In mijn linkersok.", "In mijn linkervoet."], correct: 3 },
+          { q: "Wat doe ik, als de dokter mijn voet pakt?", options: ["Ik kijk.", "Ik schreeuw.", "Ik zeg."], correct: 1 }
+        ]
+      },
+      {
+        text: "De postbode brengt de post bij jou aan huis. Vaak heeft de postbode brieven of kaarten. Soms heeft de postbode een pakketje. De postbode loopt veel buiten. Hij ziet misschien jouw naam en jouw adres. Dan geeft hij de post aan jou. De postbode leest het adres. Hij loopt van huis naar huis. Op een brief of op een pakje staat een adres. De postbode maakt veel mensen blij, want post krijgen is bijna altijd leuk!",
+        questions: [
+          { q: "Waar loopt de postbode?", options: ["Brieven.", "Kaarten.", "Buiten."], correct: 2 },
+          { q: "Hoe reageren mensen op de post en op de postbode?", options: ["Blij.", "Misschien.", "Vaak.", "Altijd."], correct: 0 }
+        ]
+      }
+    ]
+  },
+  {
+    test: 2,
+    texts: [
+      {
+        text: "Ik schrijf een brief aan mijn dochter. Zij woont in Rusland. Ik woon in Nederland. Meestal hebben wij contact via e-mail. Maar soms schrijf ik een brief op papier. Ik doe de brief in een envelop. Op de envelop plak ik een postzegel. Ik doe de brief in de brievenbus. De postbode brengt mijn brief naar Rusland. Dat duurt een week. Maar een brief is leuker dan e-mail.",
+        questions: [
+          { q: "Wie woont er in Rusland?", options: ["Ik.", "De postbode.", "Mijn dochter."], correct: 2 },
+          { q: "Wat plak ik op de envelop?", options: ["Een brief.", "Een brievenbus.", "Een postzegel."], correct: 2 }
+        ]
+      },
+      {
+        text: "De verpleegster werkt in het ziekenhuis. Zij helpt de dokter. Ze praat met de pati\u00ebnten eten en drinken. En ze geeft ook medicijnen. De verpleegster controleert de pati\u00ebnten. Ze loopt veel in de gangen van het ziekenhuis. Ze loopt van het ene bed naar het andere bed. Zij maakt alle pati\u00ebnten bij. De verpleegster is altijd druk. Zij werkt hard. Zij werkt soms overdag, soms 's nachts.",
+        questions: [
+          { q: "Waar werkt een verpleegster?", options: ["Overdag.", "In de nacht.", "Met medicijnen.", "In het ziekenhuis."], correct: 3 },
+          { q: "Wat geeft een verpleegster aan de pati\u00ebnten?", options: ["Gangen.", "Bedden.", "Medicijnen."], correct: 2 }
+        ]
+      },
+      {
+        text: "Banken hebben veel geld. Veel mensen geven hun geld aan de bank. De bank bewaart het geld. In de bank is het geld veilig. In jouw huis kan een dief het geld niet komen. Hij kan jouw geld pakken. De bank geeft jou ook rente. Bij een bank kan een dief het geld niet pakken. De bank geeft jou honderd euro naar de bank. Na \u00e9\u00e9n jaar geeft de bank jou 100 euro rente. Jij geeft 100 euro en je krijgt 103 euro terug.",
+        questions: [
+          { q: "Wat doet een bank met het geld van mensen?", options: ["Bewaren.", "Geld pakken.", "Geld geven."], correct: 0 },
+          { q: "Wat geeft de bank aan jou, als jij geld bij de bank brengt?", options: ["Een dief.", "Rente.", "Veel mensen.", "100 euro."], correct: 1 }
+        ]
+      },
+      {
+        text: "In Nederland kun je veel fruit kopen. Fruit is lekker en gezond! In het voorjaar zijn er aardbeien. Aardbeien zijn klein en rood. Na de zomer zijn er in Nederland appels en peren. In Nederland is ook veel fruit uit het buitenland. Druiven en sinaasappels komen uit Zuid-Europa. Bananen komen uit Afrika of uit Amerika. Bananen zijn er in de zomer en in de winter. Bananen kun je altijd kopen!",
+        questions: [
+          { q: "Wanneer zijn er aardbeien in Nederland?", options: ["Na de zomer.", "Altijd.", "In de lente."], correct: 2 },
+          { q: "Waar komen de druiven vandaan?", options: ["Uit Amerika.", "Uit Nederland.", "Uit Zuid-Europa.", "Uit Azi\u00eb, Afrika of uit Amerika."], correct: 2 }
+        ]
+      },
+      {
+        text: "In huis moet ik altijd alles schoonmaken. Bij mij thuis wordt alles altijd vies. De woonkamer en de slaapkamer worden vies. De ramen en de deuren worden vies. Ook de badkamer en de wc worden vies. De vloer wordt ook vies. De vloer maak ik ook schoon. Ik vind schoonmaken niet leuk. Maar een vies huis is ook niet leuk. Ik heb liever een schoon huis dan een vies huis.",
+        questions: [
+          { q: "Wat moet ik altijd schoonmaken in mijn huis?", options: ["De woonkamer en de slaapkamer.", "De ramen en de deuren.", "De badkamer en de wc.", "Alles."], correct: 3 },
+          { q: "Wat vind ik leuk?", options: ["Een schoon huis.", "Handschoenen.", "De vloer."], correct: 0 }
+        ]
+      },
+      {
+        text: "In de winter heb ik een muts op mijn hoofd. In Nederland is er in de winter wind en regen of sneeuw. In januari en februari is de temperatuur vaak onder nul. Dan doe ik mijn muts op, want ik wil geen koude oren. Koude handen heb ik ook niet in de winter. Ik doe warme handschoenen aan. Als ik warm ben, kan ik ook lachen. Koud zijn vind ik helemaal niet leuk.",
+        questions: [
+          { q: "Wat doe ik in de winter aan mijn handen?", options: ["Sneeuw.", "Een warme muts.", "Handschoenen."], correct: 2 },
+          { q: "Wat kan ik, als ik lekker warm ben?", options: ["Muts.", "Koude handen.", "Lachen.", "Leuk."], correct: 2 }
+        ]
+      }
+    ]
+  },
+  {
+    test: 3,
+    texts: [
+      {
+        text: "Het regent vaak in Nederland. In de zomer, in de winter, in de lente en in de herfst. Maar ik heb een mooie paraplu. Soms loop ik me mijn vriend in de regen. Mijn paraplu is groot en sterk en mijn vriend is ook groot en sterk. Wij lopen samen in de regen onder \u00e9\u00e9n paraplu. Wij worden niet nat. Wij blijven lekker droog. Met onze paraplu is de regen geen probleem, maar leuk en romantisch!",
+        questions: [
+          { q: "Met wie loop ik soms door de regen?", options: ["Met \u00e9\u00e9n paraplu.", "Met mijn vriend.", "Met de regen."], correct: 1 },
+          { q: "Hoeveel mensen lopen onder mijn paraplu?", options: ["\u00c9\u00e9n.", "Twee.", "Geen."], correct: 1 }
+        ]
+      },
+      {
+        text: "Mijn vriendin en ik houden van dansen. Wij gaan vaak naar een discotheek. Meestal is dat in het weekend. Op zaterdagdag is het gezellig en druk in de discotheek. Er komen dan veel mensen. Wij zijn jong en willen lekker dansen. Soms blijven we in de discotheek tot vier uur 's ochtends. We komen dan heel moe thuis. En de volgende dag slapen we heel lang. Dat is ook lekker.",
+        questions: [
+          { q: "Waar gaan mijn vriendin en ik in het weekend vaak naartoe?", options: ["Naar het weekend.", "Thuis.", "Naar een discotheek.", "Zaterdag."], correct: 2 },
+          { q: "Wanneer komen er veel mensen in de discotheek?", options: ["Zaterdag.", "Meestal.", "Vaak."], correct: 0 }
+        ]
+      },
+      {
+        text: "Mevrouw Klein loopt met een kar in de supermarkt. Er liggen al veel dingen in de kar. Ze heeft een man en vier kinderen. Iedereen moet elke dag eten en drinken. Een groot gezin heeft veel nodig. Ze zoekt de aardappelen. Waar kan ze de aardappelen vinden. Ze ziet een medewerker van de supermarkt. Ze vraagt hem waar de aardappelen zijn. Dan zegt de medewerker: 'Sorry mevrouw, de aardappelen zijn op. Morgen hebben we weer nieuwe aardappelen.'",
+        questions: [
+          { q: "Waarmee loopt mevrouw Klein door de supermarkt?", options: ["Met haar man en haar vier kinderen.", "Met een kar.", "Met een medewerker."], correct: 1 },
+          { q: "Aan wie vraagt mevrouw Klein waar de aardappelen liggen?", options: ["Nergens.", "Aan haar man.", "Morgen.", "Aan een medewerker."], correct: 3 }
+        ]
+      },
+      {
+        text: "In een bioscoop kijken mensen naar een film. In een grote bioscoop zitten soms wel een paar honderd mensen. Zij zien allemaal dezelfde film. Met veel mensen kijken is gezellig. De meeste bioscopen staan in het centrum van een stad. Thuis kun je ook alleen naar een film kijken. Of je kijkt samen met je vriend of vriendin. Alleen kijken is soms ook heerlijk. Je kunt een film huren in een videotheek. Thuis kijken is rustig en goedkoop.",
+        questions: [
+          { q: "Waar kijken veel mensen naar dezelfde film?", options: ["In een stad.", "Thuis.", "In een bioscoop."], correct: 2 },
+          { q: "Waar kun je een film huren?", options: ["Videotheek.", "Bioscoop.", "Rustig en goedkoop.", "Gezellig."], correct: 0 }
+        ]
+      },
+      {
+        text: "Kees zit op school. Hij leert lezen. Hij is negen jaar. Lezen is voor hem moeilijk. Kees leest niet veel in zijn boek. Hij kijkt liever naar buiten. Dan wil hij een buiten voetballen. Hij is klein, maar later is hij groot. Dan denkt hij aan het grote stadion en aan het publiek. Alle mensen roepen zijn naam: Kees! Kees! Vanmiddag aan half vier is Kees vrij. Dan gaat hij lekker voetballen met zijn vrienden.",
+        questions: [
+          { q: "Wat doet Kees het liefst?", options: ["Voetballen.", "Lezen.", "Zitten.", "Denken."], correct: 0 },
+          { q: "Wat leert hij op school?", options: ["Moeilijk.", "Naar buiten kijken.", "Lezen."], correct: 2 }
+        ]
+      },
+      {
+        text: "Henk heeft een mooi beroep. Hij is postbode. Hij loopt door de straten. Hij heeft een tas vol met brieven. Dan pakt Henk een envelop uit zijn tas en hij loopt naar een huis. Hij doet de brief door de brievenbus. Het is niet altijd mooi weer. Vijf dagen per week loopt Henk buiten en dat vindt hij belangrijk. Henk houdt van zijn werk. Hij werkt buiten en dat vindt hij belangrijk. Hij vindt het niet leuk.",
+        questions: [
+          { q: "Welk beroep heeft Henk?", options: ["Mooi weer.", "Naar buiten lopen.", "Postbode."], correct: 2 },
+          { q: "Wat vindt Henk van zijn werk?", options: ["Hij vindt het niet leuk.", "Hij pakt een envelop uit zijn tas.", "Hij vindt het leuk.", "Hij loopt van huis naar huis."], correct: 2 }
+        ]
+      }
+    ]
+  },
+  {
+    test: 4,
+    texts: [
+      {
+        text: "In een museum kun je speciale dingen zien. Schilderijen bijvoorbeeld. Iedereen kent Van Gogh en Rembrandt. Nederland heeft beroemde schilders. Van Gogh leefde 150 jaar geleden. Rembrandt leefde vierhonderd jaar geleden. De schilders zijn nu dood. Maar hun schilderijen hangen in een museum. Mensen uit de hele wereld komen naar Amsterdam. Zij komen om te kijken naar de schilderijen van Van Gogh en van Rembrandt.",
+        questions: [
+          { q: "Wat weet je van Rembrandt en Van Gogh?", options: ["Ze zijn dood.", "Zij schilderen in een museum.", "Zij komen naar Amsterdam."], correct: 0 },
+          { q: "Hoeveel jaar geleden leefde Rembrandt?", options: ["400 jaar geleden.", "150 jaar geleden.", "In Amsterdam."], correct: 0 }
+        ]
+      },
+      {
+        text: "Mijn vrouw houdt van winkelen. Ze gaat graag naar de stad. Ze gaat het liefst met haar zus. Zij kopen dan tassen, jassen, truien, shirts en broeken. En laarzen of schoenen. Heel mooi allemaal. En alles is altijd heel goedkoop. Zij zeggen altijd dat alles een aanbieding is. Dat is fijn. Een aanbieding is nooit duur. Ik ben altijd heel blij met mijn vrouw. Ik zie haar graag in haar mooie kleren. En ik weet niet wat duur of goedkoop is.",
+        questions: [
+          { q: "Met wie gaat mijn vrouw het liefst winkelen?", options: ["Met mij.", "Haar zus.", "Aanbieding.", "In de stad."], correct: 1 },
+          { q: "Waar gaat mijn vrouw graag naar toe?", options: ["Naar de stad.", "Naar een aanbieding.", "Naar mijn zus."], correct: 0 }
+        ]
+      },
+      {
+        text: "In mijn keuken ben ik zes dagen per week. Daar maak ik het eten klaar voor mijn vrouw en mijn zes kinderen. Iedereen gaat naar school. En mijn vrouw is lerares, dus zij werkt op school. Mijn kinderen moeten naar school, omdat zij kinderen zijn. Op zondag ben ik vrij. Dan lig ik in de woonkamer op de bank. Mijn lieve vrouw en mijn lieve kinderen werken dan in de keuken. Zij maken altijd iets lekkers voor mij en voor zichzelf.",
+        questions: [
+          { q: "Waar werkt mijn vrouw?", options: ["In de keuken.", "Op de bank.", "Op school."], correct: 2 },
+          { q: "Op welke dag ben ik vrij?", options: ["Zondag.", "Zes dagen.", "Zeven dagen.", "Maandag."], correct: 0 }
+        ]
+      },
+      {
+        text: "Karel heeft geen contant geld in zijn portemonnee. Hij wil pinnen. Hij zoekt op straat naar een geldautomaat. Hij hoeft niet lang te zoeken. Hij doet zijn bankpas in de automaat. De automaat wil weten hoeveel euro's Karel wil hebben. Karel wil honderd euro's hebben uit de automaat. De automaat geeft eerst de bankpas terug. Daarna geeft de automaat ook honderd euro's. Karel stopt de euro's in zijn portemonnee. Nu heeft hij ook contant geld.",
+        questions: [
+          { q: "Wat wil Karel hebben?", options: ["Geld.", "Bankpas.", "Portemonnee."], correct: 0 },
+          { q: "Waar zoekt Karel naar als hij op straat loopt?", options: ["Geld.", "Pinautomaat.", "Portemonnee.", "Pinpas."], correct: 1 }
+        ]
+      },
+      {
+        text: "Sara zoekt een ander huis. Ze woont nu met haar vriend en met twee katten. Ze wonen in een oud huis in de grote stad. Het huis heeft twee kamers. Maar Sara is zwanger. Ze krijgt een kindje over zes maanden. Dan wil ze in een ander huis met een tuin. Ze zoekt in kranten en op internet, maar het is niet makkelijk. Huizen zijn duur. Sara zoekt in kranten en op internet, maar het is niet makkelijk.",
+        questions: [
+          { q: "Wie wonen in het oude huis van Sara?", options: ["Sara, haar vriend en een kindje van zes maanden.", "Sara, twee katten en een kindje van 2 maanden en twee katten.", "Sara, haar vriend, een kindje van 2 maanden en twee katten.", "Sara, twee katten en haar vriend."], correct: 3 },
+          { q: "Waar zoekt Sara een ander huis?", options: ["In de tuin.", "In de krant en op internet.", "In de grote stad."], correct: 1 }
+        ]
+      },
+      {
+        text: "Ik heet Mariam en ik kom uit Iran. Ik woon nu nog niet in Nederland maar in Iran. Mijn man woont in Nederland. Ik wil graag bij hem wonen. Dan kunnen we ook samen kinderen krijgen. En wij kunnen in vrijheid leven. Dat is mijn mening. Ik moet eerst examen doen op de Nederlandse ambassade. Daarna krijg ik een visum. En dan ga ik snel naar mijn lieve man in het koude Nederland.",
+        questions: [
+          { q: "Wat krijgt Mariam na haar examen?", options: ["Kinderen.", "Visum.", "Vrijheid."], correct: 1 },
+          { q: "Waar woont Mariam?", options: ["Nederland.", "Iran.", "Bij haar man.", "Bij haar man en haar kinderen."], correct: 1 }
+        ]
+      }
+    ]
+  },
+  {
+    test: 5,
+    texts: [
+      {
+        text: "Mevrouw Pot en haar man gaan de woonkamer verven. De muren zijn grijs, maar dat vinden ze niet mooi. Ze willen alles wit verven. Dat is frisser en moderner. Gisteren hebben ze kwasten en verf gekocht. Alle meubels staan in de gang en in de keuken. De woonkamer is helemaal leeg. Meneer en mevrouw Pot beginnen over een half uurtje, maar eerst gaan ze een kopje koffie drinken. En ze eten ook nog een stuk appeltaart!",
+        questions: [
+          { q: "Wat hebben meneer en mevrouw Pot gekocht?", options: ["Meubels.", "Verf.", "Appeltaart."], correct: 1 },
+          { q: "Welke kamer gaan zij verven?", options: ["De woonkamer.", "De gang.", "De keuken."], correct: 0 }
+        ]
+      },
+      {
+        text: "Mijn man maakt vandaag voor mij een salade. Dit is zijn recept. Hij wast de tomaten en een komkommer. Hij doet de sla in een bak. Daarna snijdt hij tomaten en de komkommer in stukjes met een groot mes. Hij doet de tomaten en de komkommer ook in de bak. Dan doet hij er stukjes paprika en een gekookt ei bij. Als alles in de bak zit, doet hij zout, peper, azijn en olie bij de sla. De salade is klaar. Ik kan eten. Lekker!",
+        questions: [
+          { q: "Wat maakt mijn man vandaag?", options: ["Tomaten en komkommer.", "Tomaten, komkommer, ei en paprika.", "Salade.", "Een bak met zout, peper, azijn en olie."], correct: 2 },
+          { q: "Waar doet hij de sla in?", options: ["Recept.", "Stukjes.", "Bak."], correct: 2 }
+        ]
+      },
+      {
+        text: "Meneer en mevrouw Van Dam doen boodschappen. Ze hebben veel dingen nodig uit de supermarkt. Daarom zijn ze met de auto. Het is druk op het parkeerterrein bij de winkel. Maar ze vinden een parkeerplaats. Na twintig minuten komen ze met een kar vol met boodschappen terug bij de auto. Meneer Van Dam zet alles in de auto. Hij rijdt weg. Boem! Hij rijdt tegen de lege boodschappenkar. 'Oh, wat ben jij dom!', zegt mevrouw Van Dam.",
+        questions: [
+          { q: "Hoe zijn meneer en mevrouw Van Dam naar de supermarkt gegaan?", options: ["Met een boodschappenkar.", "Met een auto.", "Met boodschappen."], correct: 1 },
+          { q: "Wat halen zij in de supermarkt?", options: ["Een parkeerplaats.", "Een lege boodschappenkar.", "Veel dingen.", "Een auto."], correct: 2 }
+        ]
+      },
+      {
+        text: "Jantje zit een pak koekjes op tafel liggen. Het pak is open. Jantje kijkt goed naar het pak. Een paar koekjes zijn al opgegeten. Dat heeft zijn vader natuurlijk gedaan. De vader van Jantje houdt heel veel van koekjes. Jantje wil ook een koekje eten. Hij neemt er \u00e9\u00e9n uit het pak en nog \u00e9\u00e9n, en nog \u00e9\u00e9n, en nog \u00e9\u00e9n ... Dan heeft hij genoeg gegeten. Jantje heeft nu buikpijn.",
+        questions: [
+          { q: "Wie eet de meeste koekjes?", options: ["Jantje.", "De vader van Jantje.", "Buikpijn."], correct: 0 },
+          { q: "Waar liggen de koekjes?", options: ["Op tafel.", "Heel veel koekjes.", "Naar het pak.", "Uit het pak."], correct: 0 }
+        ]
+      },
+      {
+        text: "Ik kijk naar buiten en ik zie mensen. Ik ken ze niet. Wie zijn de mensen? Ze zijn met een heel grote auto. De auto gaat open en dan zie ik veel meubels. Alle meubels komen uit de auto en de mensen dragen de meubels naar binnen in het lege huis. Ik ga ze met hen kennismaken. Ik heb ze een bos bloemen brengen. Welkom in onze buurt!",
+        questions: [
+          { q: "Wat zie ik lopen in mijn straat?", options: ["Een hele grote auto.", "Nieuwe buren.", "Veel meubels.", "Een bos bloemen."], correct: 1 },
+          { q: "Wat staat er in de grote auto?", options: ["Meubels.", "Bloemen.", "Een straat."], correct: 0 }
+        ]
+      },
+      {
+        text: "Elke ochtend moet ik om half acht de deur uit. Ik stap op mijn fiets en ik rijd naar het station. Ik fiets ongeveer tien minuten. Daar stap ik in de trein naar Amsterdam. In de trein zitten veel mensen. Vaak moet ik staan in de trein. De treinreis duurt een half uur. In Amsterdam stap ik uit en loop ik van het station naar mijn kantoor. Dat is tien minuten lopen. Zo reis ik elke dag vijftig minuten naar mijn werk.",
+        questions: [
+          { q: "Hoe lang moet ik reizen naar mijn werk?", options: ["50 minuten.", "Een half uur.", "15 minuten."], correct: 0 },
+          { q: "Waar ga ik naar toe op mijn fiets?", options: ["Naar mijn werk.", "Naar Amsterdam.", "Naar mijn kantoor.", "Naar het station."], correct: 3 }
+        ]
+      }
+    ]
+  },
+  {
+    test: 6,
+    texts: [
+      {
+        text: "Op school leer je rekenen en lezen en schrijven. Je moet op school goed luisteren naar de leraar. De les duurt de hele dag, vijf dagen per week. Het leven op school is niet altijd leuk. Vaak is het druk: je moet veel doen en er zijn heel veel mensen. Maar gelukkig is er ook heel veel vakantie. In de vakantie is alles: rustig. En in de vakantie hoef je niet naar de leraar te luisteren. Heerlijk!",
+        questions: [
+          { q: "Waar leer je rekenen?", options: ["Vijf dagen per week.", "In de vakantie.", "Op school."], correct: 2 },
+          { q: "Naar wie moet je op school goed luisteren?", options: ["Naar de leraar.", "Naar veel mensen.", "Naar de school."], correct: 0 }
+        ]
+      },
+      {
+        text: "Op maandag is het wasdag. Dan doe ik de was. Gelukkig heb ik een goede wasmachine. Alles kan in de machine. Alles wordt schoon. Het is niet veel werk, want de machine doet alles. Als de was schoon is, maak ik de machine leeg. Op maandagmiddag moet ik alles zelf strijken. Dat vind ik minder leuk. Strijken kan niet in de machine. Ik moet alles zelf strijken: T-shirts, broeken, jurken, rokjes, overhemden, onderbroeken, handdoeken en theedoeken... Alles! Dat is veel werk.",
+        questions: [
+          { q: "Waarmee doe ik de was?", options: ["Met een machine.", "Met mijn handen.", "Niet in de machine.", "Met strijken."], correct: 0 },
+          { q: "Welk werk vind ik niet leuk?", options: ["De was doen.", "Veel werk.", "Strijken."], correct: 2 }
+        ]
+      },
+      {
+        text: "Het is zaterdag. Jiska gaat naar een popconcert van Beyonc\u00e9. Het concert is in een groot stadion. Veel mensen willen kijken en luisteren naar Beyonc\u00e9. Deze vrouw is heel beroemd. Jiska gaat niet vaak naar een concert. Zij vindt het heel speciaal. Bij het stadion is het druk. Iedereen moet lang wachten. Als iedereen staat in de rij, iedereen is nerveus. Jiska is enthousiast. Het concert is super!",
+        questions: [
+          { q: "Naar welk concert gaan veel mensen?", options: ["Naar het concert van Jiska.", "Naar het concert van Beyonc\u00e9.", "Naar het concert van Jiska en Beyonc\u00e9."], correct: 1 },
+          { q: "Waar is het concert?", options: ["Bij het stadion.", "In het stadion.", "In de rij.", "In de show."], correct: 1 }
+        ]
+      },
+      {
+        text: "Twee kinderen spelen bij het huis op de stoep. Ze gooien een bal naar elkaar. De \u00e9\u00e9n gooit de bal en de ander moet de bal vangen. Dan valt de bal op de grond. De bal rolt van de stoep naar de straat. Een van de kinderen wil op straat de bal pakken. De auto rijdt snel en moet remmen. Het kind schrikt en pakt de bal. Er is geen ongeluk. Gelukkig!",
+        questions: [
+          { q: "Waar rolt de bal naartoe?", options: ["Naar de stoep.", "Naar het huis.", "Naar de straat."], correct: 2 },
+          { q: "Wat moet de auto doen?", options: ["De auto moet remmen.", "De auto moet pakken.", "De auto moet snel rijden.", "De auto moet gooien."], correct: 0 }
+        ]
+      },
+      {
+        text: "Onze moeder is geboren in Argentini\u00eb. Nu woont ze bij ons in Wassenaar. Soms moet ze een paar dagen naar het buitenland. Mijn twee zusjes en ik vinden het helemaal niet leuk. Ze moet gewoon op reis. Wij missen haar erg en het is stil in huis. We zijn allemaal heel blij als zij weer op Schiphol aankomt. Wij willen dat mama altijd bij ons is. En papa wil dat ook.",
+        questions: [
+          { q: "Waar is de moeder geboren?", options: ["Dat weten we niet.", "In Wassenaar.", "In Argentini\u00eb.", "Op Schiphol."], correct: 2 },
+          { q: "Hoeveel mensen wonen in het huis in Wassenaar?", options: ["Vier.", "Drie.", "Vijf."], correct: 2 }
+        ]
+      },
+      {
+        text: "Anna is blij, want het is vandaag vijf december. Vanavond komt Sinterklaas bij haar op bezoek. Hij komt met cadeautjes. Samen met haar broertje en met haar ouders gaat Anna de cadeautjes uitpakken. Maar nu is Anna onrustig. Ze moet nog een paar uurtjes wachten. Ze zingt de hele dag al liedjes voor Sinterklaas. Het is elk jaar spannend. Wat voor cadeautjes zal Sinterklaas dit jaar aan Anna geven? Wachten is moeilijk ...",
+        questions: [
+          { q: "Wie komt er op bezoek?", options: ["Sinterklaas.", "Anna.", "Anna, haar broertje en hun ouders."], correct: 0 },
+          { q: "Wat doet Anna de hele dag?", options: ["Liedjes zingen.", "Cadeautjes uitpakken.", "Cadeautjes geven.", "Op bezoek gaan."], correct: 0 }
+        ]
+      }
+    ]
+  }
+];
+
 let mode = 'learn';
 let activeTab = 'vocab';
 let activeLessons = new Set();
@@ -2328,6 +2647,11 @@ let knsTopics = new Set();
 let speakAnswerVisible = false;
 let speakMode = 'say'; // 'say', 'write', or 'aanvul'
 let aanvulSets = new Set();
+let lezenTest = 0;
+let lezenTextIdx = 0;
+let lezenAnswers = [];
+let lezenTimer = null;
+let lezenTimeLeft = 720; // 12 minutes in seconds
 
 const LESSON_TAG = {P1:'Ik, jij, hij',P2:'Mijn, dit, dat',P3:'Wie, wat, waar',C1:'Voorzetsels 1',C2:'Voorzetsels 2',C3:'Voegwoorden',C4:'Bijwoorden',W1:'Basiswerkwoorden',W2:'Werkwoorden 2',W3:'Werkwoorden 3'};
 function lesTag(l) { return LESSON_TAG[l] ? LESSON_TAG[l] : 'Les ' + l; }
@@ -2356,6 +2680,179 @@ function exampleHtml(dutchWord) {
   let h = '<div class="learn-example">' + ex[0] + '<br>' + ex[1] + '</div>';
   if (ex[2]) h += '<div class="learn-hint">' + ex[2] + '</div>';
   return h;
+}
+
+// ---- LEZEN (Reading) ----
+function showLezenFilter() {
+  const el = document.getElementById('lezenTopFilter');
+  let html = '<div class="lezen-filter">';
+  LEZEN_DATA.forEach((t, i) => {
+    const cls = i === lezenTest ? ' active' : '';
+    html += `<button class="lezen-filter-btn${cls}" onclick="selectLezenTest(${i})">Toets ${t.test}</button>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function selectLezenTest(idx) {
+  lezenTest = idx;
+  lezenTextIdx = 0;
+  lezenAnswers = [];
+  lezenQAnswered = [false, false];
+  if (lezenTimer) { clearInterval(lezenTimer); lezenTimer = null; }
+  lezenTimeLeft = 720;
+  showLezenFilter();
+  renderLezenTest();
+}
+
+function startLezenTimer() {
+  if (lezenTimer) clearInterval(lezenTimer);
+  lezenTimeLeft = 720;
+  lezenTimer = setInterval(() => {
+    lezenTimeLeft--;
+    const timerEl = document.getElementById('lezenTimerDisplay');
+    if (timerEl) {
+      const m = Math.floor(lezenTimeLeft / 60);
+      const s = lezenTimeLeft % 60;
+      timerEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+      if (lezenTimeLeft <= 120) timerEl.parentElement.classList.add('warning');
+    }
+    if (lezenTimeLeft <= 0) {
+      clearInterval(lezenTimer);
+      lezenTimer = null;
+      showLezenScore();
+    }
+  }, 1000);
+}
+
+function renderLezenTest() {
+  const mainArea = document.getElementById('mainArea');
+  const test = LEZEN_DATA[lezenTest];
+  if (!test) return;
+
+  // If all texts answered, show score
+  if (lezenTextIdx >= test.texts.length) {
+    showLezenScore();
+    return;
+  }
+
+  // Start timer on first text
+  if (lezenTextIdx === 0 && !lezenTimer) {
+    startLezenTimer();
+  }
+
+  const t = test.texts[lezenTextIdx];
+  const m = Math.floor(lezenTimeLeft / 60);
+  const s = lezenTimeLeft % 60;
+
+  let html = '';
+  // Timer
+  html += `<div class="lezen-timer" id="lezenTimerWrap"><span>&#9200;</span> <span id="lezenTimerDisplay">${m}:${s.toString().padStart(2, '0')}</span></div>`;
+
+  // Progress dots
+  html += '<div class="lezen-progress-dots">';
+  for (let i = 0; i < test.texts.length; i++) {
+    const cls = i < lezenTextIdx ? 'done' : i === lezenTextIdx ? 'current' : '';
+    html += `<div class="lezen-dot ${cls}"></div>`;
+  }
+  html += '</div>';
+
+  // Text card
+  html += `<div class="lezen-text-card"><div class="lezen-text-num">Tekst ${lezenTextIdx + 1} / ${test.texts.length}</div>${t.text}</div>`;
+
+  // Questions
+  t.questions.forEach((q, qi) => {
+    const qNum = lezenTextIdx * 2 + qi;
+    html += `<div class="lezen-q-card" id="lezenQ${qi}">`;
+    html += `<div class="lezen-q-text">${lezenTextIdx * 2 + qi + 1}. ${q.q}</div>`;
+    html += '<div class="lezen-options">';
+    q.options.forEach((opt, oi) => {
+      const letter = String.fromCharCode(65 + oi);
+      html += `<button class="lezen-opt" id="lezenOpt${qi}_${oi}" onclick="answerLezen(${qi},${oi})">${letter}. ${opt}</button>`;
+    });
+    html += '</div></div>';
+  });
+
+  // Next button (hidden until both answered)
+  html += `<button class="lezen-next" id="lezenNextBtn" style="display:none" onclick="nextLezenText()">Volgende tekst &rarr;</button>`;
+
+  mainArea.innerHTML = html;
+}
+
+let lezenQAnswered = [false, false];
+
+function answerLezen(qi, oi) {
+  if (lezenQAnswered[qi]) return;
+  lezenQAnswered[qi] = true;
+
+  const test = LEZEN_DATA[lezenTest];
+  const t = test.texts[lezenTextIdx];
+  const q = t.questions[qi];
+  const isCorrect = oi === q.correct;
+
+  lezenAnswers.push(isCorrect);
+
+  // Disable all options for this question
+  q.options.forEach((_, j) => {
+    const btn = document.getElementById(`lezenOpt${qi}_${j}`);
+    btn.disabled = true;
+    if (j === oi && isCorrect) {
+      btn.classList.add('correct');
+    } else if (j === oi && !isCorrect) {
+      btn.classList.add('wrong');
+    }
+    if (j === q.correct && !isCorrect) {
+      btn.classList.add('correct-reveal');
+    }
+  });
+
+  // If both questions answered, show next button
+  if (lezenQAnswered[0] && lezenQAnswered[1]) {
+    const nextBtn = document.getElementById('lezenNextBtn');
+    if (lezenTextIdx < test.texts.length - 1) {
+      nextBtn.style.display = '';
+      nextBtn.textContent = 'Volgende tekst \u2192';
+    } else {
+      nextBtn.style.display = '';
+      nextBtn.textContent = 'Bekijk resultaat \u2192';
+    }
+  }
+}
+
+function nextLezenText() {
+  lezenTextIdx++;
+  lezenQAnswered = [false, false];
+  renderLezenTest();
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showLezenScore() {
+  if (lezenTimer) { clearInterval(lezenTimer); lezenTimer = null; }
+
+  const mainArea = document.getElementById('mainArea');
+  const correct = lezenAnswers.filter(a => a).length;
+  const total = 12;
+  const passed = correct >= 9;
+
+  // Save to progress
+  const p = loadProgress();
+  const key = `lezen|test${LEZEN_DATA[lezenTest].test}`;
+  const prev = p[key] ? p[key].best || 0 : 0;
+  p[key] = { correct: passed ? MASTERED_THRESHOLD : 0, best: Math.max(prev, correct), lastDate: new Date().toISOString().slice(0, 10), attempts: (p[key]?.attempts || 0) + 1 };
+  saveProgress(p);
+
+  let html = '<div class="lezen-score">';
+  html += `<div class="lezen-score-num">${correct}/${total}</div>`;
+  html += `<div class="lezen-score-label">Oefentoets ${LEZEN_DATA[lezenTest].test}</div>`;
+  if (passed) {
+    html += '<div class="lezen-score-pass" style="color:var(--green)">Geslaagd! (9+ nodig)</div>';
+  } else {
+    html += '<div class="lezen-score-pass" style="color:var(--red)">Niet geslaagd (9+ nodig)</div>';
+  }
+  html += `<button class="lezen-next" style="margin-top:24px;" onclick="selectLezenTest(${lezenTest})">Opnieuw proberen</button>`;
+  html += '</div>';
+  mainArea.innerHTML = html;
 }
 
 // ---- TTS ----
@@ -2561,6 +3058,13 @@ function getStatsHTML() {
     <div class="lp-bar"><div class="lp-fill" style="width:${knsPct}%"></div></div>
   </div>`;
 
+  const lezenPassed = LEZEN_DATA.filter(t => { const d = p['lezen|test' + t.test]; return d && d.correct >= MASTERED_THRESHOLD; }).length;
+  const lezenPct = LEZEN_DATA.length > 0 ? Math.round(lezenPassed / LEZEN_DATA.length * 100) : 0;
+  html += `<div class="lesson-progress">
+    <div class="lp-header"><span class="lp-label">Lezen</span><span class="lp-count">${lezenPassed}/${LEZEN_DATA.length}</span></div>
+    <div class="lp-bar"><div class="lp-fill" style="width:${lezenPct}%"></div></div>
+  </div>`;
+
   const syncStatus = syncUser ? `Synced as <strong>${syncUser}</strong>` : 'Not synced';
   const refreshFn = 'switchTab(\'stats\')';
   html += `<div class="lesson-progress" style="margin-top:16px;">
@@ -2614,6 +3118,7 @@ function switchTab(tab) {
   const modePill = document.getElementById('modePill');
   const knsTopFilter = document.getElementById('knsTopFilter');
   const speakTopFilter = document.getElementById('speakTopFilter');
+  const lezenTopFilter = document.getElementById('lezenTopFilter');
 
   // Reset all
   topBar.style.display = 'flex';
@@ -2622,6 +3127,8 @@ function switchTab(tab) {
   progressBar.style.display = '';
   knsTopFilter.style.display = 'none';
   speakTopFilter.style.display = 'none';
+  lezenTopFilter.style.display = 'none';
+  if (lezenTimer) { clearInterval(lezenTimer); lezenTimer = null; }
 
   if (tab === 'vocab') {
     document.querySelector('.top-bar h1').textContent = 'Dutch A1';
@@ -2653,6 +3160,15 @@ function switchTab(tab) {
     mode = 'kns';
     showKnsFilter();
     startKnsSession();
+  } else if (tab === 'lezen') {
+    drawer.style.display = 'none';
+    modePill.style.display = 'none';
+    statsEl.style.display = 'none';
+    progressBar.style.display = 'none';
+    document.querySelector('.top-bar h1').textContent = 'Lezen';
+    lezenTopFilter.style.display = 'block';
+    showLezenFilter();
+    renderLezenTest();
   } else if (tab === 'stats') {
     drawer.style.display = 'none';
     modePill.style.display = 'none';
