@@ -299,9 +299,393 @@
   .lezen-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--surface2); }
   .lezen-dot.done { background: var(--green); }
   .lezen-dot.current { background: var(--purple-strong); }
+
+  /* ---- ONBOARDING ---- */
+  #onboardingScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #0E1014;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  .ob-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .ob-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+  }
+  .ob-orb1 {
+    width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(171,125,255,0.6), transparent 70%);
+    top: -140px; left: -120px;
+    animation: obOrb1 13s ease-in-out infinite;
+  }
+  .ob-orb2 {
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(229,255,93,0.35), transparent 70%);
+    bottom: -100px; right: -100px;
+    animation: obOrb2 17s ease-in-out infinite;
+  }
+  .ob-orb3 {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(202,186,249,0.3), transparent 70%);
+    top: 55%; left: 55%;
+    animation: obOrb3 11s ease-in-out infinite;
+  }
+  @keyframes obOrb1 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(50px,40px) scale(1.12); }
+    66% { transform: translate(-20px,60px) scale(0.92); }
+  }
+  @keyframes obOrb2 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(-60px,-50px) scale(1.18); }
+  }
+  @keyframes obOrb3 {
+    0%,100% { transform: translate(0,0) scale(1); opacity: 1; }
+    50% { transform: translate(-30px,-20px) scale(1.25); opacity: 0.6; }
+  }
+  .ob-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 20px;
+    padding-top: calc(env(safe-area-inset-top, 16px) + 12px);
+    position: relative;
+    z-index: 1;
+  }
+  .ob-skip-btn {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ob-skip-btn:active { opacity: 0.6; }
+  .ob-slides-wrap {
+    flex: 1;
+    display: flex;
+    transition: transform 0.42s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    z-index: 1;
+    will-change: transform;
+  }
+  .ob-slide {
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+  }
+  .ob-glass-card {
+    background: rgba(255,255,255,0.055);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    border: 1px solid rgba(255,255,255,0.11);
+    border-radius: 28px;
+    padding: 36px 28px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 8px 48px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .ob-flag {
+    font-size: 72px;
+    margin-bottom: 22px;
+    display: block;
+    filter: drop-shadow(0 0 24px rgba(171,125,255,0.5));
+  }
+  .ob-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #fff 20%, #CABAF9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .ob-subtitle {
+    font-size: 16px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.55;
+  }
+  .ob-icon {
+    font-size: 52px;
+    margin-bottom: 18px;
+    display: block;
+  }
+  .ob-feature-title {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .ob-feature-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+  .ob-mini-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 16px;
+    padding: 18px;
+  }
+  .ob-mini-card-nl {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .ob-mini-card-en {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+  }
+  .ob-chips-scroll {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .ob-chip {
+    background: rgba(171,125,255,0.14);
+    border: 1px solid rgba(171,125,255,0.28);
+    color: #CABAF9;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .ob-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+  }
+  .ob-section-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 13px 15px;
+  }
+  .ob-section-icon { font-size: 26px; flex-shrink: 0; }
+  .ob-section-name { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 2px; }
+  .ob-section-sub { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .ob-input {
+    width: 100%;
+    padding: 16px 18px;
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 18px;
+    text-align: center;
+    outline: none;
+    font-family: inherit;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .ob-input::placeholder { color: rgba(255,255,255,0.28); }
+  .ob-input:focus { border-color: rgba(171,125,255,0.55); }
+  .ob-btn-primary {
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, #AB7DFF 0%, #D4F06A 100%);
+    color: #181B1F;
+    transition: all 0.2s;
+    letter-spacing: -0.01em;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ob-btn-primary:active { transform: scale(0.97); filter: brightness(0.92); }
+  .ob-btn-secondary {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.45);
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ob-btn-secondary:active { opacity: 0.6; }
+  .ob-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 24px;
+    padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 16px);
+    position: relative;
+    z-index: 1;
+  }
+  .ob-dots { display: flex; gap: 8px; align-items: center; }
+  .ob-dot {
+    width: 8px; height: 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.18);
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .ob-dot.active { background: #AB7DFF; width: 22px; }
+  .ob-next-btn {
+    width: 100%;
+    max-width: 400px;
+    padding: 18px;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    background: linear-gradient(135deg, #AB7DFF 0%, #D4F06A 100%);
+    color: #181B1F;
+    letter-spacing: -0.01em;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .ob-next-btn:active { transform: scale(0.97); filter: brightness(0.92); }
+  .ob-next-btn.ob-hidden { display: none; }
 </style>
 </head>
 <body>
+
+<!-- Onboarding -->
+<div id="onboardingScreen">
+  <div class="ob-bg">
+    <div class="ob-orb ob-orb1"></div>
+    <div class="ob-orb ob-orb2"></div>
+    <div class="ob-orb ob-orb3"></div>
+  </div>
+  <div class="ob-header">
+    <button class="ob-skip-btn" onclick="obGoToSlide(4)">Skip</button>
+  </div>
+  <div class="ob-slides-wrap" id="obSlidesWrap">
+    <!-- Slide 1: Hero -->
+    <div class="ob-slide">
+      <div class="ob-glass-card">
+        <span class="ob-flag">🇳🇱</span>
+        <div class="ob-title">Naar Nederland</div>
+        <div class="ob-subtitle">Prepare for the Dutch A1<br>citizenship exam</div>
+      </div>
+    </div>
+    <!-- Slide 2: Vocabulary -->
+    <div class="ob-slide">
+      <div class="ob-glass-card">
+        <span class="ob-icon">🗂️</span>
+        <div class="ob-feature-title">750+ words & phrases</div>
+        <div class="ob-feature-desc">Lessons 1–65 covering all exam topics with spaced repetition</div>
+        <div class="ob-mini-card">
+          <div class="ob-mini-card-nl">werken</div>
+          <div class="ob-mini-card-en">to work</div>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 3: Modes -->
+    <div class="ob-slide">
+      <div class="ob-glass-card">
+        <span class="ob-icon">🧠</span>
+        <div class="ob-feature-title">7 ways to study</div>
+        <div class="ob-feature-desc">From flashcards to voice — find your style</div>
+        <div class="ob-chips-scroll">
+          <span class="ob-chip">Learn</span>
+          <span class="ob-chip">Quiz</span>
+          <span class="ob-chip">Match</span>
+          <span class="ob-chip">Type</span>
+          <span class="ob-chip">Fill</span>
+          <span class="ob-chip">Build</span>
+          <span class="ob-chip">Speak</span>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 4: Exam content -->
+    <div class="ob-slide">
+      <div class="ob-glass-card">
+        <span class="ob-icon">📖</span>
+        <div class="ob-feature-title">Full exam coverage</div>
+        <div class="ob-feature-desc">Every section of the real test, in one app</div>
+        <div class="ob-sections">
+          <div class="ob-section-item">
+            <span class="ob-section-icon">🏛️</span>
+            <div>
+              <div class="ob-section-name">KNS Fotoboek</div>
+              <div class="ob-section-sub">Knowledge of Dutch society</div>
+            </div>
+          </div>
+          <div class="ob-section-item">
+            <span class="ob-section-icon">📝</span>
+            <div>
+              <div class="ob-section-name">Lezen</div>
+              <div class="ob-section-sub">Reading comprehension</div>
+            </div>
+          </div>
+          <div class="ob-section-item">
+            <span class="ob-section-icon">✍️</span>
+            <div>
+              <div class="ob-section-name">Aanvulzinnen</div>
+              <div class="ob-section-sub">Fill-in-the-blank sentences</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Slide 5: Login -->
+    <div class="ob-slide">
+      <div class="ob-glass-card">
+        <span class="ob-flag" style="font-size:52px;margin-bottom:16px;">🇳🇱</span>
+        <div class="ob-feature-title">Let's go!</div>
+        <div class="ob-feature-desc" style="margin-bottom:20px;">Enter a nickname to sync your progress across devices</div>
+        <input type="text" class="ob-input" id="obNicknameInput" placeholder="Nickname" autocomplete="off" autocapitalize="off" onkeydown="if(event.key==='Enter')obLogin()" />
+        <button class="ob-btn-primary" onclick="obLogin()">Start with sync</button>
+        <button class="ob-btn-secondary" onclick="obSkip()">Continue without sync</button>
+      </div>
+    </div>
+  </div>
+  <div class="ob-footer">
+    <div class="ob-dots" id="obDots">
+      <div class="ob-dot active" onclick="obGoToSlide(0)"></div>
+      <div class="ob-dot" onclick="obGoToSlide(1)"></div>
+      <div class="ob-dot" onclick="obGoToSlide(2)"></div>
+      <div class="ob-dot" onclick="obGoToSlide(3)"></div>
+      <div class="ob-dot" onclick="obGoToSlide(4)"></div>
+    </div>
+    <button class="ob-next-btn" id="obNextBtn" onclick="obNext()">Next →</button>
+  </div>
+</div>
 
 <!-- Welcome screen -->
 <div class="welcome" id="welcomeScreen">
@@ -1694,7 +2078,366 @@ const EXAMPLES = {
 "halen": ["Ik haal brood bij de bakker.", "I get bread at the baker."],
 "proberen": ["Ik probeer het te begrijpen.", "I try to understand it."],
 "begrijpen": ["Ik begrijp het niet.", "I don't understand it."],
-"spreken": ["Spreekt u Nederlands?", "Do you speak Dutch?"]
+"spreken": ["Spreekt u Nederlands?", "Do you speak Dutch?"],
+// Les 4
+"het haar": ["Ze heeft lang haar.", "She has long hair."],
+// Les 5
+"het mes": ["Het mes is scherp.", "The knife is sharp."],
+"de bel": ["Ik hoor de bel.", "I hear the bell."],
+"de kam": ["Ik heb een kam nodig.", "I need a comb."],
+"de bal": ["De kinderen spelen met de bal.", "The children play with the ball."],
+"de kip": ["De kip legt een ei.", "The chicken lays an egg."],
+"de lip": ["Ik bijt op mijn lip.", "I bite my lip."],
+// Les 6
+"de kop": ["Nee, liever een kop thee.", "No, I'd rather have a cup of tea."],
+"de sok": ["Ik zie maar één blauwe sok.", "I see only one blue sock."],
+"de mug": ["De mug zit op de muur.", "The mosquito is on the wall."],
+"de tas": ["Die tas is zwaar.", "That bag is heavy."],
+"de pot": ["De pot staat op tafel.", "The pot is on the table."],
+"de bus": ["Ik wacht op de bus.", "I wait for the bus."],
+// Les 7
+"het doel": ["De bal rolt naar het doel.", "The ball rolls toward the goal."],
+"de riem": ["Ik maak mijn riem vast.", "I fasten my belt."],
+"het wiel": ["Het wiel van mijn fiets is kapot.", "The wheel of my bike is broken."],
+"het huis": ["Ik woon in een huis.", "I live in a house."],
+"de duim": ["Hij slaat op zijn duim.", "He hits his thumb."],
+// Les 8
+"de noot": ["De noot hangt in de boom.", "The nut hangs in the tree."],
+"de zeep": ["Ik was me met zeep.", "I wash myself with soap."],
+"geel": ["Bananen zijn geel.", "Bananas are yellow."],
+"het jaar": ["Het jaar heeft 12 maanden.", "The year has 12 months."],
+"de maan": ["Het is volle maan.", "It is a full moon."],
+"het vuur": ["We maken vuur.", "We make fire."],
+// Les 9
+"de geit": ["De geit staat in de wei.", "The goat stands in the meadow."],
+"de ring": ["Mijn moeder heeft een ring gekocht.", "My mother bought a ring."],
+"de lach": ["Waarom lach je toch?", "Why are you laughing?"],
+"de schaar": ["Ik knip met een schaar.", "I cut with scissors."],
+// Les 10
+"de vrouw": ["Ken je die vrouw?", "Do you know that woman?"],
+"de cent": ["Voor een cent koop je niks.", "For a cent you buy nothing."],
+"het schrift": ["Ik schrijf in mijn schrift.", "I write in my notebook."],
+"het bloed": ["Er zit bloed aan je lip.", "There is blood on your lip."],
+"het gezicht": ["Je gezicht is te lang in de zon geweest.", "Your face was in the sun too long."],
+// Les 11
+"lek": ["De zak is lek.", "The bag has a hole in it."],
+"ken": ["Ik ken de les.", "I know the lesson."],
+"de pil": ["De pil is nep.", "The pill is fake."],
+"het sap": ["De man wil sap.", "The man wants juice."],
+"de man": ["De man wil sap.", "The man wants juice."],
+"het pak": ["Een pak melk.", "A carton of milk."],
+"tik": ["Ik tik op het raam.", "I tap on the window."],
+"mis": ["Ik mis de bus.", "I miss the bus."],
+"kom": ["Kom je ook mee?", "Are you coming along?"],
+"de les": ["Ik maak de les.", "I do the lesson."],
+"leg": ["Leg je pen neer.", "Put your pen down."],
+"tel": ["Ik tel tot tien.", "I count to ten."],
+// Les 12
+"de stap": ["Ik stap in de bus.", "I step onto the bus."],
+"de knop": ["Ik druk op de knop.", "I press the button."],
+"denk": ["Ik denk aan jou.", "I think of you."],
+"help": ["Ik help jou wel.", "I will help you."],
+"praat": ["Hij praat veel.", "He talks a lot."],
+"graag": ["Ik dans graag.", "I like to dance."],
+"de drop": ["Drop is zwart.", "Liquorice is black."],
+"hard": ["De bal is hard.", "The ball is hard."],
+"dans": ["Ik dans graag.", "I like to dance."],
+"speel": ["Ik speel met de bal.", "I play with the ball."],
+"de hals": ["Een vlek in je hals.", "A mark on your neck."],
+"de vlek": ["Een vlek in je hals.", "A mark on your neck."],
+"half": ["Het is half zes.", "It is half past five."],
+// Les 13
+"het stuur": ["Pak het stuur vast.", "Hold the steering wheel tight."],
+"trouw": ["Ik trouw met haar.", "I marry her."],
+"de broer": ["Komt je broer ook?", "Is your brother coming too?"],
+"het plein": ["Ik fiets op het plein.", "I cycle on the square."],
+"vast": ["Pak het stuur vast.", "Hold the steering wheel tight."],
+"vals": ["Dat alarm is vals.", "That alarm is false."],
+"sterk": ["Hij is heel sterk.", "He is very strong."],
+"de rits": ["Doe je rits dicht.", "Close your zipper."],
+"de ster": ["Een ster bij de maan.", "A star near the moon."],
+"bang": ["Ben je bang?", "Are you afraid?"],
+"het kind": ["Het kind kruipt op de grond.", "The child crawls on the ground."],
+"de grond": ["Het kind kruipt op de grond.", "The child crawls on the ground."],
+"de trein": ["Ik mis de trein.", "I miss the train."],
+"de fiets": ["Ik fiets op het plein.", "I cycle on the square."],
+"de school": ["Ik blijf op school.", "I stay at school."],
+"de brug": ["We lopen over de brug.", "We walk over the bridge."],
+"vlug": ["Ze is heel vlug.", "She is very fast."],
+// Les 15
+"de huur": ["De huur is driehonderd euro per maand.", "The rent is three hundred euros per month."],
+"per maand": ["Ik betaal driehonderd euro per maand.", "I pay three hundred euros per month."],
+"voor twee jaar": ["Ik huur dit huis voor twee jaar.", "I rent this house for two years."],
+// Les 16
+"het slot": ["De deur heeft een sterk slot.", "The door has a strong lock."],
+"te koop": ["Dit huis is te koop.", "This house is for sale."],
+"twee jaar oud": ["Mijn fiets is twee jaar oud.", "My bike is two years old."],
+"grote maat": ["Heeft u dit ook in grote maat?", "Do you have this in a large size too?"],
+// Les 17
+"kopen": ["Ik wil een brood kopen.", "I want to buy a bread."],
+"vragen": ["Mag ik iets vragen?", "May I ask something?"],
+"laag": ["De prijs is laag.", "The price is low."],
+"veel": ["Ik drink veel water.", "I drink a lot of water."],
+// Les 18
+"de schoonmaker": ["De schoonmaker maakt het kantoor schoon.", "The cleaner cleans the office."],
+"klein": ["Het kind is nog klein.", "The child is still small."],
+"mooi": ["Wat een mooi huis!", "What a beautiful house!"],
+"de buurt": ["Ik woon in een mooie buurt.", "I live in a beautiful neighborhood."],
+"de brief": ["Ik schrijf een brief.", "I write a letter."],
+"schoon": ["De keuken is schoon.", "The kitchen is clean."],
+"schoonmaken": ["Ik maak de keuken schoon.", "I clean the kitchen."],
+// Les 19
+"de baan": ["Ik zoek een nieuwe baan.", "I am looking for a new job."],
+"de nacht": ["In de nacht slaap ik.", "At night I sleep."],
+"het licht": ["Doe het licht aan.", "Turn on the light."],
+"lachen": ["Zij lacht vaak.", "She laughs often."],
+"het schaap": ["Het schaap staat in het veld.", "The sheep stands in the field."],
+"de schoen": ["Ik koop nieuwe schoenen.", "I buy new shoes."],
+"het schip": ["Het schip vaart op het water.", "The ship sails on the water."],
+"want": ["Ik blijf thuis, want het regent.", "I stay home because it is raining."],
+// Les 20
+"de letter": ["De brief begint met de letter A.", "The letter starts with the letter A."],
+"de postcode": ["Mijn postcode is 1234 AB.", "My postal code is 1234 AB."],
+"het adres": ["Wat is uw adres?", "What is your address?"],
+"de straat": ["Ik woon in een stille straat.", "I live in a quiet street."],
+// Les 21
+"makkelijk": ["Deze les is makkelijk.", "This lesson is easy."],
+"mobiel": ["Mijn mobiel is kapot.", "My phone is broken."],
+"het boekje": ["Ik schrijf in mijn boekje.", "I write in my booklet."],
+"moeilijk": ["Dit woord is moeilijk.", "This word is difficult."],
+// Les 22
+"de vriend": ["Mijn vriend woont in Amsterdam.", "My friend lives in Amsterdam."],
+"de jongen": ["De jongen speelt buiten.", "The boy plays outside."],
+"het meisje": ["Het meisje heeft blond haar.", "The girl has blond hair."],
+"de dochter": ["Mijn dochter gaat naar school.", "My daughter goes to school."],
+"leuk": ["Dat is een leuk idee.", "That is a fun idea."],
+"buiten": ["De kinderen spelen buiten.", "The children play outside."],
+"bijna": ["Ik ben bijna klaar.", "I am almost done."],
+"nog": ["Hij slaapt nog.", "He is still sleeping."],
+"jong": ["Zij is jong en sterk.", "She is young and strong."],
+"dertien": ["Er zijn dertien stoelen in de klas.", "There are thirteen chairs in the class."],
+"veertien": ["Hij is veertien jaar oud.", "He is fourteen years old."],
+"vijftien": ["De les duurt vijftien minuten.", "The lesson lasts fifteen minutes."],
+"zestien": ["Zij heeft zestien euro.", "She has sixteen euros."],
+"zeventien": ["De bus stopt om zeventien uur.", "The bus stops at seventeen o'clock."],
+"achttien": ["Op achttien jaar mag je stemmen.", "At eighteen you may vote."],
+"negentien": ["Er zijn negentien leerlingen.", "There are nineteen students."],
+"twintig": ["Hij is twintig jaar oud.", "He is twenty years old."],
+"dertig": ["Ik betaal dertig euro.", "I pay thirty euros."],
+"veertig": ["De weg is veertig kilometer lang.", "The road is forty kilometers long."],
+"vijftig": ["Een treinkaartje kost vijftig cent.", "A train ticket costs fifty cents."],
+"zestig": ["Mijn vader is zestig jaar.", "My father is sixty years old."],
+"zeventig": ["De snelheid is zeventig kilometer per uur.", "The speed is seventy kilometers per hour."],
+"tachtig": ["Mijn opa is tachtig jaar.", "My grandfather is eighty years old."],
+"negentig": ["De fiets kost negentig euro.", "The bike costs ninety euros."],
+"honderd": ["Een euro is honderd cent.", "One euro is one hundred cents."],
+// Les 23
+"de deur": ["Doe de deur dicht.", "Close the door."],
+"de woonkamer": ["Wij zitten in de woonkamer.", "We sit in the living room."],
+"de keuken": ["Ik kook in de keuken.", "I cook in the kitchen."],
+"de trap": ["Hij loopt de trap op.", "He walks up the stairs."],
+"de verdieping": ["De slaapkamer is op de eerste verdieping.", "The bedroom is on the first floor."],
+"de badkamer": ["De badkamer is boven.", "The bathroom is upstairs."],
+"de slaapkamer": ["Ik slaap in de slaapkamer.", "I sleep in the bedroom."],
+"de ruimte": ["Er is veel ruimte in de kamer.", "There is a lot of space in the room."],
+"nodig": ["Ik heb een fiets nodig.", "I need a bike."],
+"alles": ["Alles is klaar.", "Everything is ready."],
+"ruim": ["De woonkamer is ruim.", "The living room is spacious."],
+"de woning": ["Ik zoek een woning in de stad.", "I am looking for a home in the city."],
+"het toilet": ["Het toilet is links.", "The toilet is on the left."],
+"beneden": ["De keuken is beneden.", "The kitchen is downstairs."],
+"de gang": ["Er hangen jassen in de gang.", "There are coats in the hallway."],
+"links": ["De badkamer is links.", "The bathroom is on the left."],
+"rechts": ["Het toilet is rechts.", "The toilet is on the right."],
+// Les 24
+"het seizoen": ["Zomer is mijn favoriete seizoen.", "Summer is my favorite season."],
+"de winter": ["In de winter is het koud.", "In the winter it is cold."],
+"de lente": ["In de lente groeien bloemen.", "In spring flowers grow."],
+"de zomer": ["In de zomer gaan we zwemmen.", "In summer we go swimming."],
+"het najaar": ["In het najaar vallen de bladeren.", "In autumn the leaves fall."],
+"de dag": ["Vandaag is een mooie dag.", "Today is a beautiful day."],
+"kort": ["De winter is kort.", "The winter is short."],
+"lang": ["De zomer is lang.", "The summer is long."],
+"vandaag": ["Vandaag ga ik naar de markt.", "Today I go to the market."],
+"koud": ["Het is koud buiten.", "It is cold outside."],
+"warm": ["De soep is warm.", "The soup is warm."],
+"binnen": ["Het is warm binnen.", "It is warm inside."],
+"de bloem": ["Ik koop bloemen voor mijn moeder.", "I buy flowers for my mother."],
+"de jas": ["Trek je jas aan!", "Put on your coat!"],
+"droog": ["Het weer is droog vandaag.", "The weather is dry today."],
+"vrij": ["Op zondag ben ik vrij.", "On Sunday I am free."],
+"nat": ["Mijn jas is nat.", "My coat is wet."],
+"donker": ["Het is donker buiten.", "It is dark outside."],
+"gezellig": ["Het is gezellig hier.", "It is cozy here."],
+"de hond": ["Mijn hond heet Max.", "My dog is called Max."],
+"januari": ["In januari is het koud.", "In January it is cold."],
+"februari": ["In februari sneeuwt het soms.", "In February it sometimes snows."],
+"maart": ["In maart begint de lente.", "In March spring begins."],
+"april": ["In april regent het vaak.", "In April it often rains."],
+"mei": ["In mei bloeien de bloemen.", "In May the flowers bloom."],
+"juni": ["In juni begint de zomer.", "In June summer begins."],
+"juli": ["In juli gaan we op vakantie.", "In July we go on holiday."],
+"augustus": ["In augustus is het warm.", "In August it is warm."],
+"september": ["In september ga ik weer werken.", "In September I go back to work."],
+"oktober": ["In oktober vallen de bladeren.", "In October the leaves fall."],
+"november": ["In november is het koud en nat.", "In November it is cold and wet."],
+"december": ["In december vieren we kerst.", "In December we celebrate Christmas."],
+// Les 25
+"de lerares": ["De lerares spreekt langzaam.", "The teacher speaks slowly."],
+"noemen": ["Hoe noemen ze jou?", "What do they call you?"],
+"opruimen": ["Ik ruim de kamer op.", "I tidy up the room."],
+"sluiten": ["De winkel sluit om vijf uur.", "The shop closes at five o'clock."],
+"de bank": ["Ik ga naar de bank.", "I go to the bank."],
+"druk": ["De stad is druk.", "The city is busy."],
+"soms": ["Soms eet ik buiten.", "Sometimes I eat outside."],
+"nooit": ["Ik rook nooit.", "I never smoke."],
+"gesloten": ["De winkel is gesloten.", "The shop is closed."],
+"het weekend": ["In het weekend rust ik.", "In the weekend I rest."],
+"de klok": ["De klok geeft vier uur aan.", "The clock shows four o'clock."],
+"de minuut": ["Wacht één minuut!", "Wait one minute!"],
+"maandag": ["Op maandag ga ik naar school.", "On Monday I go to school."],
+"dinsdag": ["Op dinsdag werk ik.", "On Tuesday I work."],
+"woensdag": ["Op woensdag heb ik les.", "On Wednesday I have class."],
+"donderdag": ["Op donderdag ga ik naar de markt.", "On Thursday I go to the market."],
+"vrijdag": ["Op vrijdag werk ik niet.", "On Friday I do not work."],
+"zaterdag": ["Op zaterdag sleep ik uit.", "On Saturday I sleep in."],
+"zondag": ["Op zondag bezoek ik mijn familie.", "On Sunday I visit my family."],
+// Les 26
+"de tafel": ["Het eten staat op de tafel.", "The food is on the table."],
+"het raam": ["Ik open het raam.", "I open the window."],
+"de stoel": ["Ga op de stoel zitten.", "Sit on the chair."],
+"de honger": ["Ik heb honger.", "I am hungry."],
+"de soep": ["De soep is lekker.", "The soup is tasty."],
+"lekker": ["Dit brood is lekker.", "This bread is tasty."],
+"het vlees": ["Ik eet geen vlees.", "I do not eat meat."],
+"drinken": ["Ik drink een glas water.", "I drink a glass of water."],
+"het geld": ["Ik heb geen geld.", "I have no money."],
+"betalen": ["Kan ik met pin betalen?", "Can I pay by card?"],
+"de collega": ["Mijn collega werkt hard.", "My colleague works hard."],
+"thuis": ["Ik eet thuis.", "I eat at home."],
+"het gezin": ["Mijn gezin eet samen.", "My family eats together."],
+"meestal": ["Ik eet meestal brood.", "I usually eat bread."],
+"de groente": ["Eet veel groente!", "Eat lots of vegetables!"],
+"het ontbijt": ["Ik eet om acht uur ontbijt.", "I have breakfast at eight o'clock."],
+"het brood": ["Ik koop brood bij de bakker.", "I buy bread at the baker."],
+"de boter": ["Ik doe boter op het brood.", "I put butter on the bread."],
+"de kaas": ["Ik eet kaas op mijn brood.", "I eat cheese on my bread."],
+"de thee": ["Ik drink thee met melk.", "I drink tea with milk."],
+"de koffie": ["Wil je koffie?", "Do you want coffee?"],
+"de lunch": ["Ik eet de lunch op het werk.", "I have lunch at work."],
+"het water": ["Mag ik een glas water?", "May I have a glass of water?"],
+"de aardappel": ["Aardappelen zijn lekker met boter.", "Potatoes are tasty with butter."],
+// Les 27
+"vroeg": ["Ik sta vroeg op.", "I get up early."],
+"douchen": ["Ik douche elke dag.", "I shower every day."],
+"wakker": ["Ben jij al wakker?", "Are you already awake?"],
+"wassen": ["Ik was mijn handen.", "I wash my hands."],
+"aankleden": ["Ik kleed me snel aan.", "I dress quickly."],
+"de taak": ["Ik maak mijn taak.", "I do my task."],
+"iedereen": ["Iedereen is blij.", "Everyone is happy."],
+"behalve": ["Iedereen is er, behalve Jan.", "Everyone is here, except Jan."],
+"langzaam": ["Hij rijdt langzaam.", "He drives slowly."],
+"roepen": ["Mama roept ons.", "Mom calls us."],
+"te laat": ["Ik ben te laat.", "I am too late."],
+"klaar": ["Ben jij klaar?", "Are you done?"],
+"luisteren": ["Ik luister naar muziek.", "I listen to music."],
+"het nieuws": ["Ik kijk het nieuws.", "I watch the news."],
+"vertrekken": ["De trein vertrekt om negen uur.", "The train departs at nine o'clock."],
+"moe": ["Ik ben moe.", "I am tired."],
+"gelukkig": ["Gelukkig is de trein er nog.", "Fortunately the train is still there."],
+"kletsen": ["We kletsen na het eten.", "We chat after dinner."],
+"de wekker": ["Mijn wekker gaat om zeven uur.", "My alarm goes off at seven o'clock."],
+"opstaan": ["Ik sta op om zeven uur.", "I get up at seven o'clock."],
+// Les 28
+"de familie": ["Mijn familie is groot.", "My family is big."],
+"de hoek": ["De lamp staat in de hoek.", "The lamp is in the corner."],
+"de foto": ["Ik maak een foto.", "I take a photo."],
+"de tuin": ["Ik werk in de tuin.", "I work in the garden."],
+"naast": ["Ik zit naast mijn vriend.", "I sit next to my friend."],
+"de achternaam": ["Mijn achternaam is Petrova.", "My last name is Petrova."],
+"de voornaam": ["Mijn voornaam is Polina.", "My first name is Polina."],
+"de moeder": ["Mijn moeder woont in Rusland.", "My mother lives in Russia."],
+"de ouders": ["Mijn ouders zijn oud.", "My parents are old."],
+"allemaal": ["We zijn allemaal thuis.", "We are all at home."],
+"blond": ["Mijn dochter heeft blond haar.", "My daughter has blond hair."],
+"zoals": ["Zij zingt zoals een vogel.", "She sings like a bird."],
+"gisteren": ["Gisteren was ik ziek.", "Yesterday I was sick."],
+"aardig": ["De lerares is aardig.", "The teacher is kind."],
+"allebei": ["Ze zijn allebei jong.", "They are both young."],
+"de gemeente": ["Ik ga naar de gemeente.", "I go to the municipality."],
+"misschien": ["Misschien kom ik morgen.", "Maybe I will come tomorrow."],
+// Les 29
+"de pijn": ["Ik heb pijn in mijn arm.", "I have pain in my arm."],
+"de arm": ["Mijn arm doet pijn.", "My arm hurts."],
+"de dokter": ["Ik ga naar de dokter.", "I go to the doctor."],
+"de apotheek": ["Ik haal medicijnen bij de apotheek.", "I get medicine at the pharmacy."],
+"de medicijnen": ["Ik neem medicijnen voor de pijn.", "I take medicine for the pain."],
+"de herfst": ["In de herfst regent het veel.", "In autumn it rains a lot."],
+"de regen": ["Ik houd niet van regen.", "I do not like rain."],
+"daarom": ["Het regent, daarom neem ik de bus.", "It is raining, therefore I take the bus."],
+"zorgen": ["Ik zorg voor mijn kinderen.", "I take care of my children."],
+"genoeg": ["Ik slaap genoeg.", "I sleep enough."],
+"de huisarts": ["Ik heb een afspraak bij de huisarts.", "I have an appointment at the family doctor."],
+"bewegen": ["Het is goed om elke dag te bewegen.", "It is good to exercise every day."],
+"regelmatig": ["Ik beweeg regelmatig.", "I exercise regularly."],
+"wandelen": ["Ik wandel elke dag in het park.", "I walk in the park every day."],
+"minstens": ["Slaap minstens acht uur.", "Sleep at least eight hours."],
+"te veel": ["Ik eet te veel.", "I eat too much."],
+"vet": ["Vet eten is niet gezond.", "Fatty food is not healthy."],
+"roken": ["Roken is slecht voor je gezondheid.", "Smoking is bad for your health."],
+"weinig": ["Ik slaap weinig.", "I sleep little."],
+"voldoende rust": ["Neem voldoende rust.", "Take enough rest."],
+// Les 30
+"de stad": ["Ik woon in de stad.", "I live in the city."],
+"praktisch": ["De fiets is praktisch.", "The bike is practical."],
+"de weg": ["De weg is lang.", "The road is long."],
+"stil": ["De straat is stil.", "The street is quiet."],
+"de file": ["Er is een file op de weg.", "There is a traffic jam on the road."],
+"vol": ["De bus is vol.", "The bus is full."],
+"staan": ["We staan in de file.", "We are stuck in traffic."],
+"de halte": ["Ik wacht bij de halte.", "I wait at the stop."],
+"wachten": ["Ik wacht op de bus.", "I wait for the bus."],
+"dus": ["Het regent, dus ik neem de bus.", "It rains, so I take the bus."],
+"liever": ["Ik fiets liever.", "I prefer to cycle."],
+"het nadeel": ["Het nadeel van de auto is de file.", "The disadvantage of the car is the traffic jam."],
+"fijn": ["Het is fijn buiten.", "It is nice outside."],
+"het voordeel": ["Het voordeel van de fiets is de beweging.", "The advantage of the bike is the exercise."],
+"de afstand": ["De afstand is groot.", "The distance is big."],
+"gelijk hebben": ["Jij hebt gelijk.", "You are right."],
+"goedkoper": ["De fiets is goedkoper dan de auto.", "The bike is cheaper than the car."],
+"de beweging": ["Fietsen geeft je beweging.", "Cycling gives you movement."],
+// Les 31
+"binnenkort": ["Binnenkort ga ik naar Nederland.", "Soon I will go to the Netherlands."],
+"voordat": ["Voordat ik slaap, lees ik.", "Before I sleep, I read."],
+"regelen": ["Ik moet alles regelen.", "I have to arrange everything."],
+"de taal": ["Nederlands is een mooie taal.", "Dutch is a beautiful language."],
+"de toekomst": ["In de toekomst woon ik in Nederland.", "In the future I will live in the Netherlands."],
+"de haven": ["Rotterdam heeft een grote haven.", "Rotterdam has a big port."],
+"zwaar": ["Het werk is zwaar.", "The work is hard."],
+"verdienen": ["Ik verdien goed geld.", "I earn good money."],
+"redelijk": ["De huur is redelijk.", "The rent is reasonable."],
+"eigenlijk": ["Eigenlijk ben ik moe.", "Actually, I am tired."],
+"dichtbij": ["De school is dichtbij.", "The school is nearby."],
+"het land": ["Nederland is een klein land.", "The Netherlands is a small country."],
+"hetzelfde": ["We wonen in hetzelfde huis.", "We live in the same house."],
+// Les 32
+"jarig": ["Ik ben vandaag jarig.", "Today is my birthday."],
+"het feestje": ["Wij geven een feestje.", "We are giving a party."],
+"het begin": ["Aan het begin van de les.", "At the beginning of the lesson."],
+"het idee": ["Dat is een goed idee.", "That is a good idea."],
+"de oplossing": ["Ik heb een oplossing.", "I have a solution."],
+"uitslapen": ["Op zondag slaap ik uit.", "On Sunday I sleep in."],
+"vlak voor": ["Vlak voor de les drink ik koffie.", "Just before the lesson I drink coffee."],
+"de kerst": ["Met kerst eet ik bij mijn familie.", "At Christmas I eat with my family."],
+"de boodschappen doen": ["Ik doe de boodschappen op zaterdag.", "I do the groceries on Saturday."],
+"dragen": ["Ik draag een zware tas.", "I carry a heavy bag."],
+"handig": ["Een fiets is handig.", "A bike is handy."],
+"ontmoeten": ["Ik ontmoet mijn vriend in de stad.", "I meet my friend in the city."],
+"besteden": ["Ik besteed veel tijd aan Nederlands.", "I spend a lot of time on Dutch."],
+"de aandacht": ["Geef aandacht aan het kind.", "Give attention to the child."],
+"daarna": ["Eerst eten, daarna slapen.", "First eat, then sleep."],
+"de natuur": ["Ik houd van de natuur.", "I love nature."],
+"zelfs": ["Zelfs in de regen fiets ik.", "Even in the rain I cycle."]
 };
 
 // Speaking exam questions: [question, translation, example answer, topic]
@@ -2795,18 +3538,6 @@ function getStatsHTML() {
     <div style="font-size:12px;color:var(--text2);margin-top:8px;">Same nickname on all devices = shared progress</div>
   </div>`;
 
-  // AI key for smart answer checking
-  const aiKey = getAIKey();
-  html += `<div class="lesson-progress" style="margin-top:16px;">
-    <div class="lp-header"><span class="lp-label">AI Answer Check</span><span class="lp-count">${aiKey ? 'Active' : 'Off'}</span></div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">Anthropic API key for smart checking in Aanvulzinnen</div>
-    <div style="display:flex;gap:8px;">
-      <input type="password" id="aiKeyInput" placeholder="sk-ant-..." value="${aiKey}"
-        style="flex:1;padding:12px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;outline:none;" />
-      <button onclick="localStorage.setItem('dutch-a1-ai-key',document.getElementById('aiKeyInput').value);${refreshFn};"
-        style="padding:12px 18px;border:none;border-radius:var(--radius);background:var(--purple-strong);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Save</button>
-    </div>
-  </div>`;
 
   html += `<button class="stats-reset" onclick="if(confirm('Reset all progress?')){localStorage.removeItem('dutch-a1-progress');cloudPush();${refreshFn};}">Reset progress</button>`;
   html += `</div>`;
@@ -3228,7 +3959,7 @@ function showFillCard() {
     translation = ex[1];
     const word = c[0];
     const words = sentence.replace(/[.!?,]/g,'').split(/\s+/);
-    const wordLower = word.toLowerCase().split(' / ')[0].split(' ')[0];
+    const wordLower = word.toLowerCase().replace(/^(de|het)\s+/, '').split(' / ')[0].split(' ')[0];
     for (const w of words) {
       if (w.toLowerCase() === wordLower || norm(w) === norm(wordLower)) { gapWord = w; break; }
     }
@@ -3680,37 +4411,7 @@ function showAanvulCard() {
   updateStats();
 }
 
-function getAIKey() { return localStorage.getItem('dutch-a1-ai-key') || ''; }
-
-async function aiCheckAnswer(sentence, userAnswer, bookAnswer) {
-  const key = getAIKey();
-  if (!key) return null;
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20241022',
-        max_tokens: 150,
-        messages: [{ role: 'user', content: `Dutch A1 sentence completion exercise. Sentence: "${sentence}" Book answer: "${bookAnswer}". Student answered: "${userAnswer}".
-
-Is the student's answer a grammatically and logically valid completion?
-
-Reply in this exact format:
-YES or NO
-Then on a new line, a short explanation in Russian (1-2 sentences) why the answer is correct or incorrect, and what would be better if incorrect.` }]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.[0]?.text?.trim() || '';
-    const lines = text.split('\n');
-    const isCorrect = lines[0].toUpperCase().startsWith('YES');
-    const explanation = lines.slice(1).join(' ').trim();
-    return { ok: isCorrect, explanation };
-  } catch(e) { return null; }
-}
-
-async function checkAanvul() {
+function checkAanvul() {
   const c = deck[current];
   const expected = c[1].replace(/[.!?]$/,'');
   const inp = document.getElementById('aanvulInput');
@@ -3725,28 +4426,6 @@ async function checkAanvul() {
     updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 1800); return;
   }
 
-  // AI check if key is set
-  const aiKey = getAIKey();
-  if (aiKey && inp.value.trim().length > 0) {
-    ans.textContent = 'Checking...'; ans.style.color = 'var(--text2)';
-    const result = await aiCheckAnswer(c[0], inp.value.trim(), c[1]);
-    if (result && result.ok) {
-      inp.classList.add('correct'); ans.style.color = '';
-      ans.innerHTML = '<span style="color:var(--green)">Correct!</span> (book: ' + c[1] + ')' + (result.explanation ? '<br><span style="font-size:13px;color:var(--text2)">' + result.explanation + '</span>' : '');
-      known++; recordCorrect(c, 'aanvul');
-      updateStats(); setTimeout(() => { current++; showSpeakCard(); }, 2500); return;
-    }
-    if (result && !result.ok) {
-      inp.classList.add('wrong'); ans.classList.add('show-wrong'); ans.style.color = '';
-      ans.innerHTML = '<span style="color:var(--red)">' + c[1] + '</span>' + (result.explanation ? '<br><span style="font-size:13px;color:var(--text2);font-style:italic">' + result.explanation + '</span>' : '');
-      again.push(c); recordWrong(c, 'aanvul');
-      document.getElementById('buttons').innerHTML = '<button class="btn btn-good" onclick="acceptAanvul()">Accept my answer</button><button class="btn btn-next" onclick="current++;showSpeakCard()" style="margin-top:8px">Next</button>';
-      updateStats(); return;
-    }
-    ans.style.color = '';
-  }
-
-  // Fallback (no AI key or error)
   inp.classList.add('wrong'); ans.classList.add('show-wrong');
   ans.textContent = c[1];
   again.push(c); recordWrong(c, 'aanvul');
@@ -3908,6 +4587,74 @@ function enterApp() {
   setDirection(direction);
   document.getElementById('hideLearned').checked = hideLearned;
   switchTab(activeTab);
+}
+
+// ---- ONBOARDING ----
+let obCurrentSlide = 0;
+const OB_TOTAL = 5;
+
+function obGoToSlide(n) {
+  obCurrentSlide = Math.max(0, Math.min(n, OB_TOTAL - 1));
+  document.getElementById('obSlidesWrap').style.transform = `translateX(-${obCurrentSlide * 100}%)`;
+  document.querySelectorAll('.ob-dot').forEach((d, i) => d.classList.toggle('active', i === obCurrentSlide));
+  const nextBtn = document.getElementById('obNextBtn');
+  const skipBtn = document.querySelector('.ob-skip-btn');
+  if (obCurrentSlide === OB_TOTAL - 1) {
+    nextBtn.classList.add('ob-hidden');
+    skipBtn.style.visibility = 'hidden';
+  } else {
+    nextBtn.classList.remove('ob-hidden');
+    skipBtn.style.visibility = '';
+  }
+}
+
+function obNext() {
+  if (obCurrentSlide < OB_TOTAL - 1) obGoToSlide(obCurrentSlide + 1);
+}
+
+function obLogin() {
+  const name = document.getElementById('obNicknameInput').value.trim();
+  if (!name) { document.getElementById('obNicknameInput').style.borderColor = 'rgba(255,87,86,0.6)'; return; }
+  setSyncUser(name);
+  finishOnboarding();
+}
+
+function obSkip() {
+  syncUser = '';
+  localStorage.setItem('dutch-a1-user', '');
+  localStorage.setItem('dutch-a1-skipped', '1');
+  finishOnboarding();
+}
+
+function finishOnboarding() {
+  localStorage.setItem('onboardingDone', '1');
+  document.getElementById('onboardingScreen').style.display = 'none';
+  document.getElementById('appWrap').style.display = 'flex';
+  loadAppState();
+  setDirection(direction);
+  document.getElementById('hideLearned').checked = hideLearned;
+  switchTab(activeTab);
+}
+
+// Touch swipe for onboarding
+(function() {
+  let startX = 0;
+  const wrap = document.getElementById('obSlidesWrap');
+  if (!wrap) return;
+  wrap.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  wrap.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 45) {
+      if (dx < 0) obNext();
+      else if (obCurrentSlide > 0) obGoToSlide(obCurrentSlide - 1);
+    }
+  }, { passive: true });
+})();
+
+// Show onboarding on first launch
+if (!syncUser && !localStorage.getItem('dutch-a1-skipped') && !localStorage.getItem('onboardingDone')) {
+  document.getElementById('onboardingScreen').style.display = 'flex';
+  document.getElementById('welcomeScreen').style.display = 'none';
 }
 
 // Auto-enter if user already set or skipped before

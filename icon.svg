@@ -4,7 +4,25 @@
       <stop offset="0%" stop-color="#AB7DFF"/>
       <stop offset="100%" stop-color="#E5FF5D"/>
     </linearGradient>
+    <linearGradient id="card1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2E3340"/>
+      <stop offset="100%" stop-color="#242830"/>
+    </linearGradient>
   </defs>
+  <!-- Background -->
   <rect width="512" height="512" rx="108" fill="#181B1F"/>
-  <text x="256" y="290" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="200" font-weight="700" fill="url(#g)">NL</text>
+
+  <!-- Back card (rotated slightly) -->
+  <g transform="translate(256,270) rotate(-6) translate(-120,-150)">
+    <rect width="240" height="300" rx="24" fill="#2E3340" stroke="rgba(255,255,255,0.06)" stroke-width="2"/>
+  </g>
+
+  <!-- Front card -->
+  <g transform="translate(256,270) rotate(3) translate(-120,-150)">
+    <rect width="240" height="300" rx="24" fill="#242830" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+    <!-- NL text with gradient -->
+    <text x="120" y="170" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="100" font-weight="700" fill="url(#g)">NL</text>
+    <!-- Subtitle -->
+    <text x="120" y="215" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="24" font-weight="500" fill="rgba(255,255,255,0.4)">Dutch A1</text>
+  </g>
 </svg>
